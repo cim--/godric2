@@ -20,10 +20,17 @@ class HasChangedPassword
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()->route('auth.login');
+        }
+        if (!$user->member) {
+            // shouldn't normally get here in this case
+            // but can occur in rare situations
+            Auth::logout();
+            $request->session()->regenerate();
+            return redirect()->route('auth.login');
         }
         if (Hash::check($user->member->lastname, $user->password)) {
-            return redirect()->route('changepassword');
+            return redirect()->route('auth.password');
         }
         
         return $next($request);
