@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // basic bootstrapping
         $u = new \App\Models\User;
         $u->username = env("BOOT_USER");
-        $u->password = "boot";
+        $u->password = Hash::make("boot");
         $u->save();
 
         $m = new \App\Models\Member;

@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MainController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/login', [AuthController::class, 'doLogin'])->name('auth.dologin');
+Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+
+Route::middleware('auth')->group(function() {
+
+    Route::get('/changepassword', [AuthController::class, 'changePassword'])->name('auth.password');
+    Route::post('/changepassword', [AuthController::class, 'updatePassword'])->name('auth.password.update');
+
+    // middleware so that a default password can't access these other
+    // routes
+    Route::middleware('auth.cpwd')->group(function() {
+    
+        Route::get('/', [MainController::class, 'index'])->name('main');
+
+
+    });
+
 });
