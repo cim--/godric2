@@ -14,6 +14,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        // basic bootstrapping
+        $u = new \App\Models\User;
+        $u->username = env("BOOT_USER");
+        $u->password = "boot";
+        $u->save();
+
+        $m = new \App\Models\Member;
+        $m->membership = env("BOOT_USER");
+        $m->firstname = "";
+        $m->lastname = "";
+        $m->email = "";
+        $m->mobile = "";
+        $m->department = "";
+        $m->jobtype = "";
+        $m->membertype = "Standard";
+        $m->save();
+
+        $r = new \App\Models\Role;
+        $r->role = \App\Models\Role::ROLE_SUPERUSER;
+        $r->member_id = $m->id;
+        $r->save();
     }
 }
