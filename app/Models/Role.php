@@ -21,5 +21,25 @@ class Role extends Model
     {
         return $this->belongsTo(Member::class);
     }
-    
+
+
+    public static function roleTypes()
+    {
+        return [
+            self::ROLE_COMMS => "Communications",
+            self::ROLE_REP => "Representative",
+            self::ROLE_SUPERUSER => "Super-user",
+        ];
+    }
+
+    public static function roleFields()
+    {
+        return [
+            "" => "Unrestricted",
+            "department" => "Department",
+            "jobtype" => "Job Type",
+            "membertype" => "Member Type"
+        ];
+    }
+
 }

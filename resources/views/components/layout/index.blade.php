@@ -2,6 +2,7 @@
 <html>
     <head>
 	<title>{{ $title }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
     </head>
     <body>
 

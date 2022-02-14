@@ -1,0 +1,47 @@
+body {
+    background: #fff4f4;
+    font-family: sans-serif;
+}
+
+header, footer {
+    border-top: #e74898 solid 3px;
+    border-bottom: #e74898 solid 3px;
+    padding: 0.5em;
+}
+
+h1, h2, h3, h4 {
+    color: #310c58;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 1em;
+}
+
+#main {
+    padding: 0.5em;
+}
+
+#message {
+    margin: 1em;
+    border: #310c58 solid 1px;
+    padding: 1em;
+}
+
+form {
+    margin-bottom: 1em;
+}
+
+td, th {
+    border: thin #310c58 solid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}

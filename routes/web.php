@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ImportController;
+use App\Http\Controllers\RolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function() {
             Route::get('/import', [ImportController::class, 'index'])->name('import');
             Route::post('/import', [ImportController::class, 'process'])->name('import.process');
 
+            Route::resource('/roles', RolesController::class)->except('show');
 
             
         });
