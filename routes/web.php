@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,16 @@ Route::middleware('auth')->group(function() {
     
         Route::get('/', [MainController::class, 'index'])->name('main');
 
+        // superuser routes
+        Route::middleware('authz.super')->group(function() {
+            
+            Route::get('/import', [ImportController::class, 'index'])->name('import');
+            Route::post('/import', [ImportController::class, 'process'])->name('import.process');
+
+
+            
+        });
+        
 
     });
 

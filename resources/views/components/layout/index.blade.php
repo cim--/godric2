@@ -9,16 +9,7 @@
 
 	@if (Auth::user())
 	<header>
-	    <nav>
-		<ul>
-		    <li><a href="{{route('main')}}">Index</a></li>
-
-		    
-
-		    <li><a href="{{route('auth.password')}}">Change Password</a></li>
-		    <li><a href="{{route('auth.logout')}}">Log out</a></li>
-		</ul>
-	    </nav>
+	    <x-layout.navigation/>
 	</header>
 	@endif
 
