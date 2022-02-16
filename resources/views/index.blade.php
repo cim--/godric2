@@ -13,12 +13,27 @@
 
 	@foreach ($campaigns as $campaign)
 
+	    <h3>{{ $campaign->name }}</h3>
+	    <p>{{ $campaign->description }}</p>
 
+	    {!! Form::open(['route' => ['participate', $campaign->id], 'method' => 'POST']) !!}
 
-
+	    <div>
+		{!! Form::label('participation'.$campaign->id, 'Have you participated?') !!}
+		{!! Form::select('participation'.$campaign->id, [
+		    '-' => '(select answer)',
+		    'yes' => 'I have participated',
+		    'wait' => 'I will participate soon',
+		    'help' => 'I need assistance to participate',
+		    'no' => 'I have not participated / prefer not to say, but do not need further reminders'
+		    ], $self->participation($campaign)) !!}
+		{!! Form::submit("Update participation") !!}
+	    </div>
 	    
+	    {!! Form::close() !!}
 
-	
+	    <p><strong>Total participation so far</strong>: {{$campaign->actions_count}} and {{ $campaign->calctarget }} required. This campaign action must be completed by {{ $campaign->end->format("j F Y") }}.</p>
+	    
 	@endforeach	
 
     @endif

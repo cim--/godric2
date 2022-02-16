@@ -26,6 +26,11 @@ class Member extends Model
 
     public function participation(Campaign $campaign)
     {
-        return $this->actions->where('campaign_id', $campaign_id)->first();
+        $action = $this->actions->where('campaign_id', $campaign->id)->first();
+        if (!$action) {
+            return "-";
+        } else {
+            return $action->action;
+        }
     }
 }

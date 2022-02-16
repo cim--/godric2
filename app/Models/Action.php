@@ -9,6 +9,8 @@ class Action extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['campaign_id', 'member_id'];
+    
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use App\Models\Member;
+use App\Models\Action;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -16,7 +17,9 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $campaigns = Campaign::withCount('actions')->orderBy('end', 'DESC')->get();
+        $campaigns = Campaign::withCount(['actions' => function ($q) {
+            $q->where('action', 'yes');
+        }])->orderBy('end', 'DESC')->get();
         $membercount = Member::count();
         $votercount = Member::where('voter', true)->count();
         return view('campaigns.index', [
@@ -90,4 +93,31 @@ class CampaignController extends Controller
         return redirect()->route('campaigns.index')->with('message', 'Campaign edited');
     }
 
+
+
+    public function participate(Request $request, Campaign $campaign)
+    {
+        $part = $request->input('participation'.$campaign->id, '-');
+
+        $self = \Auth::user()->member;
+        if ($campaign->start->isFuture() || $campaign->end->copy()->addDay()->isPast()) {
+            return back()->with('message', 'This campaign is not currently active');
+        }
+        if ($campaign->votersonly && !$self->voter) {
+            return back()->with('message', 'This campaign is for voters only');
+        }
+
+        if ($part == "-") {
+            return back()->with('message', 'You have not selected an option');
+        }
+
+        $action = Action::firstOrNew([
+            'campaign_id' => $campaign->id,
+            'member_id' => $self->id
+        ]);
+        $action->action = $part;
+        $action->save();
+
+        return back()->with('message', 'Your participation has been updated');
+    }
 }
