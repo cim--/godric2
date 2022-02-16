@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\CampaignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +34,20 @@ Route::middleware('auth')->group(function() {
     Route::middleware('auth.cpwd')->group(function() {
     
         Route::get('/', [MainController::class, 'index'])->name('main');
+        Route::post('/participate/{campaign}', [CampaignController::class, 'participate'])->name('participate');
+    
 
+        // rep routes
+
+        
         // superuser routes
-        Route::middleware('authz.super')->group(function() {
+        Route::middleware('authz.super')->prefix('admin')->group(function() {
             
             Route::get('/import', [ImportController::class, 'index'])->name('import');
             Route::post('/import', [ImportController::class, 'process'])->name('import.process');
 
             Route::resource('/roles', RolesController::class)->except('show');
+            Route::resource('/campaigns', CampaignController::class)->except('show', 'destroy');
 
             
         });

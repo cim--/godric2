@@ -20,6 +20,7 @@ return new class extends Migration
             $table->datetime('start');
             $table->datetime('end');
             $table->tinyInteger('target'); // percent
+            $table->integer('calctarget')->unsigned(); // absolute
             $table->boolean('votersonly')->default(true);
             
             $table->timestamps();

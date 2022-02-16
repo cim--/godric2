@@ -24,4 +24,8 @@ class Member extends Model
         return $this->hasMany(Role::class);
     }
 
+    public function participation(Campaign $campaign)
+    {
+        return $this->actions->where('campaign_id', $campaign_id)->first();
+    }
 }

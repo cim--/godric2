@@ -49,7 +49,7 @@ class ImportController extends Controller
             $member->mobile = $line[16] ? $line[16] : $line[14];
             $member->jobtype = $line[19];
             $member->membertype = $line[29];
-            if ($line[29] != "Standard" || $line[29] != "Standard Free" || $line[27] != "N") {
+            if (($line[29] != "Standard" && $line[29] != "Standard Free") || $line[27] != "N") {
                 $member->voter = false;
             } else {
                 $member->voter = true;
