@@ -42,6 +42,14 @@
 	</tbody>
     </table>
 
-    
-    
+    <h2>Download data</h2>
+
+    <p>Downloaded copies of data must be used in accordance with data protection policies, and deleted once no longer required.</p>
+	
+    <ul>
+	<li><a href="{{ route('members.export') }}?format=email">Export Email List</a> (contacts for current campaigns)</li>
+	<li><a href="{{ route('members.export') }}?format=phone">Export Phone List</a> (contacts for current campaigns)</li>
+	<li><a href="{{ route('members.export') }}?format=rep">Download Rep CSV</a> (all campaigns)</li>
+    </ul>
+	
 </x-layout>

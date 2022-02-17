@@ -81,5 +81,128 @@ class MembersController extends Controller
         return redirect()->route('members.list')->with('message', 'Updated campaign participation');
     }
     
-    
+    public function export(Request $request)
+    {
+        $members = $this->getMemberList();
+        $pastcampaigns = Campaign::ended()->orderBy('end')->get();
+        $campaigns = Campaign::started()->orderBy('end')->get();
+
+        $format = $request->input('format');
+        switch ($format) {
+        case "email":
+            $data = $this->exportEmail($members, $campaigns);
+            break;
+        case "phone":
+            $data = $this->exportPhone($members, $campaigns);
+            break;
+        case "rep":
+            $data = $this->exportRep($members, $pastcampaigns, $campaigns);
+            break;
+        default:
+            abort(400);
+        }
+
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=".$format.".csv",
+        ];
+
+        $csvencoder = function() use($data) {
+            $file = fopen('php://output', 'w');
+            foreach ($data as $line) {
+                fputcsv($file, $line);
+            }
+            fclose($file);
+        };
+        
+        return response()->stream($csvencoder, 200, $headers);
+    }
+
+    private function exportEmail($members, $campaigns)
+    {
+        $data = [];
+        $data[] = ["EMAIL", "FNAME", "LNAME"];
+
+        foreach ($members as $member) {
+            if (count($campaigns) > 0) {
+                foreach ($campaigns as $campaign) {
+                    $part = $campaign->participation($member);
+                    if ($part == "yes" || $part == "no") {
+                        continue; // try next campaign
+                    } elseif ($campaign->votersonly && !$member->voter) {
+                        continue; // try next campaign
+                    } else {
+                        $data[] = [$member->email, $member->firstname, $member->lastname];
+                        continue 2;
+                        // next member
+                    }
+                }
+            } else {
+                // include all
+                $data[] = [$member->email, $member->firstname, $member->lastname];
+            }
+        }
+        return $data;
+    }
+
+    private function exportPhone($members, $campaigns)
+    {
+        $data = [];
+        $data[] = ["FNAME", "LNAME", "DEPT", "PHONE"];
+
+        foreach ($members as $member) {
+            if (count($campaigns) > 0) {
+                foreach ($campaigns as $campaign) {
+                    $part = $campaign->participation($member);
+                    if ($part == "yes" || $part == "no") {
+                        continue; // try next campaign
+                    } elseif ($campaign->votersonly && !$member->voter) {
+                        continue; // try next campaign
+                    } else {
+                        $data[] = [$member->firstname, $member->lastname, $member->department, $member->mobile];
+                        continue 2;
+                        // next member
+                    }
+                }
+            } else {
+                // include all
+                $data[] = [$member->email, $member->firstname, $member->lastname, $member->department, $member->mobile];
+            }
+        }
+        return $data;
+    }
+
+    private function exportRep($members, $pastcampaigns, $campaigns)
+    {
+        $data = [];
+        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Voter?"];
+        foreach ($pastcampaigns as $pc) {
+            $headers[] = "(P)".$pc->name;
+        }
+        foreach ($campaigns as $c) {
+            $headers[] = $c->name;
+        }
+        $data[] = $headers;
+
+        foreach ($members as $member) {
+            $row = [
+                $member->membership,
+                $member->firstname,
+                $member->lastname,
+                $member->email,
+                $member->mobile,
+                $member->department,
+                $member->voter ? "Yes":"No",
+            ];
+
+            foreach ($pastcampaigns as $pc) {
+                $row[] = $pc->participation($member);
+            }
+            foreach ($campaigns as $c) {
+                $row[] = $c->participation($member);
+            }
+            $data[] = $row;
+        }
+        return $data;
+    }
 }

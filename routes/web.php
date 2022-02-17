@@ -41,9 +41,13 @@ Route::middleware('auth')->group(function() {
         // rep routes
         Route::middleware('authz.rep')->prefix('reps')->group(function() {
             
+            Route::get('/members/export', [MembersController::class, 'export'])->name('members.export');            
             Route::get('/members', [MembersController::class, 'list'])->name('members.list');
             Route::get('/members/{member}', [MembersController::class, 'edit'])->name('members.edit');
             Route::post('/members/{member}', [MembersController::class, 'update'])->name('members.update');
+
+
+
             
         });
         
