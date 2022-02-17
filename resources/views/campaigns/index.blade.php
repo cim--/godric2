@@ -26,7 +26,9 @@
 			{{ $campaign->target }}%
 		    </td>
 		    <td>
-			{{ $campaign->actions_count }} / {{ $campaign->calctarget }}
+			<a href="{{ route('campaigns.import', $campaign->id) }}">
+			    {{ $campaign->actions_count }} / {{ $campaign->calctarget }}
+			</a>
 		    </td>
 		</tr>
 	    @endforeach

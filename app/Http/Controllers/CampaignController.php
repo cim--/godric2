@@ -87,6 +87,8 @@ class CampaignController extends Controller
                 $count = Member::count();
             }
             $campaign->calctarget = ceil($campaign->target * $count / 100);
+        } elseif (!$campaign->calctarget) {
+            $campaign->calctarget = 0;
         }
         $campaign->save();
 
@@ -119,5 +121,48 @@ class CampaignController extends Controller
         $action->save();
 
         return back()->with('message', 'Your participation has been updated');
+    }
+
+
+    public function bulkImport(Campaign $campaign)
+    {
+        return view('campaigns.bulkimport', [
+            'campaign' => $campaign
+        ]);
+    }
+
+    public function bulkImportProcess(Campaign $campaign, Request $request)
+    {
+        $part = $request->input('action');
+        $members = explode("\n", $request->input('members'));
+        $notfound = [];
+        foreach ($members as $memberid) {
+            $memberid = trim($memberid);
+
+            if ($memberid == "") {
+                continue;
+            }
+            
+            $member = Member::where('membership', $memberid)
+                    ->orWhere('email', $memberid)
+                    ->orWhere('mobile', $memberid)
+                    ->first();
+            if ($member) {
+                $action = Action::firstOrNew([
+                    'campaign_id' => $campaign->id,
+                    'member_id' => $member->id
+                ]);
+                $action->action = $part;
+                $action->save();
+            } else {
+                $notfound[] = $memberid;
+            }
+        }
+
+        if (count($notfound) == 0) {
+            return redirect()->route('campaigns.index')->with('message', 'Imported actions');
+        } else {
+            return redirect()->route('campaigns.index')->with('message', 'Imported actions. Some IDs not found: '.join(",", $notfound));
+        }
     }
 }
