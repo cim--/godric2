@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
         'auth.cpwd' => \App\Http\Middleware\HasChangedPassword::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'authz.super' => \App\Http\Middleware\RequireSuperuser::class,
+        'authz.rep' => \App\Http\Middleware\RequireRep::class,
 
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

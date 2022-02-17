@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\MembersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,10 +36,14 @@ Route::middleware('auth')->group(function() {
     
         Route::get('/', [MainController::class, 'index'])->name('main');
         Route::post('/participate/{campaign}', [CampaignController::class, 'participate'])->name('participate');
-    
 
+        
         // rep routes
-
+        Route::middleware('authz.rep')->prefix('reps')->group(function() {
+            
+            Route::get('/members', [MembersController::class, 'list'])->name('members.list');
+            
+        });
         
         // superuser routes
         Route::middleware('authz.super')->prefix('admin')->group(function() {
@@ -48,6 +53,9 @@ Route::middleware('auth')->group(function() {
 
             Route::resource('/roles', RolesController::class)->except('show');
             Route::resource('/campaigns', CampaignController::class)->except('show', 'destroy');
+            
+            Route::get('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImport'])->name('campaigns.import');
+            Route::post('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImportProcess'])->name('campaigns.import.process');
 
             
         });

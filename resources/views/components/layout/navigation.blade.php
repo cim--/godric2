@@ -2,7 +2,10 @@
     <ul>
 	<li><a href="{{route('main')}}">Home</a></li>
 
+        @can('seeReports', App\Models\Member::class)
+	<li><a href="{{route('members.list')}}">Member Lists</a></li>
 
+	@endcan
 	
 	@can('manage', App\Models\Member::class)
 	<li><a href="{{route('import')}}">Import Members</a></li>

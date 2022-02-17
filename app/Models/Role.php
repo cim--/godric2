@@ -13,8 +13,6 @@ class Role extends Model
     public const ROLE_SUPERUSER = "superuser";
     /* Rep: run reports and charts */
     public const ROLE_REP = "rep";
-    /* Comms: run reports */
-    public const ROLE_COMMS = "comms";
     
     
     public function member()
@@ -26,7 +24,6 @@ class Role extends Model
     public static function roleTypes()
     {
         return [
-            self::ROLE_COMMS => "Communications",
             self::ROLE_REP => "Representative",
             self::ROLE_SUPERUSER => "Super-user",
         ];

@@ -25,7 +25,7 @@ class ImportController extends Controller
         
         $test = str_getcsv(trim($contents[0]));
         // check expected format
-        if (count($test) != 31 || $test[0] != "person_id" || $test[30] != "ede_primary") {
+        if (count($test) < 31 || $test[0] != "person_id" || $test[30] != "ede_primary") {
             return back()->with('message', 'File is not in the expected format');
         }
 

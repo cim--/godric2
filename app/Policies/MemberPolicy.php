@@ -21,13 +21,6 @@ class MemberPolicy
     {
         return $user->member->roles()->where('role', Role::ROLE_REP)
                     ->orWhere('role', Role::ROLE_SUPERUSER)
-                    ->orWhere('role', Role::ROLE_COMMS)->count() > 0;
-    }
-
-    public function seeCharts(User $user)
-    {
-        return $user->member->roles()->where('role', Role::ROLE_REP)
-                    ->orWhere('role', Role::ROLE_SUPERUSER)
                     ->count() > 0;
     }
 
