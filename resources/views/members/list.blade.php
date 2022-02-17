@@ -1,6 +1,8 @@
 <x-layout>
     <x-slot:title>Member List</x-slot:title>
 
+    <p>Click on names to update participation in current campaigns.</p>
+    
     <table>
 	<thead>
 	    <tr>
@@ -20,7 +22,7 @@
 	    @foreach ($members as $member)
 		<tr>
 		    <td>{{ $member->membership }}</td>
-		    <td>{{ $member->firstname }} {{ $member->lastname }}</td>
+		    <td><a href="{{ route('members.edit', $member->id) }}">{{ $member->firstname }} {{ $member->lastname }}</a></td>
 		    <td>{{ $member->email }}</td>
 		    <td>{{ $member->mobile }}</td>
 		    <td>{{ $member->department }}</td>
