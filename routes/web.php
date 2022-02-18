@@ -45,9 +45,9 @@ Route::middleware('auth')->group(function() {
             Route::get('/members', [MembersController::class, 'list'])->name('members.list');
             Route::get('/members/{member}', [MembersController::class, 'edit'])->name('members.edit');
             Route::post('/members/{member}', [MembersController::class, 'update'])->name('members.update');
-
-
-
+            
+            Route::get('/campaigns/report', [CampaignController::class, 'reportIndex'])->name('campaign.report');
+            Route::get('/campaigns/report/{campaign}', [CampaignController::class, 'reportView'])->name('campaign.report.view');  
             
         });
         

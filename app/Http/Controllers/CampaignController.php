@@ -165,4 +165,50 @@ class CampaignController extends Controller
             return redirect()->route('campaigns.index')->with('message', 'Imported actions. Some IDs not found: '.join(",", $notfound));
         }
     }
+
+    public function reportIndex()
+    {
+        $campaigns = Campaign::withCount(['actions' => function ($q) {
+            $q->where('action', 'yes');
+        }])->orderBy('end', 'DESC')->get();
+        return view('campaigns.report.index', [
+            'campaigns' => $campaigns
+        ]);
+    }
+
+    public function reportView(Campaign $campaign)
+    {
+        $departments = [];
+        if ($campaign->votersonly) {
+            $members = Member::where('voter', true)->get();
+        } else {
+            $members = Member::all();
+        }
+
+        $mcount = 0;
+        $pcount = 0;
+        foreach ($members as $member) {
+            $dept = $member->department;
+            if (!isset($departments[$dept])) {
+                $departments[$dept] = [
+                    'members' => 0,
+                    'participants' => 0
+                ];
+            }
+            $departments[$dept]['members']++;
+            $mcount++;
+            if ($campaign->participation($member) == "yes") {
+                $departments[$dept]['participants']++;
+                $pcount++;
+            }
+        }
+        ksort($departments);
+        
+        return view('campaigns.report.show', [
+            'campaign' => $campaign,
+            'departments' => $departments,
+            'mcount' => $mcount,
+            'pcount' => $pcount
+        ]);
+    }
 }

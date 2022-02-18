@@ -1,9 +1,6 @@
 <x-layout>
-    <x-slot:title>Campaign List</x-slot:title>
+    <x-slot:title>Campaign Reports</x-slot:title>
 
-    <p><strong>Current membership</strong>: {{ $members }} ({{ $voters }} voters)</p>
-    
-    <p><a href="{{ route('campaigns.create') }}">New Campaign</a></p>
     <table>
 	<thead>
 	    <tr>
@@ -17,7 +14,7 @@
 	<tbody>
 	    @foreach ($campaigns as $campaign)
 		<tr>
-		    <td><a href="{{ route('campaigns.edit', $campaign->id) }}">
+		    <td><a href="{{ route('campaign.report.view', $campaign->id) }}">
 			{{ $campaign->name }}
 		    </a></td>
 		    <td>{{$campaign->start->format("j F Y")}}</td>
@@ -29,9 +26,7 @@
 			@endif
 		    </td>
 		    <td>
-			<a href="{{ route('campaigns.import', $campaign->id) }}">
-			    {{ $campaign->actions_count }} / {{ $campaign->calctarget }}
-			</a>
+			{{ $campaign->actions_count }} / {{ $campaign->calctarget }}
 		    </td>
 		</tr>
 	    @endforeach

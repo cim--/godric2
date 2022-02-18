@@ -4,7 +4,7 @@
 
         @can('seeReports', App\Models\Member::class)
 	<li><a href="{{route('members.list')}}">Member Lists</a></li>
-
+	<li><a href="{{route('campaign.report')}}">Campaign Reports</a></li>
 	@endcan
 	
 	@can('manage', App\Models\Member::class)
