@@ -175,7 +175,7 @@ class MembersController extends Controller
     private function exportRep($members, $pastcampaigns, $campaigns)
     {
         $data = [];
-        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Voter?"];
+        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Job Type", "Member Type", "Voter?"];
         foreach ($pastcampaigns as $pc) {
             $headers[] = "(P)".$pc->name;
         }
@@ -192,6 +192,8 @@ class MembersController extends Controller
                 $member->email,
                 $member->mobile,
                 $member->department,
+                $member->jobtype,
+                $member->membertype,
                 $member->voter ? "Yes":"No",
             ];
 

@@ -11,6 +11,8 @@
 		<th>Email</th>
 		<th>Phone</th>
 		<th>Department</th>
+		<th>Job Type</th>
+		<th>Membership Type</th>
 		<th>Voter?</th>
 		<th>Past Campaigns</th>
 		@foreach ($campaigns as $campaign)
@@ -26,6 +28,8 @@
 		    <td>{{ $member->email }}</td>
 		    <td>{{ $member->mobile }}</td>
 		    <td>{{ $member->department }}</td>
+		    <td>{{ $member->jobtype }}</td>
+		    <td>{{ $member->membertype }}</td>
 		    <td>{{ $member->voter ? "Yes" : "No" }}</td>
 		    <td>
 			@foreach ($pastcampaigns as $pc) 
