@@ -3,6 +3,10 @@
 
     {!! Form::open(['method' => 'POST', 'route' => 'auth.password.update']) !!}
 
+    @if ($firsttime)
+	<p><strong>As this is the first time you have used this system, you must set a new password, and enter a verification code.</strong> The verification code has been sent to your preferred email address.</p>
+    @endif
+    
     <div>
 	{!! Form::label('cpwd', 'Current Password') !!}
 	{!! Form::password('cpwd') !!}
@@ -18,6 +22,14 @@
 	{!! Form::password('npwd2') !!}
     </div>
 
+    @if ($firsttime)
+	<div>
+	    {!! Form::label('code', 'Verification Code') !!}
+	    {!! Form::text('code') !!}
+	    Check your email for this code - it will be eight letters and numbers
+	</div>
+    @endif
+    
     {!! Form::submit("Change Password") !!}
     
     {!! Form::close() !!}

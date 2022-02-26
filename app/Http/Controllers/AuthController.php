@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Models\Member;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\FirstLogin;
 
 class AuthController extends Controller
 {
@@ -66,11 +69,31 @@ class AuthController extends Controller
 
     public function changePassword()
     {
-        return view('auth.password');
+        $user = Auth::user();
+        if (Hash::check($user->member->lastname, $user->password)) {
+            $firsttime = true;
+
+            $user->setEmailCode();
+
+            Mail::to($user->member->email)->send(new FirstLogin($user));
+            
+        } else {
+            $firsttime = false;
+        }
+        return view('auth.password', [
+            'firsttime' => $firsttime
+        ]);
     }
 
     public function updatePassword(Request $request)
     {
+        $user = Auth::user();
+        if (Hash::check($user->member->lastname, $user->password)) {
+            $firsttime = true;
+        } else {
+            $firsttime = false;
+        }
+        
         $cpwd = $request->input('cpwd');
         $npwd = $request->input('npwd');
         $npwd2 = $request->input('npwd2');
@@ -84,9 +107,21 @@ class AuthController extends Controller
         if (!Hash::check($cpwd, $request->user()->password)) {
             return back()->with('message', 'Current password is not correct');
         }
+        if ($firsttime) {
+            if ($user->resetcode == null) {
+                return back()->with('message', 'Emailed verification code has expired, please start again');
+            }
+            $code = $request->input('code');
+            if ($code != $user->resetcode) {
+                $user->resetcode = null;
+                $user->save();
+                return back()->with('message', 'The verification code was incorrect. Please wait for a new email and try again.');
+            }
+        }
 
         $user = $request->user();
         $user->password = Hash::make($npwd);
+        $user->resetcode = null;
         $user->save();
 
         return redirect()->route('main')->with('message', 'Password updated');
