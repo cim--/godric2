@@ -85,7 +85,13 @@ class MembersController extends Controller
     {
         $members = $this->getMemberList();
         $pastcampaigns = Campaign::ended()->orderBy('end')->get();
-        $campaigns = Campaign::started()->orderBy('end')->get();
+
+        $full = $request->input('full', 0);
+        if ($full == 0) {
+            $campaigns = Campaign::started()->orderBy('end')->get();
+        } else {
+            $campaigns = [];
+        }
 
         $format = $request->input('format');
         switch ($format) {

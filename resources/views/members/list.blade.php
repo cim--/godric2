@@ -52,7 +52,9 @@
 	
     <ul>
 	<li><a href="{{ route('members.export') }}?format=email">Export Email List</a> (contacts for current campaigns)</li>
+	<li><a href="{{ route('members.export') }}?format=email&amp;full=1">Export Full Email List</a></li>
 	<li><a href="{{ route('members.export') }}?format=phone">Export Phone List</a> (contacts for current campaigns)</li>
+	<li><a href="{{ route('members.export') }}?format=phone&amp;full=1">Export Full Phone List</a></li>
 	<li><a href="{{ route('members.export') }}?format=rep">Download Rep CSV</a> (all campaigns)</li>
     </ul>
 	
