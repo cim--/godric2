@@ -211,4 +211,16 @@ class CampaignController extends Controller
             'pcount' => $pcount
         ]);
     }
+
+    public function destroy(Request $request, Campaign $campaign)
+    {
+        if ($request->input('confirm') == $campaign->name) {
+            $campaign->actions()->delete();
+            $campaign->delete();
+            return redirect()->route('campaigns.index')->with('message', 'Campaign Deleted');
+        } else {
+            return back()->with('message', 'Deletion confirmation not given');
+        }
+    }
+
 }

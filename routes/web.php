@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function() {
             Route::post('/import', [ImportController::class, 'process'])->name('import.process');
 
             Route::resource('/roles', RolesController::class)->except('show');
-            Route::resource('/campaigns', CampaignController::class)->except('show', 'destroy');
+            Route::resource('/campaigns', CampaignController::class)->except('show');
             
             Route::get('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImport'])->name('campaigns.import');
             Route::post('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImportProcess'])->name('campaigns.import.process');

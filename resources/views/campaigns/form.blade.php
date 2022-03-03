@@ -36,5 +36,22 @@
     {!! Form::submit("Edit Campaign") !!}
 
     {!!  Form::close() !!}
+
+
+    @if ($campaign->id)
+	{!! Form::open(['route' => ['campaigns.destroy', $campaign->id], 'method' => 'DELETE']) !!}
+	<p><strong>Warning:</strong> Campaign deletion cannot be undone.</p>
+	<div>
+	    {!! Form::label('confirm', 'Confirm by typing campaign name') !!}
+	    {!! Form::text('confirm') !!}
+	</div>
+	
+	{!! Form::submit("Delete Campaign") !!}
+
+	{!!  Form::close() !!}
+
+    @endif
+
+
     
 </x-layout>
