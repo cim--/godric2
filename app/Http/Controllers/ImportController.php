@@ -33,7 +33,13 @@ class ImportController extends Controller
         $removed = [];
         
         for ($i=1;$i<count($contents);$i++) {
-            $line = str_getcsv(trim($contents[$i]));
+            $line = str_getcsv(
+                iconv(
+                    "ISO-8859-1",
+                    "UTF-8",
+                    trim($contents[$i])
+                )
+            );
             $member = Member::where('membership', $line[0])->first();
 
             if (!$member) {
