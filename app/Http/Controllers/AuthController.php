@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 use App\Mail\FirstLogin;
+use App\Mail\PasswordReset;
 
 class AuthController extends Controller
 {
@@ -127,5 +128,34 @@ class AuthController extends Controller
         return redirect()->route('main')->with('message', 'Password updated');
         
     }
-    
+
+    public function reset()
+    {
+        return view('auth.reset');
+    }
+
+    public function doReset(Request $request)
+    {
+        $allow = false;
+        $username = $request->input('username');
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            $member = Member::where('membership', $username)->first();
+            if ($member) {
+                $lastname = $request->input('lastname');
+                $email = $request->input('email');
+                if ($lastname == $member->lastname && $email == $member->email) {
+                    $allow = true;
+                }
+            }
+        }
+        if (!$allow) {
+            return back()->with('message', 'The password reset information was incorrect. Please check the details and try again.');
+        }
+
+        Mail::to($user->member->email)->send(new PasswordReset($user));
+
+        $user->delete();
+        return redirect()->route('auth.login')->with('message', 'Your password has now been reset.');
+    }
 }

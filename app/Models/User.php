@@ -54,4 +54,10 @@ class User extends Authenticatable
         $this->resetcode = Str::random(8);
         $this->save();
     }
+
+    public function resetPassword()
+    {
+        $this->password = Hash::make($member->lastname);
+        $this->save();
+    }
 }

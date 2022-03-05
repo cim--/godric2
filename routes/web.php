@@ -23,6 +23,8 @@ use App\Http\Controllers\MembersController;
 Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'doLogin'])->name('auth.dologin');
 Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::get('/login/reset', [AuthController::class, 'reset'])->name('auth.reset');
+Route::post('/login/reset', [AuthController::class, 'doReset'])->name('auth.doreset');
 
 
 Route::middleware('auth')->group(function() {
