@@ -42,6 +42,9 @@ class AuthController extends Controller
                 Auth::login($user);
                 $request->session()->regenerate();
                 return redirect()->route('auth.password')->with('message', 'Please set your password');
+            } else {
+                // wrong initial password
+                return back()->with('message', 'Invalid username or password');
             }
         } else {
             if (!$user->member) {
