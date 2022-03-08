@@ -2,6 +2,8 @@
     <x-slot:title>Member List</x-slot:title>
 
     <p>Click on names to update participation in current campaigns.</p>
+
+    <p>Name, contact and affiliation data is derived from national data sources - please send corrections to national in the usual way.</p>
     
     <table>
 	<thead>
@@ -51,10 +53,10 @@
     <p>Downloaded copies of data must be used in accordance with data protection policies, and deleted once no longer required.</p>
 	
     <ul>
-	<li><a href="{{ route('members.export') }}?format=email">Export Email List</a> (contacts for current campaigns)</li>
 	<li><a href="{{ route('members.export') }}?format=email&amp;full=1">Export Full Email List</a></li>
-	<li><a href="{{ route('members.export') }}?format=phone">Export Phone List</a> (contacts for current campaigns)</li>
+	<li><a href="{{ route('members.export') }}?format=email">Export Campaign Email List</a> (excludes those who have already participated)</li>
 	<li><a href="{{ route('members.export') }}?format=phone&amp;full=1">Export Full Phone List</a></li>
+	<li><a href="{{ route('members.export') }}?format=phone">Export Campaign Phone List</a> (excludes those who have already participated)</li>
 	<li><a href="{{ route('members.export') }}?format=rep">Download Rep CSV</a> (all campaigns)</li>
     </ul>
 	
