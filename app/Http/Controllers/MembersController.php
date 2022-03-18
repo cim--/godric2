@@ -101,6 +101,9 @@ class MembersController extends Controller
         case "phone":
             $data = $this->exportPhone($members, $campaigns);
             break;
+        case "thrutext":
+            $data = $this->exportThrutext($members, $campaigns);
+            break;
         case "rep":
             $data = $this->exportRep($members, $pastcampaigns, $campaigns);
             break;
@@ -172,7 +175,36 @@ class MembersController extends Controller
                 }
             } else {
                 // include all
-                $data[] = [$member->email, $member->firstname, $member->lastname, $member->department, $member->mobile];
+                $data[] = [$member->firstname, $member->lastname, $member->department, $member->mobile];
+            }
+        }
+        return $data;
+    }
+
+    private function exportThrutext($members, $campaigns)
+    {
+        $data = [];
+        $data[] = ["FNAME", "LNAME", "DEPT", "PHONE"];
+
+        foreach ($members as $member) {
+            if ($member->hasMobileNumber()) {
+                if (count($campaigns) > 0) {
+                    foreach ($campaigns as $campaign) {
+                        $part = $campaign->participation($member);
+                        if ($part == "yes" || $part == "no") {
+                            continue; // try next campaign
+                        } elseif ($campaign->votersonly && !$member->voter) {
+                            continue; // try next campaign
+                        } else {
+                            $data[] = [$member->firstname, $member->lastname, $member->department, $member->mobile];
+                            continue 2;
+                            // next member
+                        }
+                    }
+                } else {
+                    // include all
+                    $data[] = [$member->firstname, $member->lastname, $member->department, $member->mobile];
+                }
             }
         }
         return $data;

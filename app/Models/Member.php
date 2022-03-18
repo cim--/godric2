@@ -33,4 +33,14 @@ class Member extends Model
             return $action->action;
         }
     }
+
+    public function hasMobileNumber()
+    {
+        $number = $this->mobile;
+        $number = preg_replace("/[^0-9]+/", "", $number);
+        if (substr($number, 0, 2) == "07" || substr($number, 0, 3) == "447") {
+            return true;
+        }
+        return false;
+    }
 }

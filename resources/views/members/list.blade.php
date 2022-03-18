@@ -57,6 +57,7 @@
 	<li><a href="{{ route('members.export') }}?format=email">Export Campaign Email List</a> (excludes those who have already participated)</li>
 	<li><a href="{{ route('members.export') }}?format=phone&amp;full=1">Export Full Phone List</a></li>
 	<li><a href="{{ route('members.export') }}?format=phone">Export Campaign Phone List</a> (excludes those who have already participated)</li>
+	<li><a href="{{ route('members.export') }}?format=thrutext">Export Campaign Thrutext List</a> (excludes those who have already participated, mobiles only)</li>
 	<li><a href="{{ route('members.export') }}?format=rep">Download Rep CSV</a> (all campaigns)</li>
     </ul>
 	
