@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function() {
 
             Route::resource('/roles', RolesController::class)->except('show');
             Route::resource('/campaigns', CampaignController::class)->except('show');
+
+            Route::post('/members/{member}/setpassword', [MembersController::class, 'setPassword'])->name('members.setpassword');
             
             Route::get('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImport'])->name('campaigns.import');
             Route::post('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImportProcess'])->name('campaigns.import.process');

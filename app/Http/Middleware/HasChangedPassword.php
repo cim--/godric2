@@ -29,7 +29,7 @@ class HasChangedPassword
             $request->session()->regenerate();
             return redirect()->route('auth.login');
         }
-        if (Hash::check($user->member->lastname, $user->password)) {
+        if ($user->hasTemporaryPassword()) {
             return redirect()->route('auth.password');
         }
         

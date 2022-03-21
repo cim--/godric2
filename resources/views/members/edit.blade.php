@@ -3,6 +3,7 @@
 
     <p><strong>Updating for:</strong> {{ $member->firstname }} {{ $member->lastname }}</p>
 
+    <h2>Campaign participation</h2>
     @if (count($campaigns) == 0)
 	<p>There are currently no active campaigns. Other membership information must be updated nationally if incorrect.</p>
     @else
@@ -26,7 +27,27 @@
 	{!! Form::close() !!}
 	
     @endif
+
+
+    @can('setPassword', $member)
+    <h2>Emergency password reset</h2>    
+    {!! Form::open(['route'=>['members.setpassword', $member->id], 'method' => 'POST']) !!}
+    <p>Where a member is having difficulties with the standard log in or password reset process, due to not receiving the code or having other technical difficulties, you can set a new password here, to tell them by an alternative secure route.</p>
+
+    <p>This option is only available if the member has a user account with the password set to their surname, which will be the case after initial log in or partial use of the password reset process.</p>
+
+    <p>Remember to ask them to change their password to something only they know after they log in.</p>
     
+    <div>
+	{!! Form::label('newpass', 'New temporary password') !!}
+	{!! Form::text('newpass') !!} (minimum 8 characters)
+    </div>
     
+    {!! Form::submit("Set new password") !!}
+    {!! Form::close() !!}
+
     
+    @endcan
+
+	
 </x-layout>

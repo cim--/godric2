@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Campaign;
 use App\Models\Action;
+use Illuminate\Support\Facades\Hash;
 
 class MembersController extends Controller
 {
@@ -79,6 +80,24 @@ class MembersController extends Controller
         }
 
         return redirect()->route('members.list')->with('message', 'Updated campaign participation');
+    }
+
+    public function setPassword(Member $member, Request $request)
+    {
+        $user = \Auth::user();
+        if (!$user->can('setPassword', $member)) {
+            abort(403);
+        }
+
+        $newpass = $request->input('newpass');
+        if (strlen($newpass) < 8) {
+            return back()->with('message', 'Password must be at least 8 characters');
+        }
+        
+        $member->user->password = Hash::make($newpass);
+        $member->user->save();
+
+        return back()->with('message', 'Temporary Password set - please contact the member to confirm this promptly.');
     }
     
     public function export(Request $request)

@@ -18,9 +18,6 @@ tar --anchored \
             --exclude=.gitattributes \
             --exclude=.gitignore \
 	    --exclude=*~ \
-#	    --exclude=storage/debugbar \
-#	    --exclude=storage/framework/views/* \
-#	    --exclude=storage/framework/sessions/* \
 	    --exclude=storage \
             --exclude=build.sh \
             --exclude=gulpfile.js \

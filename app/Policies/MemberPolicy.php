@@ -19,9 +19,9 @@ class MemberPolicy
      */
     public function seeReports(User $user)
     {
-        return $user->member->roles()->where('role', Role::ROLE_REP)
-                    ->orWhere('role', Role::ROLE_SUPERUSER)
-                    ->count() > 0;
+        return $user->member->roles()
+                            ->whereIn('role', [Role::ROLE_REP, Role::ROLE_SUPERUSER])
+                            ->count() > 0;
     }
 
     /**
@@ -38,6 +38,7 @@ class MemberPolicy
         }
 
         $roles = $user->member->roles;
+
         foreach ($roles as $role) {
             if ($role->role == Role::ROLE_SUPERUSER) {
                 return true;
@@ -62,4 +63,25 @@ class MemberPolicy
         return $user->member->roles()->where('role', Role::ROLE_SUPERUSER)->count() > 0;
     }
 
+    // for people who have trouble logging in normally
+    public function setPassword(User $user, Member $member)
+    {
+        if (!$member->user) {
+            // needs to start process
+            return false;
+        }
+        if ($member->user->hasTemporaryPassword()) {
+            // restricted to superusers as this can allow someone with
+            // membership access to log in as someone else. But the
+            // superuser permission should be limited to people who
+            // are very trusted anyway
+            return $this->manage($user);
+        }
+        // can't override a normal password this way - user must
+        // either have tried to log in, or started the password reset
+        // process
+        return false;
+    }
+
+    
 }

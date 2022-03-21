@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Hash;
 
 
 class User extends Authenticatable
@@ -59,5 +59,13 @@ class User extends Authenticatable
     {
         $this->password = Hash::make($member->lastname);
         $this->save();
+    }
+
+    public function hasTemporaryPassword()
+    {
+        if (!$this->member) {
+            return false;
+        }
+        return Hash::check($this->member->lastname, $this->password);
     }
 }
