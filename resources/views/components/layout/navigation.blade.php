@@ -6,7 +6,11 @@
 	<li><a href="{{route('members.list')}}">Member Lists</a></li>
 	<li><a href="{{route('campaign.report')}}">Campaign Reports</a></li>
 	@endcan
-	
+
+	@can('seePhonebank', App\Models\Member::class)
+	<li><a href="{{route('phonebank')}}">Campaign Participation</a></li>
+	@endcan
+
 	@can('manage', App\Models\Member::class)
 	<li><a href="{{route('import')}}">Import Members</a></li>
 	<li><a href="{{route('roles.index')}}">Set up Roles</a></li>

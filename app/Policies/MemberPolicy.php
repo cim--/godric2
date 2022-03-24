@@ -24,6 +24,14 @@ class MemberPolicy
                             ->count() > 0;
     }
 
+    public function seePhonebank(User $user)
+    {
+        return $user->member->roles()
+                            ->whereIn('role', [Role::ROLE_PHONEBANK, Role::ROLE_SUPERUSER])
+                            ->count() > 0;
+    }
+
+    
     /**
      * Determine whether the user can view the model.
      *
@@ -42,7 +50,7 @@ class MemberPolicy
         foreach ($roles as $role) {
             if ($role->role == Role::ROLE_SUPERUSER) {
                 return true;
-            } else {
+            } else if ($role->role == Role::ROLE_REP || $role->role == Role::ROLE_PHONEBANK) {
                 if (!$role->restrictfield) {
                     // view all
                     return true;

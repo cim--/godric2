@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Campaign;
 use App\Models\Action;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class MembersController extends Controller
 {
@@ -263,5 +264,91 @@ class MembersController extends Controller
             $data[] = $row;
         }
         return $data;
+    }
+
+
+    public function search()
+    {
+        if (!Campaign::started()->count()) {
+            return view('phonebank.nocampaign');
+        }
+        
+        return view('phonebank.search', [
+            'search' => '',
+            'results' => null,
+            'campaigns' => null
+        ]);
+    }
+
+    public function doSearch(Request $request)
+    {
+        $campaigns = Campaign::started()->get();
+        if (!$campaigns->count()) {
+            return view('phonebank.nocampaign');
+        }
+        
+        $user = Auth::user();
+        
+        $search = $request->input('search');
+        $words = explode(" ", trim($search));
+        if (strlen(trim($search)) < 3) {
+            return redirect()->route('phonebank')->with('message', 'Search term must be at least three characters');
+        }
+        
+        $members = Member::orderBy('lastname');
+        foreach ($words as $word) {
+            $members->where(function ($q) use ($word) {
+                $s = "%".trim($word)."%";
+                $q->where('firstname', 'LIKE', $s)
+                  ->orWhere('lastname', 'LIKE', $s)
+                  ->orWhere('email', 'LIKE', $s)
+                  ->orWhere('mobile', 'LIKE', $s)
+                  ->orWhere('membership', 'LIKE', $s);
+            });
+        }
+        $people = $members->get();
+        $results = [];
+        foreach ($people as $person) {
+            if ($user->can('view', $person)) {
+                $results[] = $person;
+            }
+        }
+        
+        return view('phonebank.search', [
+            'search' => $search,
+            'results' => $results,
+            'campaigns' => $campaigns
+        ]);
+    }
+
+    public function setParticipation(Request $request, Member $member)
+    {
+        if (!Campaign::started()->count()) {
+            return view('phonebank.nocampaign');
+        }
+
+        $user = Auth::user();
+
+        if (!$member || !$user->can('view', $member)) {
+            return redirect()->route('phonebank')->with('message', 'This member could not be found');
+        }
+        
+        $campaigns = Campaign::started()->get();
+        foreach ($campaigns as $campaign) {
+            if ($campaign->votersonly && !$member->voter) {
+                // skip this one
+                continue;
+            }
+
+            $action = Action::firstOrNew([
+                'campaign_id' => $campaign->id,
+                'member_id' => $member->id
+            ]);
+            $part = $request->input('part'.$campaign->id);
+            $action->action = $part;
+            $action->save();
+        }
+
+        return redirect()->route('phonebank')->with('message', $member->firstname." ".$member->lastname." participation updated");
     }
 }

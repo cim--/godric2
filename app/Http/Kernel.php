@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'authz.super' => \App\Http\Middleware\RequireSuperuser::class,
         'authz.rep' => \App\Http\Middleware\RequireRep::class,
+        'authz.phonebank' => \App\Http\Middleware\RequirePhonebank::class,
 
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

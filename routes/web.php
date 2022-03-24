@@ -40,6 +40,15 @@ Route::middleware('auth')->group(function() {
         Route::post('/participate/{campaign}', [CampaignController::class, 'participate'])->name('participate');
 
         
+        // phonebanker routes
+        Route::middleware('authz.phonebank')->prefix('phonebank')->group(function() {
+            Route::get('/phonebank', [MembersController::class, 'search'])->name('phonebank');
+            Route::post('/phonebank', [MembersController::class, 'doSearch'])->name('phonebank.search');
+            Route::post('/phonebank/{member}', [MembersController::class, 'setParticipation'])->name('phonebank.update');
+                
+        });
+
+
         // rep routes
         Route::middleware('authz.rep')->prefix('reps')->group(function() {
             

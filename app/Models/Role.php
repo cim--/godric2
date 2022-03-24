@@ -13,6 +13,8 @@ class Role extends Model
     public const ROLE_SUPERUSER = "superuser";
     /* Rep: run reports and charts */
     public const ROLE_REP = "rep";
+    /* Phonebank: set campaign participation */
+    public const ROLE_PHONEBANK = "phonebank";
     
     
     public function member()
@@ -25,6 +27,7 @@ class Role extends Model
     {
         return [
             self::ROLE_REP => "Representative",
+            self::ROLE_PHONEBANK => "Phonebank",
             self::ROLE_SUPERUSER => "Super-user",
         ];
     }
