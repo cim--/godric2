@@ -2,7 +2,7 @@
     <x-slot:title>Data Access Roles</x-slot:title>
 
     <p><a href="{{ route('roles.create') }}">New Role</a></p>
-    <table>
+    <table class="datatable" data-order='[[1, "asc"]]'>
 	<thead>
 	    <tr>
 		<th>Member</th>

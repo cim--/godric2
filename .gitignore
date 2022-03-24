@@ -2,11 +2,15 @@
 /public/hot
 /public/storage
 /public/css
+/public/js
+/public/images
 /public/mix-manifest.json
 /storage/*.key
 /vendor
 .env
 .env.backup
+.env.live
+godric.dist.tgz
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json

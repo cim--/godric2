@@ -3,6 +3,7 @@
     <head>
 	<title>{{ $title }}</title>
 	<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
+	<script src="{{ URL::asset('js/app.js') }}"></script>
     </head>
     <body>
 

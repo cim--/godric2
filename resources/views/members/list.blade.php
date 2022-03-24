@@ -5,7 +5,7 @@
 
     <p>Name, contact and affiliation data is derived from national data sources - please send corrections to national in the usual way.</p>
     
-    <table>
+    <table class="datatable" data-order='[[1, "asc"]]' data-length-menu='[[25,100,-1],[25,100,"All"]]'>
 	<thead>
 	    <tr>
 		<th>Membership ID</th>
@@ -26,7 +26,7 @@
 	    @foreach ($members as $member)
 		<tr>
 		    <td>{{ $member->membership }}</td>
-		    <td><a href="{{ route('members.edit', $member->id) }}">{{ $member->firstname }} {{ $member->lastname }}</a></td>
+		    <td data-sort="{{$member->lastname}} {{$member->firstname}}"><a href="{{ route('members.edit', $member->id) }}">{{ $member->firstname }} {{ $member->lastname }}</a></td>
 		    <td>{{ $member->email }}</td>
 		    <td>{{ $member->mobile }}</td>
 		    <td>{{ $member->department }}</td>

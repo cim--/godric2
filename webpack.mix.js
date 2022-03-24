@@ -11,7 +11,14 @@ const mix = require('laravel-mix');
  |
  */
 
-mix//.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
+mix.autoload({
+    jquery: ['$', 'window.jQuery']
+})
+    .js([
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/datatables.net-dt/js/dataTables.dataTables.js',
+    'resources/js/app.js'
+    ], 'public/js/app.js')
+    .css('resources/css/app.css', 'public/css', [
         //
     ]);
