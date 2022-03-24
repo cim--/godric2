@@ -12,3 +12,7 @@
 * Signup functionality that's a bit more generic than a campaign (e.g. picketing slots)
 * List of branch offices and holders
 ** could link to roles/permissions in-app as well, potentially?
+
+## Interface improvements
+
+* Add datatables support to the big member list table

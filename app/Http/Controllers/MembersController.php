@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Campaign;
 use App\Models\Action;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,12 @@ class MembersController extends Controller
         $roles = \Auth::user()->member->roles;
 
         $members = Member::orderBy('lastname')->orderBy('firstname');
+        $hasrole = false;
         foreach ($roles as $role) {
+            if ($role->role != Role::ROLE_SUPERUSER && $role->role != Role::ROLE_REP) {
+                continue; // not a role for this list
+            }  
+            $hasrole = true;
             if ($role->restrictfield == "") {
                 // trivially true
                 $members->orWhere('id', '>', '0');
@@ -27,7 +33,10 @@ class MembersController extends Controller
                 $members->orWhere($role->restrictfield, $role->restrictvalue);
             }
         }
-
+        if (!$hasrole) {
+            // no list - though shouldn't get here anyway
+            return collect([]);
+        }
         return $members->cursor();
     }
 
@@ -47,7 +56,7 @@ class MembersController extends Controller
     public function edit(Member $member)
     {
         $user = \Auth::user();
-        if (!$user->can('view', $member)) {
+        if (!$user->can('viewFull', $member)) {
             abort(403);
         }
         
@@ -61,7 +70,7 @@ class MembersController extends Controller
     public function update(Member $member, Request $request)
     {
         $user = \Auth::user();
-        if (!$user->can('view', $member)) {
+        if (!$user->can('viewFull', $member)) {
             abort(403);
         }
         
@@ -309,7 +318,7 @@ class MembersController extends Controller
         $people = $members->get();
         $results = [];
         foreach ($people as $person) {
-            if ($user->can('view', $person)) {
+            if ($user->can('view', $person)) { // not viewFull
                 $results[] = $person;
             }
         }

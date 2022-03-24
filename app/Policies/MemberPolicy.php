@@ -65,6 +65,33 @@ class MemberPolicy
         return false;
     }
 
+    /* View a rep's report for the member */
+    public function viewFull(User $user, Member $member)
+    {
+        if ($user->member->id == $member->id) {
+            return true;
+        }
+
+        $roles = $user->member->roles;
+
+        foreach ($roles as $role) {
+            if ($role->role == Role::ROLE_SUPERUSER) {
+                return true;
+            } else if ($role->role == Role::ROLE_REP) {
+                if (!$role->restrictfield) {
+                    // view all
+                    return true;
+                } 
+                $field = $role->restrictfield;
+                if ($member->$field == $role->restrictvalue) {
+                    // view scope
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // superuser wide-scale management
     public function manage(User $user)
     {
