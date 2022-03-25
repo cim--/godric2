@@ -15,4 +15,4 @@
 
 ## Interface improvements
 
-* Add datatables support to the big member list table
+* Move the 'any role' prefix out of 'reps' (when things are quieter)

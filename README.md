@@ -34,11 +34,12 @@ php artisan migrate --seed
 
 ## Setting up roles
 
-Use the "Set up Roles" link. There are two roles currently available, and users need not have any roles at all:
+Use the "Set up Roles" link. There are the following roles currently available, and users need not have any roles at all:
 
 * No role: can set own participation in campaigns
 * Representative: can view membership lists and campaign reports for their remit, and set member participation in campaigns
-* Phonebank: can set member participation in campaigns
+* Phonebank: can set member participation in campaigns and view campaign reports
+* Report View: can view campaign reports (not needed if they have another role which allows this already)
 * Superuser: can set up roles, import members, and set up campaigns
 
 Most representatives should have their roles restricted to the area they operate in - often a department, but it might be a job type or membership type. (Note that while superuser roles can be restricted, a superuser can just edit their role to remove that restriction.) Follow the general GDPR principles when granting access.
