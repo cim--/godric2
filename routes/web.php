@@ -8,6 +8,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\MembersController;
+use App\Http\Controllers\NoticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,10 +36,13 @@ Route::middleware('auth')->group(function() {
     // middleware so that a default password can't access these other
     // routes
     Route::middleware('auth.cpwd')->group(function() {
-    
+
+        // entirely public routes go here
         Route::get('/', [MainController::class, 'index'])->name('main');
         Route::post('/participate/{campaign}', [CampaignController::class, 'participate'])->name('participate');
 
+        Route::get('/notices', [NoticeController::class, 'publicIndex'])->name('notices.public');
+        Route::get('/notices/{notice}', [NoticeController::class, 'read'])->name('notices.read');
         
         // phonebanker routes
         Route::middleware('authz.phonebank')->prefix('phonebank')->group(function() {
@@ -72,6 +76,8 @@ Route::middleware('auth')->group(function() {
 
             Route::resource('/roles', RolesController::class)->except('show');
             Route::resource('/campaigns', CampaignController::class)->except('show');
+            Route::resource('/notices', NoticeController::class)->except('show');
+                    
 
             Route::post('/members/{member}/setpassword', [MembersController::class, 'setPassword'])->name('members.setpassword');
             

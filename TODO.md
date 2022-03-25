@@ -7,6 +7,7 @@
   
 ## More generally
 
+* Internal message and notice functionality
 * Petition functionality
 * Basic online voting functionality
 * Signup functionality that's a bit more generic than a campaign (e.g. picketing slots)

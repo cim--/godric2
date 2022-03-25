@@ -47,3 +47,8 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+
+.highnotice {
+    font-weight: bold;
+    color: #310c58;
+}

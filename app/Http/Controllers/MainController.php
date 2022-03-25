@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Campaign;
+use App\Models\Notice;
 use Carbon\Carbon;
 
 class MainController extends Controller
@@ -20,9 +21,12 @@ class MainController extends Controller
         }
         $list = $campaigns->get();
 
+        $notices = Notice::current()->highlighted()->orderBy('title')->get();
+        
         return view('index', [
             'campaigns' => $list,
-            'self' => $self
+            'self' => $self,
+            'notices' => $notices
         ]);
     }
 }
