@@ -12,7 +12,7 @@ class MemberPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Determine high-level access permissions to member data
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
@@ -20,7 +20,12 @@ class MemberPolicy
     public function seeReports(User $user)
     {
         return $user->member->roles()
-                            ->whereIn('role', [Role::ROLE_REP, Role::ROLE_PHONEBANK, Role::ROLE_SUPERUSER])
+                            ->whereIn('role', [
+                                Role::ROLE_REP,
+                                Role::ROLE_PHONEBANK,
+                                Role::ROLE_SUPERUSER,
+                                Role::ROLE_REPORT
+                            ])
                             ->count() > 0;
     }
 
@@ -40,7 +45,7 @@ class MemberPolicy
 
     
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the specific member.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Member  $member
