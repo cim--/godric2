@@ -57,6 +57,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.cpwd' => \App\Http\Middleware\HasChangedPassword::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'authz.any' => \App\Http\Middleware\RequireSomerole::class,
         'authz.super' => \App\Http\Middleware\RequireSuperuser::class,
         'authz.rep' => \App\Http\Middleware\RequireRep::class,
         'authz.phonebank' => \App\Http\Middleware\RequirePhonebank::class,

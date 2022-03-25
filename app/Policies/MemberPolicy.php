@@ -20,6 +20,13 @@ class MemberPolicy
     public function seeReports(User $user)
     {
         return $user->member->roles()
+                            ->whereIn('role', [Role::ROLE_REP, Role::ROLE_PHONEBANK, Role::ROLE_SUPERUSER])
+                            ->count() > 0;
+    }
+
+    public function seeLists(User $user)
+    {
+        return $user->member->roles()
                             ->whereIn('role', [Role::ROLE_REP, Role::ROLE_SUPERUSER])
                             ->count() > 0;
     }

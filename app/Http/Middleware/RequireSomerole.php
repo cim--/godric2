@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
 
-class RequireRep
+class RequireSomerole
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class RequireRep
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if (!$user->can('seeLists', \App\Models\Member::class))
+        if (!$user->can('seeReports', \App\Models\Member::class))
         {
             abort(403);
         }
