@@ -18,7 +18,7 @@ class NoticeController extends Controller
      */
     public function publicIndex()
     {
-        $notices = Notice::current()->orderBy('highlighted', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
+        $notices = Notice::current()->orderBy('highlight', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
         return view('notices.public', [
             'notices' => $notices
         ]);
@@ -52,7 +52,7 @@ class NoticeController extends Controller
      */
     public function index()
     {
-        $notices = Notice::orderBy('highlighted', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
+        $notices = Notice::orderBy('highlight', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
         return view('notices.index', [
             'notices' => $notices
         ]);
