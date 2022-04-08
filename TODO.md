@@ -2,12 +2,14 @@
 
 ## For balloting
 
-* Phonebanker role - can search by name, department, etc. and set
-  participation details for current campaigns.
-  
+* Campaign reports: "with wait" / "with wait+help"
+* Data entry: more clarity over what 'wait' and 'help' means for a ballot
+* Campaigns: automove wait -> yes
+* Set up workplace/department map - allow grouping of workplaces, and allow permissions to be allocated on workplaces rather than departments
+* Roletype 'campaigner': same permissions as a rep, but *only* when a campaign is active. Makes it easier to allocate and remove temporary permissions.
+
 ## More generally
 
-* Internal message and notice functionality
 * Petition functionality
 * Basic online voting functionality
 * Signup functionality that's a bit more generic than a campaign (e.g. picketing slots)
@@ -17,3 +19,11 @@
 ## Interface improvements
 
 * Move the 'any role' prefix out of 'reps' (when things are quieter)
+
+## Data retention improvements
+
+* Implement "dispute+3" cleanup of old campaigns. Probably needs a dispute object to link them to so that it can be configured properly.
+
+## For testing
+
+* Database seed/factories to set up a basic fake members + roles list for demonstration/testing/auto-testing purposes.

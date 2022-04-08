@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Member;
+use App\Models\Action;
 use Carbon\Carbon;
 
 class ImportController extends Controller
@@ -75,9 +76,10 @@ class ImportController extends Controller
         $remlist = $removed->map($lister);
         
         foreach ($removed as $remove) {
+            $remove->actions()->delete();
             $remove->delete();
         }
-
+        
         return view('import.process', [
             'total' => count($contents)-1,
             'added' => $addlist,
