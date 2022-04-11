@@ -22,8 +22,8 @@
 
 ## Data retention improvements
 
-* Implement "dispute+3" cleanup of old campaigns. Probably needs a dispute object to link them to so that it can be configured properly.
+* Implement "dispute+3" cleanup of old campaigns. Probably needs a dispute object to link them to so that it can be configured properly. (No hurry, just sometime before 2025)
 
 ## For testing
 
-* Database seed/factories to set up a basic fake members + roles list for demonstration/testing/auto-testing purposes.
+* Some automated browserkit tests would be good

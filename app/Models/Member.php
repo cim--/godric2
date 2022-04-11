@@ -34,6 +34,11 @@ class Member extends Model
         }
     }
 
+    public function scopeVoter($q)
+    {
+        return $q->where('voter', true);
+    }
+    
     public function hasMobileNumber()
     {
         $number = $this->mobile;
