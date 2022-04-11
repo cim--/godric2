@@ -10,18 +10,26 @@
 	    <tr>
 		<th>Department</th>
 		<th>Members</th>
-		<th>Participation</th>
 		<th>Target</th>
-		<th>Percentage</th>
+		<th>Participation</th>
+		<th>Participation + Intends</th>
+		<th>Participation + Intends + Needs Help</th>
+		<th>All Responses</th>
+		<th>Participation Percentage</th>
+		<th>Contact Percentage</th>
 	    </tr>
 	</thead>
 	<tfoot>
 	    <tr>
 		<td><strong>TOTAL</strong></td>
 		<td><strong>{{ $mcount }}</strong></td>
-		<td><strong>{{ $pcount }}</strong></td>
 		<td><strong>{{ $campaign->calctarget ? $campaign->calctarget : ceil($mcount * $campaign->target / 100) }}</strong></td>
+		<td><strong>{{ $pcount }}</strong></td>
+		<td><strong>{{ $wpcount }}</strong></td>
+		<td><strong>{{ $whpcount }}</strong></td>
+		<td><strong>{{ $ccount }}</strong></td>
 		<td><strong>{{ number_format(100*$pcount/$mcount, 1) }}%</strong></td>
+		<td><strong>{{ number_format(100*$ccount/$mcount, 1) }}%</strong></td>
 	    </tr>
 	</tfoot>
 	<tbody>
@@ -29,9 +37,14 @@
 		<tr>
 		    <td>{{ $department }}</td>
 		    <td>{{ $data['members'] }}</td>
-		    <td>{{ $data['participants'] }}</td>
 		    <td>{{ ceil($data['members'] * $campaign->target / 100) }}</td>
+		    <td>{{ $data['participants'] }}</td>
+		    <td>{{ $data['wparticipants'] }}</td>
+		    <td>{{ $data['whparticipants'] }}</td>
+		    <td>{{ $data['contacts'] }}</td>
 		    <td data-sort="{{$data['participants']/$data['members']}}">{{ number_format(100*$data['participants']/$data['members'], 1) }}%</td>
+		    <td data-sort="{{$data['contacts']/$data['members']}}">{{ number_format(100*$data['contacts']/$data['members'], 1) }}%</td>
+
 		</tr>
 	    @endforeach
 	</tbody>

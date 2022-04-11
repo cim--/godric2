@@ -187,19 +187,38 @@ class CampaignController extends Controller
 
         $mcount = 0;
         $pcount = 0;
+        $wpcount = 0;
+        $whpcount = 0;
+        $ccount = 0;
         foreach ($members as $member) {
             $dept = $member->department;
             if (!isset($departments[$dept])) {
                 $departments[$dept] = [
                     'members' => 0,
-                    'participants' => 0
+                    'participants' => 0,
+                    'wparticipants' => 0,
+                    'whparticipants' => 0,
+                    'contacts' => 0
                 ];
             }
             $departments[$dept]['members']++;
             $mcount++;
-            if ($campaign->participation($member) == "yes") {
+            $participation = $campaign->participation($member);
+            switch ($participation) {
+                // fall-through is intended!
+            case "yes":
                 $departments[$dept]['participants']++;
                 $pcount++;
+            case "wait":
+                $departments[$dept]['wparticipants']++;
+                $wpcount++;
+            case "help":
+                $departments[$dept]['whparticipants']++;
+                $whpcount++;
+            case "no":
+                $departments[$dept]['contacts']++;
+                $ccount++;
+            default:
             }
         }
         ksort($departments);
@@ -208,7 +227,10 @@ class CampaignController extends Controller
             'campaign' => $campaign,
             'departments' => $departments,
             'mcount' => $mcount,
-            'pcount' => $pcount
+            'pcount' => $pcount,
+            'wpcount' => $wpcount,
+            'whpcount' => $whpcount,
+            'ccount' => $ccount
         ]);
     }
 
