@@ -18,10 +18,14 @@ class MembersController extends Controller
     {
         $roles = \Auth::user()->member->roles;
 
+        $campaign = Campaign::started()->count();
+
         $members = Member::orderBy('lastname')->orderBy('firstname');
         $hasrole = false;
         foreach ($roles as $role) {
-            if ($role->role != Role::ROLE_SUPERUSER && $role->role != Role::ROLE_REP) {
+            if ($role->role == Role::ROLE_CAMPAIGNER && $campaign > 0) {
+                // proceed
+            } elseif ($role->role != Role::ROLE_SUPERUSER && $role->role != Role::ROLE_REP) {
                 continue; // not a role for this list
             }  
             $hasrole = true;

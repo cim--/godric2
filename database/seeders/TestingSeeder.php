@@ -97,6 +97,14 @@ class TestingSeeder extends Seeder
                     'restrictvalue' => 'Postgraduate'
                 ]);
                 break;
+            case 1005:
+                Role::factory()->create([
+                    'member_id' => $member->id,
+                    'role' => Role::ROLE_CAMPAIGNER,
+                    'restrictfield' => 'department',
+                    'restrictvalue' => 'Chemistry'
+                ]);
+                break;
             default:
                 // no roles
             }

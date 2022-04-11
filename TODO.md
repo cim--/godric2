@@ -2,11 +2,9 @@
 
 ## For balloting
 
-* Campaign reports: "with wait" / "with wait+help"
 * Data entry: more clarity over what 'wait' and 'help' means for a ballot
 * Campaigns: automove wait -> yes
 * Set up workplace/department map - allow grouping of workplaces, and allow permissions to be allocated on workplaces rather than departments
-* Roletype 'campaigner': same permissions as a rep, but *only* when a campaign is active. Makes it easier to allocate and remove temporary permissions.
 
 ## More generally
 

@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Member;
 use App\Models\User;
+use App\Models\Campaign;
 use App\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -22,6 +23,7 @@ class MemberPolicy
         return $user->member->roles()
                             ->whereIn('role', [
                                 Role::ROLE_REP,
+                                Role::ROLE_CAMPAIGNER,
                                 Role::ROLE_PHONEBANK,
                                 Role::ROLE_SUPERUSER,
                                 Role::ROLE_REPORT
@@ -31,8 +33,13 @@ class MemberPolicy
 
     public function seeLists(User $user)
     {
+        $roles = [Role::ROLE_REP, Role::ROLE_SUPERUSER];
+        if (Campaign::started()->count() > 0) {
+            // only applies during campaigns
+            $roles[] = Role::ROLE_CAMPAIGNER;
+        }
         return $user->member->roles()
-                            ->whereIn('role', [Role::ROLE_REP, Role::ROLE_SUPERUSER])
+                            ->whereIn('role', $roles)
                             ->count() > 0;
     }
 
@@ -62,7 +69,7 @@ class MemberPolicy
         foreach ($roles as $role) {
             if ($role->role == Role::ROLE_SUPERUSER) {
                 return true;
-            } else if ($role->role == Role::ROLE_REP || $role->role == Role::ROLE_PHONEBANK) {
+            } else if ($role->role == Role::ROLE_REP || $role->role == Role::ROLE_PHONEBANK || $role->role == Role::ROLE_CAMPAIGNER) {
                 if (!$role->restrictfield) {
                     // view all
                     return true;
@@ -84,12 +91,15 @@ class MemberPolicy
             return true;
         }
 
+        $campaign = Campaign::started()->count();
+        
         $roles = $user->member->roles;
 
         foreach ($roles as $role) {
             if ($role->role == Role::ROLE_SUPERUSER) {
                 return true;
-            } else if ($role->role == Role::ROLE_REP) {
+            } else if ($role->role == Role::ROLE_REP ||
+                       ($role->role == Role::ROLE_CAMPAIGNER && $campaign > 0)) {
                 if (!$role->restrictfield) {
                     // view all
                     return true;

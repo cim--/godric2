@@ -13,6 +13,8 @@ class Role extends Model
     public const ROLE_SUPERUSER = "superuser";
     /* Rep: run reports and charts */
     public const ROLE_REP = "rep";
+    /* Campaigner: same permissions as a rep, but only when campaigns are active */
+    public const ROLE_CAMPAIGNER = "campaigner";
     /* Phonebank: set campaign participation */
     public const ROLE_PHONEBANK = "phonebank";
     /* Report: view high-level reports only */
@@ -29,6 +31,7 @@ class Role extends Model
     {
         return [
             self::ROLE_REP => "Representative",
+            self::ROLE_CAMPAIGNER => "Campaigner",
             self::ROLE_PHONEBANK => "Phonebank",
             self::ROLE_REPORT => "Reporting View",
             self::ROLE_SUPERUSER => "Super-user",

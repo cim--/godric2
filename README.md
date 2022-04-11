@@ -38,6 +38,7 @@ Use the "Set up Roles" link. There are the following roles currently available, 
 
 * No role: can set own participation in campaigns
 * Representative: can view membership lists and campaign reports for their remit, and set member participation in campaigns
+* Campaigner: like a rep, but the role only works to view membership lists when there's an active campaign (useful for cleanly adding temporary helpers)
 * Phonebank: can set member participation in campaigns and view campaign reports
 * Report View: can view campaign reports (not needed if they have another role which allows this already)
 * Superuser: can set up roles, import members, and set up campaigns
