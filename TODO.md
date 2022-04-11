@@ -18,7 +18,7 @@
 
 ## Interface improvements
 
-* Move the 'any role' prefix out of 'reps' (when things are quieter)
+* Reorganise navigation bar
 
 ## Data retention improvements
 
