@@ -34,7 +34,7 @@
 		    '-' => '(select answer)',
 		    'yes' => 'I have participated',
 		    'wait' => 'I will participate soon',
-		    'help' => 'I need assistance to participate',
+		    'help' => 'I need assistance to participate / I have not received a ballot',
 		    'no' => 'I have not participated / prefer not to say, but do not need further reminders'
 		    ], $self->participation($campaign)) !!}
 		{!! Form::submit("Update participation") !!}

@@ -17,9 +17,9 @@
 		{!! Form::select('action'.$campaign->id, [
 		    '-' => 'Not known',
 		    'yes' => 'Participated',
-		    'wait' => 'Intends to',
-		    'help' => 'Needs help',
-		    'no' => 'No, end contact'
+		    'wait' => 'Intends to participate before deadline',
+		    'help' => 'Needs help / ballot not arrived',
+		    'no' => 'Will not or can not participate, end contact'
 		    ] ,$member->participation($campaign)) !!} 
 	    </div>
 	@endforeach

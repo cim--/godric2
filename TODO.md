@@ -2,7 +2,6 @@
 
 ## For balloting
 
-* Data entry: more clarity over what 'wait' and 'help' means for a ballot
 * Campaigns: automove wait -> yes
 * Set up workplace/department map - allow grouping of workplaces, and allow permissions to be allocated on workplaces rather than departments
 

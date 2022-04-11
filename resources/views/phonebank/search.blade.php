@@ -29,7 +29,7 @@
 				'-' => '(select answer)',
 				'yes' => 'Participated',
 				'wait' => 'Will participate soon',
-				'help' => 'Needs assistance to participate',
+				'help' => 'Needs assistance to participate / ballot not arrived',
 				'no' => 'Not participated / prefer not to say, end contact'
 				], $campaign->participation($result)) !!}
 			    

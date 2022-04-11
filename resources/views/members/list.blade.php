@@ -34,10 +34,10 @@
 		    <td>{{ $member->membertype }}</td>
 		    <td>{{ $member->voter ? "Yes" : "No" }}</td>
 		    <td>
-			@foreach ($pastcampaigns as $pc) 
-			    @if ($pc->participation($member) == "yes")
-				<span title="{{ $pc->name }}">&#x2714;</span>
-			    @endif
+			@foreach ($pastcampaigns as $pc)
+			    <x-campaigns.pastparticipant
+				title="{{ $pc->name }}"
+				part="{{ $pc->participation($member) }}" />
 			@endforeach
 		    </td>
 		    @foreach ($campaigns as $campaign)
