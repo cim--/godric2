@@ -76,6 +76,7 @@ class CampaignController extends Controller
     {
         $campaign->name = $request->input('name');
         $campaign->description = $request->input('description');
+        $campaign->campaigntype = $request->input('type');
         $campaign->start = Carbon::parse($request->input('start'));
         $campaign->end = Carbon::parse($request->input('end'));
         $campaign->target = $request->input('target');

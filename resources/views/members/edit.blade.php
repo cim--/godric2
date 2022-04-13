@@ -12,22 +12,11 @@
 	{!! Form::open(['route'=>['members.update', $member->id], 'method' => 'POST']) !!}
 	
 	@foreach ($campaigns as $campaign)
-	    <div>
-		{!! Form::label('action'.$campaign->id, $campaign->name) !!}
-		{!! Form::select('action'.$campaign->id, [
-		    '-' => 'Not known',
-		    'yes' => 'Participated',
-		    'wait' => 'Intends to participate before deadline',
-		    'help' => 'Needs help / ballot not arrived',
-		    'no' => 'Will not or can not participate, end contact'
-		    ] ,$member->participation($campaign)) !!} 
-	    </div>
+	    <x-campaigns.statemenu :campaign="$campaign" :member="$member" />
 	@endforeach
 	{!! Form::submit("Update campaign participation") !!}
 	{!! Form::close() !!}
-	
     @endif
-
 
     @can('setPassword', $member)
     <h2>Emergency password reset</h2>    

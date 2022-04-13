@@ -22,23 +22,7 @@
 
 		{!! Form::open(['method'=>'post', 'route' => ['phonebank.update', $result->id]]) !!}
 		@foreach ($campaigns as $campaign)
-		    @if (!$campaign->votersonly || $result->voter)
-			<div>
-			    {!! Form::label('part'.$campaign->id, $campaign->name) !!}
-			    {!! Form::select('part'.$campaign->id, [
-				'-' => '(select answer)',
-				'yes' => 'Participated',
-				'wait' => 'Will participate soon',
-				'help' => 'Needs assistance to participate / ballot not arrived',
-				'no' => 'Not participated / prefer not to say, end contact'
-				], $campaign->participation($result)) !!}
-			    
-			</div>
-		    @else
-			<div>
-			    {{$campaign->name}}: voters only
-			</div>
-		    @endif
+		    <x-campaigns.statemenu :campaign="$campaign" :member="$result" />
 		@endforeach
 		{!! Form::submit('Update participation') !!}
 		{!! Form::close() !!}

@@ -8,6 +8,7 @@
 	<thead>
 	    <tr>
 		<th>Title</th>
+		<th>Type</th>
 		<th>Start</th>
 		<th>End</th>
 		<th>Target</th>
@@ -20,6 +21,7 @@
 		    <td><a href="{{ route('campaigns.edit', $campaign->id) }}">
 			{{ $campaign->name }}
 		    </a></td>
+		    <td>{{ucwords($campaign->campaigntype)}}</td>
 		    <td>{{$campaign->start->format("j F Y")}}</td>
 		    <td>{{$campaign->end->format("j F Y")}}</td>
 		    <td>

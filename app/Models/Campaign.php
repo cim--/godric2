@@ -15,6 +15,15 @@ class Campaign extends Model
         'end' => 'datetime',
     ];
 
+    /* Ballot. Wording around voting. */
+    public const CAMPAIGN_BALLOT = "ballot";
+    /* Advance Signup. Does not have 'yes' option. */
+    public const CAMPAIGN_SIGNUP = "signup";
+    /* Petition. Does not have 'wait' option. */
+    public const CAMPAIGN_PETITION = "petition";
+    /* Miscellaneous. All options, generic wording */
+    public const CAMPAIGN_MISC = "misc";
+    
     
     use HasFactory;
 
@@ -42,6 +51,63 @@ class Campaign extends Model
             return "-";
         } else {
             return $action->action;
+        }
+    }
+
+    public static function campaignTypes()
+    {
+        return [
+            self::CAMPAIGN_BALLOT => "Ballot",
+            self::CAMPAIGN_SIGNUP => "Advance Signup",
+            self::CAMPAIGN_PETITION => "Petition",
+            self::CAMPAIGN_MISC => "Other Campaign"
+        ];
+    }
+
+    public function stateDescriptions($pronoun="I")
+    {
+        switch ($this->campaigntype) {
+        case (self::CAMPAIGN_BALLOT):
+            return [
+                '-' => '(select answer)',
+                'yes' => $pronoun." have voted",
+                'wait' => $pronoun." have received a ballot and will return it soon",
+                'help' => $pronoun." have not received a ballot",
+                'no' => $pronoun." have not voted or prefer not to say, but do not need further reminders"
+            ];
+        case (self::CAMPAIGN_SIGNUP):
+            return [
+                '-' => '(select answer)',
+                'wait' => $pronoun." will participate in this action",
+                'help' => $pronoun." need more information about this action",
+                'no' => $pronoun." will not participate in this action"
+            ];
+        case (self::CAMPAIGN_PETITION):
+            // reps and admins can't set 'yes' or edit a 'yes'
+            if ($pronoun == "I") {
+                return [
+                    '-' => '(select answer)',
+                    'yes' => $pronoun." sign this petition",
+                    'help' => $pronoun." need more information about this petition",
+                    'no' => $pronoun." will not sign this petition"
+                ];
+            } else {
+                return [
+                    '-' => '(select answer)',
+                    //                    'yes' => $pronoun." sign this petition",
+                    'help' => $pronoun." need more information about this petition",
+                    'no' => $pronoun." will not sign this petition"
+                ];
+            }
+        case (self::CAMPAIGN_MISC):
+        default:
+            return [
+                '-' => '(select answer)',
+                'yes' => $pronoun." have participated",
+                'wait' => $pronoun." will participate soon",
+                'help' => $pronoun." need assistance or more information to participate",
+                'no' => $pronoun." will not participate"
+            ];
         }
     }
 }

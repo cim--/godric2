@@ -80,6 +80,15 @@ class MembersController extends Controller
         
         $campaigns = Campaign::started()->orderBy('end')->get();
         foreach ($campaigns as $campaign) {
+            if ($campaign->campaigntype == CAMPAIGN::CAMPAIGN_PETITION && $campaign->participation($member) == "yes") {
+                // skip this one
+                continue;
+            }
+            if ($campaign->votersonly && !$member->voter) {
+                // skip this one
+                continue;
+            }
+            
             $part = $request->input('action'.$campaign->id, "-");
             if ($part != "-") {
                 $action = Action::firstOrNew([
@@ -352,12 +361,16 @@ class MembersController extends Controller
                 // skip this one
                 continue;
             }
+            if ($campaign->campaigntype == CAMPAIGN::CAMPAIGN_PETITION && $campaign->participation($member) == "yes") {
+                // skip this one
+                continue;
+            }
 
             $action = Action::firstOrNew([
                 'campaign_id' => $campaign->id,
                 'member_id' => $member->id
             ]);
-            $part = $request->input('part'.$campaign->id);
+            $part = $request->input('action'.$campaign->id);
             $action->action = $part;
             $action->save();
         }

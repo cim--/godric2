@@ -2,7 +2,7 @@
 
 ## For balloting
 
-* Campaigns: automove wait -> yes
+* Campaigns: bulk move wait -> yes
 * Set up workplace/department map - allow grouping of workplaces, and allow permissions to be allocated on workplaces rather than departments
 
 ## More generally
