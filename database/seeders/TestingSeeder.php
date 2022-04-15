@@ -29,26 +29,59 @@ class TestingSeeder extends Seeder
             $user = User::factory()->create([
                 'username' => $i
             ]);
-            $member = Member::factory()->create([
-                'membership' => $i
-            ]);
+            switch ($i) {
+            case 1020:
+            case 1030:
+                // set specific members
+                $member = Member::factory()->create([
+                    'membership' => $i,
+                    'department' => 'Philosophy',
+                    'voter' => true,
+                ]);
+                break;
+            case 1040:
+                $member = Member::factory()->create([
+                    'membership' => $i,
+                    'voter' => true,
+                ]);
+                break;
+            default:
+                // randomise
+                $member = Member::factory()->create([
+                    'membership' => $i
+                ]);
+            }
             if ($member->voter) {
-                if (rand(0,10) < 5) {
+                switch ($member->id) {
+                case 1020:
+                    // force no actions
+                    break;
+                case 1030:
+                    // force yes action this time
                     Action::factory()->create([
                         'member_id' => $member->id,
-                        'campaign_id' => $pastcampaign->id,
+                        'campaign_id' => $currentcampaign->id,
+                        'action' => 'yes'
                     ]);
-                    if (rand(0,10) < 3) {
+                    break;
+                default:
+                    if (rand(0,10) < 5) {
+                        Action::factory()->create([
+                            'member_id' => $member->id,
+                            'campaign_id' => $pastcampaign->id,
+                        ]);
+                        if (rand(0,10) < 3) {
+                            Action::factory()->create([
+                                'member_id' => $member->id,
+                                'campaign_id' => $currentcampaign->id,
+                            ]);
+                        }
+                    } elseif (rand(0,10) < 2) {
                         Action::factory()->create([
                             'member_id' => $member->id,
                             'campaign_id' => $currentcampaign->id,
                         ]);
                     }
-                } elseif (rand(0,10) < 2) {
-                    Action::factory()->create([
-                        'member_id' => $member->id,
-                        'campaign_id' => $currentcampaign->id,
-                    ]);
                 }
             }
             /* Set up roles */

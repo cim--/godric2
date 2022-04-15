@@ -1,16 +1,16 @@
 # Features needed
 
-## For balloting
+## For balloting / campaigning
 
 * Campaigns: bulk move wait -> yes
 * Set up workplace/department map - allow grouping of workplaces, and allow permissions to be allocated on workplaces rather than departments
 
 ## More generally
 
-* Petition functionality
+* "Notes" field for reps to use
+* Highlight permissions held on reps list
 * Basic online voting functionality
-* Signup functionality that's a bit more generic than a campaign (e.g. picketing slots)
-* List of branch offices and holders
+* More structured list of branch offices and holders (can be done as a notice, of course)
 ** could link to roles/permissions in-app as well, potentially?
 
 ## Interface improvements

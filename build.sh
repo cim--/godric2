@@ -20,6 +20,7 @@ tar --anchored \
 	    --exclude=*~ \
 	    --exclude=storage \
             --exclude=build.sh \
+	    --exclude=test.sh \
             --exclude=gulpfile.js \
             --exclude=package.json \
             --exclude=phpspec.yml \
