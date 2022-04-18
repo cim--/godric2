@@ -33,6 +33,10 @@ class MembersController extends Controller
                 // trivially true
                 $members->orWhere('id', '>', '0');
                 break;
+            } elseif ($role->restrictfield == "workplace") {
+                $members->orWhereHas('workplaces', function ($q) use ($role) {
+                    $q->where('name', $role->restrictvalue);
+                });
             } else {
                 $members->orWhere($role->restrictfield, $role->restrictvalue);
             }

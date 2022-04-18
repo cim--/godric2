@@ -77,6 +77,7 @@ class ImportController extends Controller
         
         foreach ($removed as $remove) {
             $remove->actions()->delete();
+            $remove->workplaces()->detach();
             $remove->delete();
         }
         

@@ -75,7 +75,11 @@ class MemberPolicy
                     return true;
                 } 
                 $field = $role->restrictfield;
-                if ($member->$field == $role->restrictvalue) {
+                if ($field == "workplace") {
+                    if ($member->workplaces->where('name', $role->restrictvalue)->count() > 0) {
+                        return true;
+                    }
+                } elseif ($member->$field == $role->restrictvalue) {
                     // view scope
                     return true;
                 }
@@ -105,7 +109,11 @@ class MemberPolicy
                     return true;
                 } 
                 $field = $role->restrictfield;
-                if ($member->$field == $role->restrictvalue) {
+                if ($field == "workplace") {
+                    if ($member->workplaces->where('name', $role->restrictvalue)->count() > 0) {
+                        return true;
+                    }
+                } elseif ($member->$field == $role->restrictvalue) {
                     // view scope
                     return true;
                 }
