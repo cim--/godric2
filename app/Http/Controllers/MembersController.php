@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Campaign;
+use App\Models\Workplace;
 use App\Models\Action;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +46,7 @@ class MembersController extends Controller
             // no list - though shouldn't get here anyway
             return collect([]);
         }
-        return $members->cursor();
+        return $members->with('workplaces')->get();
     }
 
     public function list()
@@ -67,11 +68,14 @@ class MembersController extends Controller
         if (!$user->can('viewFull', $member)) {
             abort(403);
         }
+
+        $workplaces = Workplace::managedBy($user);
         
         $campaigns = Campaign::started()->orderBy('end')->get();
         return view('members.edit', [
             'member' => $member,
-            'campaigns' => $campaigns
+            'campaigns' => $campaigns,
+            'workplaces' => $workplaces,
         ]);
     }
 
@@ -109,6 +113,40 @@ class MembersController extends Controller
         return redirect()->route('members.list')->with('message', 'Updated campaign participation');
     }
 
+    public function updateWorkplace(Member $member, Request $request)
+    {
+        $user = \Auth::user();
+        if (!$user->can('viewFull', $member)) {
+            abort(403);
+        }
+        $workplaces = Workplace::managedBy($user);
+
+        foreach ($workplaces as $workplace) {
+
+            $join = (bool)$request->input('workplace'.$workplace->id, false);
+            $already = ($member->workplaces->where('id', $workplace->id)->count() > 0);
+            if ($join && !$already) {
+                $workplace->members()->attach($member->id);
+            } elseif ($already && !$join) {
+                $workplace->members()->detach($member->id);
+            }
+        }
+
+        return redirect()->route('members.list')->with('message', 'Updated workplace membership');
+    }
+
+    public function updateNotes(Member $member, Request $request)
+    {
+        $user = \Auth::user();
+        if (!$user->can('viewFull', $member)) {
+            abort(403);
+        }
+        $notes = $request->input('notes');
+        $member->notes = $notes;
+        $member->save();
+        return redirect()->route('members.list')->with('message', 'Updated notes');
+    }
+    
     public function setPassword(Member $member, Request $request)
     {
         $user = \Auth::user();
@@ -259,7 +297,7 @@ class MembersController extends Controller
     private function exportRep($members, $pastcampaigns, $campaigns)
     {
         $data = [];
-        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Job Type", "Member Type", "Voter?"];
+        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes"];
         foreach ($pastcampaigns as $pc) {
             $headers[] = "(P)".$pc->name;
         }
@@ -276,9 +314,11 @@ class MembersController extends Controller
                 $member->email,
                 $member->mobile,
                 $member->department,
+                $member->workplaces->pluck('name')->join('; '),
                 $member->jobtype,
                 $member->membertype,
                 $member->voter ? "Yes":"No",
+                str_replace(["\r", "\n"], " ", $member->notes),
             ];
 
             foreach ($pastcampaigns as $pc) {

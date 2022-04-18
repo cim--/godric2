@@ -54,6 +54,16 @@ table {
     border-collapse: collapse;
 }
 
+table.dataTable thead td,
+table.dataTable thead th,
+table.dataTable tfoot th,
+table.dataTable tfoot td,
+table.dataTable tbody th,
+table.dataTable tbody td {
+    padding: 2px;
+}
+
+
 .highnotice {
     font-weight: bold;
     color: #310c58;

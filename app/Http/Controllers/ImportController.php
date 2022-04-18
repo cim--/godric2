@@ -69,7 +69,7 @@ class ImportController extends Controller
         $removed = Member::where('updated_at', '<', Carbon::parse("-1 hour"))->get();
 
         $lister = function($item, $key) {
-            return $item->membership.": ".$item->firstname." ".$item->lastname;
+            return $item->membership.": ".$item->firstname." ".$item->lastname." (".$item->department.")";
         };
         
         $addlist = collect($added)->map($lister);

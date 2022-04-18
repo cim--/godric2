@@ -13,6 +13,7 @@
 		<th>Email</th>
 		<th>Phone</th>
 		<th>Department</th>
+		<th>Workplaces</th>
 		<th>Job Type</th>
 		<th>Membership Type</th>
 		<th>Voter?</th>
@@ -20,6 +21,7 @@
 		@foreach ($campaigns as $campaign)
 		    <th>{{ $campaign->name }}</th>
 		@endforeach
+		<th>Notes</th>
 	    </tr>
 	</thead>
 	<tbody>
@@ -30,6 +32,7 @@
 		    <td>{{ $member->email }}</td>
 		    <td>{{ $member->mobile }}</td>
 		    <td>{{ $member->department }}</td>
+		    <td>{{ $member->workplaces->pluck('name')->join('; ') }}
 		    <td>{{ $member->jobtype }}</td>
 		    <td>{{ $member->membertype }}</td>
 		    <td>{{ $member->voter ? "Yes" : "No" }}</td>
@@ -43,6 +46,7 @@
 		    @foreach ($campaigns as $campaign)
 			<td>{{ $campaign->participation($member) }}</td>
 		    @endforeach
+		    <td>{{ $member->notes }}</td>
 		</tr>
 	    @endforeach
 	</tbody>

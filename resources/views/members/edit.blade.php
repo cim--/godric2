@@ -18,6 +18,41 @@
 	{!! Form::close() !!}
     @endif
 
+
+    <h2>Notes</h2>
+    {!! Form::open(['route'=>['members.updatenotes', $member->id], 'method' => 'POST']) !!}
+    
+    <div>
+	{!! Form::label('notes', 'Additional Notes') !!}
+	{!! Form::textarea('notes', '') !!} 
+    </div>
+
+    <p>Record additional notes about a member. Notes will be visible and editable by all representatives, and of course may be shown to the member themselves.</p>
+    
+    {!! Form::submit("Update notes") !!}
+    {!! Form::close() !!}
+    
+    @if (count($workplaces) > 0)
+	<h2>Edit workplace membership</h2>
+
+	<p>Removing workplace membership may require an administrator to reverse, depending on your permissions.</p>
+	
+	{!! Form::open(['route'=>['members.updateworkplace', $member->id], 'method' => 'POST']) !!}
+	@foreach ($workplaces as $workplace) 
+	    <div>
+		{!! Form::checkbox('workplace'.$workplace->id, 1, $member->workplaces->where('id', $workplace->id)->count() > 0) !!}
+		{!! Form::label('workplace'.$workplace->id, $workplace->name) !!}
+	    </div>
+	@endforeach
+	{!! Form::submit("Update workplaces") !!}
+	{!! Form::close() !!}
+	
+    @else
+	<h2>Workplace membership</h2>
+	<p>Contact your organisation administrators if you would like workplaces setting up.</p>
+    @endif
+
+    
     @can('setPassword', $member)
     <h2>Emergency password reset</h2>    
     {!! Form::open(['route'=>['members.setpassword', $member->id], 'method' => 'POST']) !!}

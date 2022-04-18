@@ -13,4 +13,19 @@ class Workplace extends Model
     {
         return $this->belongsToMany(Member::class);
     }
+
+
+    public static function managedBy(User $user)
+    {
+        $roles = $user->member->roles;
+        $names = [];
+        foreach ($roles as $role) {
+            if ($role->role == Role::ROLE_SUPERUSER) {
+                return Workplace::orderBy('name')->get();
+            } elseif ($role->restrictfield == 'workplace') {
+                $names[] = $role->restrictvalue;
+            }
+        }
+        return Workplace::whereIn('name', $names)->orderBy('name')->get();
+    }
 }
