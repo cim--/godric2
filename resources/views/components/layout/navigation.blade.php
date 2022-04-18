@@ -15,13 +15,19 @@
 	<li><a href="{{route('phonebank')}}">Campaign Participation</a></li>
 	@endcan
 
-	@can('manage', App\Models\Member::class)
+	<li><a href="{{route('auth.password')}}">Change Password</a></li>
+	<li><a href="{{route('auth.logout')}}">Log out</a></li>
+    </ul>
+
+</nav>
+@can('manage', App\Models\Member::class)
+<nav>
+    <ul>
 	<li><a href="{{route('import')}}">Import Members</a></li>
 	<li><a href="{{route('roles.index')}}">Set up Roles</a></li>
 	<li><a href="{{route('campaigns.index')}}">Set up Campaigns</a></li>
 	<li><a href="{{route('notices.index')}}">Set up Notices</a></li>
-	@endcan
-	<li><a href="{{route('auth.password')}}">Change Password</a></li>
-	<li><a href="{{route('auth.logout')}}">Log out</a></li>
+	<li><a href="{{route('workplaces.index')}}">Set up Workplaces</a></li>
     </ul>
 </nav>
+@endcan

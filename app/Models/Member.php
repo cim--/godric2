@@ -24,6 +24,12 @@ class Member extends Model
         return $this->hasMany(Role::class);
     }
 
+    public function workplaces()
+    {
+        return $this->belongsToMany(Workplace::class);
+    }
+
+    
     public function participation(Campaign $campaign)
     {
         $action = $this->actions->where('campaign_id', $campaign->id)->first();
@@ -47,5 +53,13 @@ class Member extends Model
             return true;
         }
         return false;
+    }
+
+    public static function search($memberid) {
+        $memberid = trim($memberid);
+        return Member::where('membership', $memberid)
+            ->orWhere('email', $memberid)
+            ->orWhere('mobile', $memberid)
+            ->first();
     }
 }

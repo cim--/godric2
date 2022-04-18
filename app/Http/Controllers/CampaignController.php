@@ -144,10 +144,7 @@ class CampaignController extends Controller
                 continue;
             }
             
-            $member = Member::where('membership', $memberid)
-                    ->orWhere('email', $memberid)
-                    ->orWhere('mobile', $memberid)
-                    ->first();
+            $member = Member::search($memberid);
             if ($member) {
                 $action = Action::firstOrNew([
                     'campaign_id' => $campaign->id,

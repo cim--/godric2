@@ -44,7 +44,8 @@ class Role extends Model
             "" => "Unrestricted",
             "department" => "Department",
             "jobtype" => "Job Type",
-            "membertype" => "Member Type"
+            "membertype" => "Member Type",
+            "workplace" => "Workplace",
         ];
     }
 

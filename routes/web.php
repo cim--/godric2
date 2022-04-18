@@ -9,6 +9,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\WorkplaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,7 +78,8 @@ Route::middleware('auth')->group(function() {
             Route::resource('/roles', RolesController::class)->except('show');
             Route::resource('/campaigns', CampaignController::class)->except('show');
             Route::resource('/notices', NoticeController::class)->except('show');
-                    
+            Route::resource('/workplaces', WorkplaceController::class)->except('show');
+            
 
             Route::post('/members/{member}/setpassword', [MembersController::class, 'setPassword'])->name('members.setpassword');
             
