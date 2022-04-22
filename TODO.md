@@ -6,6 +6,7 @@
 
 ## More generally
 
+* "My details" page for checking national and local data and giving instructions for corrections.
 * Highlight permissions held on reps list
 * Basic online voting functionality
 * More structured list of branch offices and holders (can be done as a notice, of course)
