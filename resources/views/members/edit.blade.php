@@ -27,7 +27,7 @@
 	{!! Form::textarea('notes', '') !!} 
     </div>
 
-    <p>Record additional notes about a member. Notes will be visible and editable by all representatives, and of course may be shown to the member themselves.</p>
+    <p>Record additional notes about a member. Notes will be visible and editable by all representatives. The member will be able to view the notes on their My Profile page.</p>
     
     {!! Form::submit("Update notes") !!}
     {!! Form::close() !!}
