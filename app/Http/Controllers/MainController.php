@@ -29,4 +29,16 @@ class MainController extends Controller
             'notices' => $notices
         ]);
     }
+
+    public function profile()
+    {
+        $self = \Auth::user()->member()->with('roles', 'workplaces', 'actions', 'actions.campaign')->first();
+
+        $reps = $self->representatives();
+
+        return view('profile', [
+            'self' => $self,
+            'reps' => $reps
+        ]);
+    }
 }

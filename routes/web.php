@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function() {
 
         // entirely public routes go here
         Route::get('/', [MainController::class, 'index'])->name('main');
+        Route::get('/profile', [MainController::class, 'profile'])->name('profile');
         Route::post('/participate/{campaign}', [CampaignController::class, 'participate'])->name('participate');
 
         Route::get('/notices', [NoticeController::class, 'publicIndex'])->name('notices.public');

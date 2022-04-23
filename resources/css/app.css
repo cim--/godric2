@@ -15,15 +15,15 @@ h1, h2, h3, h4 {
     color: #310c58;
 }
 
-nav+nav {
-    margin-top: 0.25em;
-    padding-top: 0.25em;
-    border-top: #e74898 solid 2px;
-}
-
 nav ul {
     margin: 0;
     padding: 0;
+}
+
+nav ul+ul {
+    margin-top: 0.25em;
+    padding-top: 0.25em;
+    border-top: #e74898 solid 2px;
 }
 
 nav ul li {
@@ -47,11 +47,16 @@ form {
 
 td, th {
     border: thin #310c58 solid;
+    padding: 2px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+}
+
+th[scope=row] {
+    text-align: right;
 }
 
 table.dataTable thead td,
@@ -67,4 +72,10 @@ table.dataTable tbody td {
 .highnotice {
     font-weight: bold;
     color: #310c58;
+}
+
+div.profilebox {
+    margin-bottom: 0.5em;
+    padding-bottom: 0.5em;
+    border-bottom: thin dotted #310c58;
 }

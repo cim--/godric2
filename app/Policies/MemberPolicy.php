@@ -20,6 +20,8 @@ class MemberPolicy
      */
     public function seeReports(User $user)
     {
+        /* This is the lowest level of member data permission and
+         * should usually be given to every new role */
         return $user->member->roles()
                             ->whereIn('role', [
                                 Role::ROLE_REP,

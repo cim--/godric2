@@ -62,4 +62,48 @@ class Member extends Model
             ->orWhere('mobile', $memberid)
             ->first();
     }
+
+    /* Gets the representatives of particular roles for a member */
+    public function representatives($roles=null)
+    {
+        if ($roles === null) {
+            $roles = [Role::ROLE_REP, Role::ROLE_SUPERUSER];
+        }
+        $bydept = Member::whereHas('roles', function ($q) use ($roles) {
+            $q->where('restrictfield', 'department')
+              ->where('restrictvalue', $this->department)
+              ->whereIn('role', $roles);
+        })->orderBy('lastname')->get();
+
+        $byjtype = Member::whereHas('roles', function ($q) use ($roles) {
+            $q->where('restrictfield', 'jobtype')
+              ->where('restrictvalue', $this->jobtype)
+              ->whereIn('role', $roles);
+        })->orderBy('lastname')->get();
+
+        $bymtype = Member::whereHas('roles', function ($q) use ($roles) {
+            $q->where('restrictfield', 'membertype')
+              ->where('restrictvalue', $this->membertype)
+              ->whereIn('role', $roles);
+        })->orderBy('lastname')->get();
+
+        $byworkplace = Member::whereHas('roles', function ($q) use ($roles) {
+            $q->where('restrictfield', 'membertype')
+              ->whereIn('restrictvalue', $this->workplaces->pluck('name'))
+              ->whereIn('role', $roles);
+        })->orderBy('lastname')->get();
+
+        $byorganisation = Member::whereHas('roles', function ($q) use ($roles) {
+            $q->where('restrictfield', '')
+              ->whereIn('role', $roles);
+        })->orderBy('lastname')->get();
+
+        return [
+            'department' => $bydept,
+            'jobtype' => $byjtype,
+            'membertype' => $bymtype,
+            'workplace' => $byworkplace,
+            'organisation' => $byorganisation
+        ];
+    }
 }
