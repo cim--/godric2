@@ -94,7 +94,10 @@ class Member extends Model
         })->orderBy('lastname')->get();
 
         $byorganisation = Member::whereHas('roles', function ($q) use ($roles) {
-            $q->where('restrictfield', '')
+            $q->where(function ($nq) {
+                $nq->whereNull('restrictfield')
+                   ->orWhere('restrictfield', '');
+            })
               ->whereIn('role', $roles);
         })->orderBy('lastname')->get();
 
