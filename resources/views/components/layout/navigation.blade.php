@@ -27,8 +27,10 @@
 	<li><a href="{{route('import')}}">Import Members</a></li>
 	<li><a href="{{route('roles.index')}}">Set up Roles</a></li>
 	<li><a href="{{route('campaigns.index')}}">Set up Campaigns</a></li>
+	<li><a href="{{route('ballots.index')}}">Set up Ballots</a></li>
 	<li><a href="{{route('notices.index')}}">Set up Notices</a></li>
 	<li><a href="{{route('workplaces.index')}}">Set up Workplaces</a></li>
     </ul>
+    @endcan
 </nav>
-@endcan
+

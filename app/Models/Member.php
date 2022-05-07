@@ -19,6 +19,11 @@ class Member extends Model
         return $this->hasMany(Action::class);
     }
 
+    public function ballots()
+    {
+        return $this->belongsToMany(Ballot::class);
+    }
+    
     public function roles()
     {
         return $this->hasMany(Role::class);
