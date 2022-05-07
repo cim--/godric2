@@ -100,8 +100,8 @@ class PermissionsTest extends TestCase
 
     public function testPhonebankerRoleCanBeRestricted()
     {
-        $member1 = Member::where('department', 'Chemistry')->first();
-        $member2 = Member::where('department', 'Library')->first();
+        $member1 = Member::where('department', 'Chemistry')->where('membership', '!=', 1006)->first();
+        $member2 = Member::where('department', 'Library')->where('membership', '!=', 1006)->first();
         
         $this->loginAs('1006')
              ->visitRoute('main')
