@@ -21,12 +21,15 @@ class MainController extends Controller
         }
         $list = $campaigns->get();
 
+        $ballots = $self->activeBallots();
+        
         $notices = Notice::current()->highlighted()->orderBy('title')->get();
         
         return view('index', [
             'campaigns' => $list,
             'self' => $self,
-            'notices' => $notices
+            'notices' => $notices,
+            'ballots' => $ballots
         ]);
     }
 

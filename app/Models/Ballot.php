@@ -37,6 +37,13 @@ class Ballot extends Model
         return $q->where('end', '>', Carbon::now());
     }
 
+    public function scopeOpen($q)
+    {
+        return $q->where('end', '>', Carbon::now())
+                 ->where('start', '<=', Carbon::now());
+    }
+
+    
     public function started()
     {
         if (!$this->id) {

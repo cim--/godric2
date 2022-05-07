@@ -146,4 +146,36 @@ class BallotController extends Controller
             return back()->with('message', 'Deletion confirmation not given');
         }
     }
+
+
+
+
+    public function vote(Request $request, Ballot $ballot)
+    {
+        $self = \Auth::user()->member;
+        $ballots = $self->activeBallots();
+
+        if (!$ballots->pluck('id')->contains($ballot->id)) {
+            return back()->with('message', 'You cannot vote in this ballot, or it has closed.');
+        }
+
+        $choice = $request->input('option', 0);
+        if ($choice == 0) {
+            return back()->with('message', 'Select an option to cast your vote.');
+        }
+
+        $option = Option::where('id', $choice)->where('ballot_id', $ballot->id)->first();
+        if (!$option) {
+             return back()->with('message', 'This is not a valid option in this ballot.');           
+        }
+
+        // all looks okay
+        \DB::transaction(function() use ($option, $ballot, $self) {
+            $ballot->members()->attach($self->id);
+            $option->votes = $option->votes + 1;
+            $option->save();
+        });
+
+        return redirect()->route('main')->with('message', 'Your vote has been recorded.');
+    }
 }

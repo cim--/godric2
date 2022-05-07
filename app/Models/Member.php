@@ -114,4 +114,16 @@ class Member extends Model
             'organisation' => $byorganisation
         ];
     }
+
+    public function activeBallots()
+    {
+        $q = Ballot::open();
+        if (!$this->voter) {
+            $q->where('votersonly', false);
+        }
+        $q->whereDoesntHave('members', function($mq) {
+            $mq->where('members.id', $this->id); 
+        });
+        return $q->orderBy('end')->with('options')->get();
+    }
 }
