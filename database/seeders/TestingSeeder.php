@@ -172,7 +172,7 @@ class TestingSeeder extends Seeder
         $options = Option::factory()->count(3)->create([
             'ballot_id' => $ballot1->id
         ]);
-        $total = $options->sum('votes');
+        $total = min($options->sum('votes'), 45);
         for ($i=1099; $i>1099-$total; $i-=2) {
             $ballot1->members()->attach($memberhash[$i]);
         }
@@ -184,7 +184,7 @@ class TestingSeeder extends Seeder
         $options = Option::factory()->count(6)->create([
             'ballot_id' => $ballot2->id
         ]);
-        $total = $options->sum('votes');
+        $total = min($options->sum('votes'), 90);
         for ($i=1000; $i<1000+$total; $i++) {
             $ballot2->members()->attach($memberhash[$i]);
         }
@@ -197,7 +197,7 @@ class TestingSeeder extends Seeder
             'ballot_id' => $ballot3->id
         ]);
 
-        $total = $options->sum('votes');
+        $total = min($options->sum('votes'), 90);
         for ($i=1099; $i>1099-$total; $i--) {
             $ballot3->members()->attach($memberhash[$i]);
         }

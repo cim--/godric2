@@ -155,7 +155,7 @@ class DataEntryTest extends TestCase
 
         $member1 = Member::whereDoesntHave('actions', function($q) use ($c) {
             $q->where('campaign_id', $c->id);
-        })->where('voter', true)->first();
+        })->where('voter', true)->where('membership', '!=', '1003')->first();
 
         $this->loginAs('1003')
              ->visitRoute('main')
