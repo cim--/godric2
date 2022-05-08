@@ -2,7 +2,7 @@
     <x-slot:title>Ballot Archive</x-slot:title>
 
     @if ($running->count() > 0)
-	<h2>Current Ballots</h2>
+	<h2>Current Online Ballots</h2>
 	<p>The following ballots are currently running. If eligible, you can cast your vote on the <a href="{{ route('main') }}">home page</a>. Results will be displayed here when the ballot closes.</p>
 
 	<ul>
@@ -13,8 +13,9 @@
     @endif
 
     @if ($ballots->count() == 0)
-	<p>No ballots have finished yet.</p>
+	<p>No online ballots have finished yet.</p>
     @else
+	<p>The following online ballot results are available.</p>
     @foreach ($ballots as $ballot)
 	<h2>{{ $ballot->title }}</h2>
 	<p>{{ $ballot->description }}</p>
