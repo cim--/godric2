@@ -7,7 +7,6 @@
 ## More generally
 
 * Highlight permissions held on reps list
-* Basic online voting functionality
 * More structured list of branch offices and holders (can be done as a notice, of course)
 ** could link to roles/permissions in-app as well, potentially?
 
@@ -20,4 +19,5 @@
 
 ## For testing
 
-* Some more automated tests would be good (around workplaces, especially)
+* More tests for workplaces
+* More tests for ballots

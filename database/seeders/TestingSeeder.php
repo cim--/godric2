@@ -11,6 +11,10 @@ use App\Models\Member;
 use App\Models\Campaign;
 use App\Models\Action;
 use App\Models\Role;
+use App\Models\Ballot;
+use App\Models\Option;
+
+use Carbon\Carbon;
 
 class TestingSeeder extends Seeder
 {
@@ -24,6 +28,8 @@ class TestingSeeder extends Seeder
 
         $pastcampaign = Campaign::factory()->create();
         $currentcampaign = Campaign::factory()->current()->create();
+
+        $memberhash = [];
         
         for ($i=1000;$i<=1100;$i++) {
             $user = User::factory()->create([
@@ -149,11 +155,43 @@ class TestingSeeder extends Seeder
             default:
                 // no roles
             }
+            $memberhash[$i] = $member->id;
         }
 
         $pastcampaign->calctarget = ceil(Member::voter()->count()/2);
         $pastcampaign->save();
         $currentcampaign->calctarget = ceil(Member::voter()->count()/2);
         $currentcampaign->save();
+
+        /* Ballots */
+
+        $ballot1 = Ballot::factory()->create([
+            'start' => Carbon::parse("-3 months"),
+            'end' => Carbon::parse("-10 weeks")
+        ]);
+        $options = Option::factory()->count(3)->create([
+            'ballot_id' => $ballot1->id
+        ]);
+
+        $ballot2 = Ballot::factory()->create([
+            'start' => Carbon::parse("-4 weeks"),
+            'end' => Carbon::parse("-3 weeks")
+        ]);
+        $options = Option::factory()->count(6)->create([
+            'ballot_id' => $ballot2->id
+        ]);
+
+        $ballot3 = Ballot::factory()->create([
+            'start' => Carbon::parse("-1 day"),
+            'end' => Carbon::parse("+3 days")
+        ]);
+        $options = Option::factory()->count(3)->create([
+            'ballot_id' => $ballot3->id
+        ]);
+
+        $total = $options->sum('votes');
+        for ($i=1099; $i>1099-$total; $i--) {
+            $ballot3->members()->attach($memberhash[$i]);
+        }
     }
 }

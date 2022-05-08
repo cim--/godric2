@@ -3,6 +3,7 @@
 	<li><a href="{{route('main')}}">Home</a></li>
 	<li><a href="{{route('notices.public')}}">Notices and Information</a></li>
 	<li><a href="{{route('profile')}}">My Profile</a></li>
+	<li><a href="{{route('ballots.archive')}}">Ballot Archive</a></li>
 
 	<li><a href="{{route('auth.password')}}">Change Password</a></li>
 	<li><a href="{{route('auth.logout')}}">Log out</a></li>

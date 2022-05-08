@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function() {
         Route::get('/profile', [MainController::class, 'profile'])->name('profile');
         Route::post('/participate/{campaign}', [CampaignController::class, 'participate'])->name('participate');
         Route::post('/vote/{ballot}', [BallotController::class, 'vote'])->name('ballots.vote');
+        Route::get('/vote', [BallotController::class, 'archive'])->name('ballots.archive');
 
         Route::get('/notices', [NoticeController::class, 'publicIndex'])->name('notices.public');
         Route::get('/notices/{notice}', [NoticeController::class, 'read'])->name('notices.read');

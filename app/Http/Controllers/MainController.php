@@ -16,6 +16,7 @@ class MainController extends Controller
             $q->where('action', 'yes');
         }])->orderBy('name');
         $self = \Auth::user()->member;
+
         if (!$self->voter) {
             $campaigns->where('votersonly', false);
         }

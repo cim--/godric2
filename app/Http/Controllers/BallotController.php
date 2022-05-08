@@ -178,4 +178,17 @@ class BallotController extends Controller
 
         return redirect()->route('main')->with('message', 'Your vote has been recorded.');
     }
+
+    public function archive()
+    {
+        $ballots = Ballot::completed()->with('options', function($q) {
+            $q->orderBy('order');
+        })->orderBy('end', 'desc')->get();
+        $running = Ballot::open()->orderBy('end')->get();
+
+        return view('ballots.archive', [
+            'running' => $running,
+            'ballots' => $ballots
+        ]);
+    }
 }
