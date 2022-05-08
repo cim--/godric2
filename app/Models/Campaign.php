@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class Campaign extends Model
+class Campaign extends Model implements Participatory
 {
     protected $casts = [
         'created_at' => 'datetime',
@@ -109,5 +109,10 @@ class Campaign extends Model
                 'no' => $pronoun." will not participate"
             ];
         }
+    }
+
+    public function shortDesc()
+    {
+        return $this->name;
     }
 }

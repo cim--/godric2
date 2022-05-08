@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class Ballot extends Model
+class Ballot extends Model implements Participatory
 {
     use HasFactory;
 
@@ -68,6 +68,11 @@ class Ballot extends Model
         } else {
             return "yes";
         }
+    }
+
+    public function shortDesc()
+    {
+        return $this->title;
     }
 
 }

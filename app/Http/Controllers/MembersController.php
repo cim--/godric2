@@ -61,10 +61,8 @@ class MembersController extends Controller
         
         return view('members.list', [
             'members' => $members,
-            'pastcampaigns' => $pastcampaigns,
-            'campaigns' => $campaigns,
-            'pastballots' => $pastballots,
-            'ballots' => $ballots
+            'pastcampaigns' => $pastcampaigns->concat($pastballots),
+            'campaigns' => $campaigns->concat($ballots),
         ]);
     }
 
@@ -174,11 +172,15 @@ class MembersController extends Controller
     public function export(Request $request)
     {
         $members = $this->getMemberList();
-        $pastcampaigns = Campaign::ended()->orderBy('end')->get();
-
+        $pastcampaigns = Campaign::ended()->orderBy('end')->get()->concat(
+            Ballot::completed()->with('members')->orderBy('end')->get()
+        );
+        
         $full = $request->input('full', 0);
         if ($full == 0) {
-            $campaigns = Campaign::started()->orderBy('end')->get();
+            $campaigns = Campaign::started()->orderBy('end')->get()->concat(
+                Ballot::open()->with('members')->orderBy('end')->get()
+            );
         } else {
             $campaigns = [];
         }
@@ -302,22 +304,14 @@ class MembersController extends Controller
 
     private function exportRep($members, $pastcampaigns, $campaigns)
     {
-        $ballots = Ballot::open()->with('members')->orderBy('end')->get();
-        $pastballots = Ballot::completed()->with('members')->orderBy('end')->get();
-        
+      
         $data = [];
         $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes"];
         foreach ($pastcampaigns as $pc) {
-            $headers[] = "(P)".$pc->name;
+            $headers[] = "(P)".$pc->shortDesc();
         }
         foreach ($campaigns as $c) {
-            $headers[] = $c->name;
-        }
-        foreach ($pastballots as $pb) {
-            $headers[] = "(P)".$pb->title;
-        }
-        foreach ($ballots as $b) {
-            $headers[] = $b->title;
+            $headers[] = $c->shortDesc();
         }
         $data[] = $headers;
 
@@ -342,13 +336,6 @@ class MembersController extends Controller
             foreach ($campaigns as $c) {
                 $row[] = $c->participation($member);
             }
-            foreach ($pastballots as $pb) {
-                $row[] = $pb->participation($member);
-            }
-            foreach ($ballots as $b) {
-                $row[] = $b->participation($member);
-            }
-
 
             $data[] = $row;
         }
