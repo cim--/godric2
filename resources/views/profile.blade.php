@@ -105,6 +105,25 @@
 	@endif
 	<p>If this is incorrect or could be updated, please contact your <a href="#orgrep">organisation administrators</a>. You can <a href="{{ route('main') }}">update participation in ongoing campaigns</a> on the front page.</p>
     </div>
+
+    <div class="profilebox">
+
+	<h2>Online Ballots</h2>
+
+	@if ($self->ballots->count() == 0)
+	    <p>You have not voted in any online ballots yet.</p>
+	@else
+
+	    <p>You voted in the following online ballots:</p>
+	    <ul>
+		@foreach ($self->ballots as $ballot)
+		    <li>{{ $ballot->title }}</li>
+		@endforeach
+	    </ul>
+
+	@endif
+    </div>
+
     <div class="profilebox">
 
 	<h2>Roles</h2>

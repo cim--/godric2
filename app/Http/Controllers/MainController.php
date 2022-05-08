@@ -36,7 +36,7 @@ class MainController extends Controller
 
     public function profile()
     {
-        $self = \Auth::user()->member()->with('roles', 'workplaces', 'actions', 'actions.campaign')->first();
+        $self = \Auth::user()->member()->with('roles', 'workplaces', 'actions', 'actions.campaign', 'ballots')->first();
 
         $reps = $self->representatives();
 
