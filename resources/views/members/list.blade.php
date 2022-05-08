@@ -21,6 +21,9 @@
 		@foreach ($campaigns as $campaign)
 		    <th>{{ $campaign->name }}</th>
 		@endforeach
+		@foreach ($ballots as $ballot)
+		    <th>{{ $ballot->title }}</th>
+		@endforeach
 		<th>Notes</th>
 	    </tr>
 	</thead>
@@ -40,11 +43,19 @@
 			@foreach ($pastcampaigns as $pc)
 			    <x-campaigns.pastparticipant
 				title="{{ $pc->name }}"
-				part="{{ $pc->participation($member) }}" />
+				       part="{{ $pc->participation($member) }}" />
+			@endforeach
+			@foreach ($pastballots as $pb)
+			    <x-campaigns.pastparticipant
+				title="{{ $pb->title }}"
+				part="{{ $pb->participation($member) }}" />
 			@endforeach
 		    </td>
 		    @foreach ($campaigns as $campaign)
 			<td>{{ $campaign->participation($member) }}</td>
+		    @endforeach
+		    @foreach ($ballots as $ballot)
+			<td>{{ $ballot->participation($member) }}</td>
 		    @endforeach
 		    <td>{{ $member->notes }}</td>
 		</tr>

@@ -59,4 +59,15 @@ class Ballot extends Model
         }
         return $this->end->isPast();
     }
+
+    public function participation(Member $member)
+    {
+        $vote = $this->members->where('id', $member->id)->first();
+        if (!$vote) {
+            return "-";
+        } else {
+            return "yes";
+        }
+    }
+
 }

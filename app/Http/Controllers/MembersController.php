@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Campaign;
+use App\Models\Ballot;
 use App\Models\Workplace;
 use App\Models\Action;
 use App\Models\Role;
@@ -54,11 +55,16 @@ class MembersController extends Controller
         $members = $this->getMemberList();
         $pastcampaigns = Campaign::ended()->orderBy('end')->get();
         $campaigns = Campaign::started()->orderBy('end')->get();
+
+        $ballots = Ballot::open()->with('members')->orderBy('end')->get();
+        $pastballots = Ballot::completed()->with('members')->orderBy('end')->get();
         
         return view('members.list', [
             'members' => $members,
             'pastcampaigns' => $pastcampaigns,
-            'campaigns' => $campaigns
+            'campaigns' => $campaigns,
+            'pastballots' => $pastballots,
+            'ballots' => $ballots
         ]);
     }
 
@@ -296,6 +302,9 @@ class MembersController extends Controller
 
     private function exportRep($members, $pastcampaigns, $campaigns)
     {
+        $ballots = Ballot::open()->with('members')->orderBy('end')->get();
+        $pastballots = Ballot::completed()->with('members')->orderBy('end')->get();
+        
         $data = [];
         $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes"];
         foreach ($pastcampaigns as $pc) {
@@ -303,6 +312,12 @@ class MembersController extends Controller
         }
         foreach ($campaigns as $c) {
             $headers[] = $c->name;
+        }
+        foreach ($pastballots as $pb) {
+            $headers[] = "(P)".$pb->title;
+        }
+        foreach ($ballots as $b) {
+            $headers[] = $b->title;
         }
         $data[] = $headers;
 
@@ -327,6 +342,14 @@ class MembersController extends Controller
             foreach ($campaigns as $c) {
                 $row[] = $c->participation($member);
             }
+            foreach ($pastballots as $pb) {
+                $row[] = $pb->participation($member);
+            }
+            foreach ($ballots as $b) {
+                $row[] = $b->participation($member);
+            }
+
+
             $data[] = $row;
         }
         return $data;

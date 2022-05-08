@@ -172,6 +172,10 @@ class TestingSeeder extends Seeder
         $options = Option::factory()->count(3)->create([
             'ballot_id' => $ballot1->id
         ]);
+        $total = $options->sum('votes');
+        for ($i=1099; $i>1099-$total; $i-=2) {
+            $ballot1->members()->attach($memberhash[$i]);
+        }
 
         $ballot2 = Ballot::factory()->create([
             'start' => Carbon::parse("-4 weeks"),
@@ -180,6 +184,10 @@ class TestingSeeder extends Seeder
         $options = Option::factory()->count(6)->create([
             'ballot_id' => $ballot2->id
         ]);
+        $total = $options->sum('votes');
+        for ($i=1000; $i<1000+$total; $i++) {
+            $ballot2->members()->attach($memberhash[$i]);
+        }
 
         $ballot3 = Ballot::factory()->create([
             'start' => Carbon::parse("-1 day"),
