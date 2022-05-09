@@ -73,7 +73,7 @@
     @if ($ballots->count() == 0)
 	<h2>Member Ballots</h2>
 	
-	<p>There are no ballots currently open.</p>
+	<p>There are no ballots currently waiting for your vote. You can view all current and previous ballots in the Ballot Archive.</p>
     @endif
 
     
