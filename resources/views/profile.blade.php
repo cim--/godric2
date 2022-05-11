@@ -108,13 +108,13 @@
 
     <div class="profilebox">
 
-	<h2>Online Ballots</h2>
+	<h2>Online Votes</h2>
 
 	@if ($self->ballots->count() == 0)
-	    <p>You have not voted in any online ballots yet.</p>
+	    <p>You have not voted in any online votes yet.</p>
 	@else
 
-	    <p>You voted in the following online ballots:</p>
+	    <p>You voted in the following online votes:</p>
 	    <ul>
 		@foreach ($self->ballots as $ballot)
 		    <li>{{ $ballot->title }}</li>
@@ -152,7 +152,7 @@
 
 	
 	<h2>Notes</h2>
-	<p>Your local representatives may make notes on your record to help administer campaigns and communications. You can see those notes here for transparency.</p>
+	<p>Your local representatives and volunteers may make notes on your record to help administer campaigns and communications. You can see those notes here for transparency.</p>
 	
 	@if ($self->notes == "")
 	    <p>No notes have been recorded</p>
@@ -162,9 +162,9 @@
     </div>
     <div class="profilebox">
 
-	<h2 id="localrep">Your Local Representatives</h2>
+	<h2 id="localrep">Your Local Representatives and Volunteers</h2>
 
-	<p>The following members are your local representatives. Talk to them if you can volunteer to help with campaigns or communications.</p>
+	<p>The following members are your local elected representatives and other volunteers. Talk to them if you can volunteer to help with campaigns or communications.</p>
 
 	<h3>For your department: {{ $self->department }}</h3>
 	<x-profile.replist :reps="$reps['department']" />
