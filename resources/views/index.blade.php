@@ -11,11 +11,11 @@
 	</ul>
     @endif
     
-    <p>Welcome to the GODRIC system. You can record your participation in campaigns and vote in member ballots here - and if you hold a representative or communications role, also get access to additional reports.</p>
+    <p>Welcome to the GODRIC system. You can record your participation in campaigns and vote online here - and if you hold a representative or communications role, also get access to additional reports.</p>
 
     @if ($ballots->count() > 0)
-	<h2>Member Ballots</h2>
-	<p>To cast a vote in the ballot, select your preferred option and press the "Cast Vote" button. It will not be possible to link your vote to you, and therefore you will not be able to change your vote once you have cast it.</p>
+	<h2>Member Online Votes</h2>
+	<p>To cast a vote online, select your preferred option and press the "Cast Vote" button. It will not be possible to link your vote to you, and therefore you will not be able to change your vote once you have cast it.</p>
 
 	@foreach ($ballots as $ballot)
 	    <h3>{{ $ballot->title }}</h3>
@@ -71,9 +71,9 @@
     @endif
 
     @if ($ballots->count() == 0)
-	<h2>Member Ballots</h2>
+	<h2>Member Online Votes</h2>
 	
-	<p>There are no ballots currently waiting for your vote. You can view all current and previous ballots in the Ballot Archive.</p>
+	<p>There are no polls currently waiting for your vote. You can view all current and previous online votes in the <a href="{{ route('ballots.archive') }}">Archive</a>.</p>
     @endif
 
     

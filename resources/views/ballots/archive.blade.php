@@ -1,9 +1,9 @@
 <x-layout>
-    <x-slot:title>Ballot Archive</x-slot:title>
+    <x-slot:title>Online Vote Archive</x-slot:title>
 
     @if ($running->count() > 0)
-	<h2>Current Online Ballots</h2>
-	<p>The following ballots are currently running. If eligible, you can cast your vote on the <a href="{{ route('main') }}">home page</a>. Results will be displayed here when the ballot closes.</p>
+	<h2>Current Online Votes</h2>
+	<p>The following votes are currently running. If eligible, you can cast your vote on the <a href="{{ route('main') }}">home page</a>. Results will be displayed here when voting closes.</p>
 
 	<ul>
 	    @foreach ($running as $runner)
@@ -13,9 +13,9 @@
     @endif
 
     @if ($ballots->count() == 0)
-	<p>No online ballots have finished yet.</p>
+	<p>No online votes have finished yet.</p>
     @else
-	<p>The following online ballot results are available.</p>
+	<p>The following online vote results are available.</p>
     @foreach ($ballots as $ballot)
 	<h2>{{ $ballot->title }}</h2>
 	<p>{{ $ballot->description }}</p>

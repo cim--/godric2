@@ -1,9 +1,9 @@
 <x-layout>
-    <x-slot:title>Ballot List</x-slot:title>
+    <x-slot:title>Online Vote List</x-slot:title>
 
     <p><strong>Current membership</strong>: {{ $members }} ({{ $voters }} voters)</p>
     
-    <p><a href="{{ route('ballots.create') }}">New Ballot</a></p>
+    <p><a href="{{ route('ballots.create') }}">New Online Vote</a></p>
     <table>
 	<thead>
 	    <tr>
