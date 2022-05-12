@@ -75,4 +75,8 @@ class Ballot extends Model implements Participatory
         return $this->title;
     }
 
+    public function total()
+    {
+        return $this->options->sum('votes');
+    }
 }

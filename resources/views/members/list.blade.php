@@ -39,7 +39,7 @@
 		    <td>
 			@foreach ($pastcampaigns as $pc)
 			    <x-campaigns.pastparticipant
-				title="{{ $pc->name }}"
+				title="{{ $pc->shortDesc() }}"
 				       part="{{ $pc->participation($member) }}" />
 			@endforeach
 		    </td>

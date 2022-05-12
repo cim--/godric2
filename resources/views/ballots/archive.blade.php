@@ -18,17 +18,18 @@
 	<p>The following online vote results are available.</p>
     @foreach ($ballots as $ballot)
 	<h2>{{ $ballot->title }}</h2>
-	<p>{{ $ballot->description }}</p>
-	<p>Voting between {{ $ballot->start->format("j F Y H:i") }} and {{ $ballot->end->format("j F Y H:i") }}</p>
+	<p><strong>Description</strong>: {{ $ballot->description }}</p>
+	<p><strong>Voting between</strong>: {{ $ballot->start->format("j F Y H:i") }} and {{ $ballot->end->format("j F Y H:i") }}</p>
 
 	<ul>
 	    @foreach ($ballot->options as $option)
-		<li>{{ $option->option }}:
+		<li>{{ trim($option->option) }}:
 		    @if ($option->votes == 1)
 			1 vote
 		    @else
 			{{ $option->votes }} votes
 		    @endif
+		    ({{ $option->percent() }}%)
 		</li>
 	    @endforeach
 	</ul>

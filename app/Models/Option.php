@@ -13,4 +13,9 @@ class Option extends Model
     {
         return $this->belongsTo(Ballot::class);
     }
+
+    public function percent()
+    {
+        return number_format(100 * $this->votes / $this->ballot->total(), 1);
+    }
 }

@@ -109,12 +109,14 @@ class BallotController extends Controller
 
             $ballot->options()->delete();
             foreach ($options as $idx => $option) {
-                $opt = new Option;
-                $opt->option = $option;
-                $opt->ballot_id = $ballot->id;
-                $opt->votes = 0;
-                $opt->order = $idx+1;
-                $opt->save();
+                if (trim($option) != "") {
+                    $opt = new Option;
+                    $opt->option = trim($option);
+                    $opt->ballot_id = $ballot->id;
+                    $opt->votes = 0;
+                    $opt->order = $idx+1;
+                    $opt->save();
+                }
             }
             return redirect()->route('ballots.index')->with('message', 'Ballot saved');     
         } else {
