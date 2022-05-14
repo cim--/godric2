@@ -18,7 +18,7 @@
 	<p>The following online vote results are available.</p>
     @foreach ($ballots as $ballot)
 	<h2>{{ $ballot->title }}</h2>
-	<p><strong>Description</strong>: {{ $ballot->description }}</p>
+	<p><strong>Description</strong>: {!! $ballot->description !!}</p>
 	<p><strong>Voting between</strong>: {{ $ballot->start->format("j F Y H:i") }} and {{ $ballot->end->format("j F Y H:i") }}</p>
 
 	<ul>

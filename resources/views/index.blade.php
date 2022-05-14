@@ -20,7 +20,7 @@
 	@foreach ($ballots as $ballot)
 	    <h3>{{ $ballot->title }}</h3>
 	    <p><strong>Voting closes</strong>: {{ $ballot->end->format("j F Y H:i") }}</p>
-	    <p>{{ $ballot->description }}</p>
+	    <p>{!! $ballot->description !!}</p>
 
 	    {!! Form::open(['route' => ['ballots.vote', $ballot->id], 'method' => 'POST']) !!}
 	    <fieldset><legend>Select option</legend>

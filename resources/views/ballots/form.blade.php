@@ -22,7 +22,7 @@
     </div>
     <div>
 	{!! Form::label('description', 'Description') !!}
-	{!! Form::textarea('description', $ballot->description) !!}
+	{!! Form::textarea('description', $ballot->description) !!} (HTML allowed)
     </div>
     <div>
 	{!! Form::label('votersonly', 'Voters Only?') !!}
