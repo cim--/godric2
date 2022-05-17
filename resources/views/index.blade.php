@@ -15,7 +15,7 @@
 
     @if ($ballots->count() > 0)
 	<h2>Member Online Votes</h2>
-	<p>To cast a vote online, select your preferred option and press the "Cast Vote" button. It will not be possible to link your vote to you, and therefore you will not be able to change your vote once you have cast it.</p>
+	<p>To cast a vote online, select your preferred option and press the "Cast Vote" button. <strong>It will not be possible to link your vote to you, and therefore you will not be able to change your vote once you have cast it.</strong></p>
 
 	@foreach ($ballots as $ballot)
 	    <h3>{{ $ballot->title }}</h3>
