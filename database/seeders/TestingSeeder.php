@@ -32,9 +32,11 @@ class TestingSeeder extends Seeder
         $memberhash = [];
         
         for ($i=1000;$i<=1100;$i++) {
-            $user = User::factory()->create([
-                'username' => $i
-            ]);
+            if ($i < 1050) {
+                $user = User::factory()->create([
+                    'username' => $i
+                ]);
+            }
             switch ($i) {
             case 1020:
             case 1030:

@@ -1,6 +1,8 @@
 <x-layout>
     <x-slot:title>Log in</x-slot:title>
 
+    <h2>Existing Accounts</h2>
+    
     {!! Form::open(['method' => 'POST', 'route' => 'auth.dologin']) !!}
 
     <div>
@@ -16,8 +18,26 @@
     
     {!! Form::close() !!}
 
-    <p>If you have not used this system before, your password will be your last name as recorded in membership data. You will need to set a real password after you log in. If you have used this system before but cannot remember your password, you can <a href="{{ route('auth.reset') }}">reset your password</a>.</p>
+    <p>If you have used this system before but cannot remember your password, you can <a href="{{ route('auth.reset') }}">reset your password</a>.</p>
 
-    <p>If you believe you should be able to log in but cannot, please contact your organisation and ask them to check the membership data.</p>
+    <h2>Create Account</h2>
+
+    {!! Form::open(['method' => 'POST', 'route' => 'auth.dologin']) !!}
+
+    <div>
+	{!! Form::label('username', 'Membership ID') !!}
+	{!! Form::text('username') !!}
+    </div>
+    <div>
+	{!! Form::label('password', 'Last Name') !!}
+	{!! Form::password('password') !!}
+	(exactly as in membership records, including punctuation and capitalisation)
+    </div>
+
+    {!! Form::submit("Create Account") !!}
+
+    <p>If you believe you should be able to create an account but cannot, please contact your organisation and ask them to check the membership data.</p>
+
+    {!! Form::close() !!}
     
 </x-layout>

@@ -151,6 +151,24 @@ class AuthController extends Controller
                     $allow = true;
                 }
             }
+        } else {
+            // user not created, but *could* they be created?
+            $member = Member::where('membership', $username)->first();
+            if ($member) {
+                $lastname = $request->input('lastname');
+                if ($lastname == $member->lastname) {
+                    // yes - create the account and go to the email
+                    // validation step
+                    $user = new User;
+                    $user->username = $username;
+                    $user->password = Hash::make($member->lastname);
+                    $user->save();
+                    
+                    Auth::login($user);
+                    $request->session()->regenerate();
+                    return redirect()->route('auth.password')->with('message', 'Please set a new password');
+                }
+            }
         }
         if (!$allow) {
             return back()->with('message', 'The password reset information was incorrect. Please check the details and try again.');

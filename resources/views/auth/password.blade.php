@@ -5,12 +5,19 @@
 
     @if ($firsttime)
 	<p><strong>As this is the first time you have used this system, you must set a new password, and enter a verification code.</strong> The verification code has been sent to your preferred email address.</p>
+
+	<div>
+	    {!! Form::label('cpwd', 'Last Name') !!}
+	    {!! Form::password('cpwd') !!} (again, exactly as recorded in membership data)
+	</div>
+    @else
+	<div>
+	    {!! Form::label('cpwd', 'Current Password') !!}
+	    {!! Form::password('cpwd') !!}
+	</div>
+
     @endif
     
-    <div>
-	{!! Form::label('cpwd', 'Current Password') !!}
-	{!! Form::password('cpwd') !!}
-    </div>
 
     <div>
 	{!! Form::label('npwd', 'New Password') !!}
