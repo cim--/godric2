@@ -77,9 +77,11 @@ class AuthController extends Controller
         if (Hash::check($user->member->lastname, $user->password)) {
             $firsttime = true;
 
-            $user->setEmailCode();
+            if ($user->resetcode === null) {
+                $user->setEmailCode();
 
-            Mail::to($user->member->email)->send(new FirstLogin($user));
+                Mail::to($user->member->email)->send(new FirstLogin($user));
+            }
             
         } else {
             $firsttime = false;
