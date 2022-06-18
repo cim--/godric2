@@ -53,8 +53,8 @@ class MembersController extends Controller
     public function list()
     {
         $members = $this->getMemberList();
-        $pastcampaigns = Campaign::ended()->orderBy('end')->get();
-        $campaigns = Campaign::started()->orderBy('end')->get();
+        $pastcampaigns = Campaign::ended()->with('actions')->orderBy('end')->get();
+        $campaigns = Campaign::started()->with('actions')->orderBy('end')->get();
 
         $ballots = Ballot::open()->with('members')->orderBy('end')->get();
         $pastballots = Ballot::completed()->with('members')->orderBy('end')->get();
