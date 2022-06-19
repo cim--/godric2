@@ -24,6 +24,7 @@ class Campaign extends Model implements Participatory
     /* Miscellaneous. All options, generic wording */
     public const CAMPAIGN_MISC = "misc";
     
+    private $pcache = null;
     
     use HasFactory;
 
@@ -46,12 +47,14 @@ class Campaign extends Model implements Participatory
 
     public function participation(Member $member)
     {
-        $action = $this->actions->where('member_id', $member->id)->first();
-        if (!$action) {
-            return "-";
-        } else {
-            return $action->action;
+        if ($this->pcache === null) {
+            $this->pcache = [];
+            foreach ($this->actions as $action) {
+                $this->pcache[$action->member_id] = $action->action;
+            }
         }
+        
+        return $this->pcache[$member->id] ?? "-";
     }
 
     public static function campaignTypes()

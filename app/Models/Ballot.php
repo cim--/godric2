@@ -16,6 +16,8 @@ class Ballot extends Model implements Participatory
         'start' => 'datetime',
         'end' => 'datetime',
     ];
+
+    private $pcache = null;
     
     public function options()
     {
@@ -62,12 +64,14 @@ class Ballot extends Model implements Participatory
 
     public function participation(Member $member)
     {
-        $vote = $this->members->where('id', $member->id)->first();
-        if (!$vote) {
-            return "-";
-        } else {
-            return "yes";
+        if ($this->pcache === null) {
+            $this->pcache = [];
+            foreach ($this->members as $member) {
+                $this->pcache[$member->id] = "yes";
+            }
         }
+        
+        return $this->pcache[$member->id] ?? "-";
     }
 
     public function shortDesc()
