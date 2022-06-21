@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filter;
 use App\Models\Ballot;
 use App\Models\Option;
 use App\Models\Member;
@@ -101,7 +102,7 @@ class BallotController extends Controller
             }
 
             $ballot->title = $title;
-            $ballot->description = $description;
+            $ballot->description = Filter::HTML($description);
             $ballot->start = $start;
             $ballot->end = $end;
             $ballot->votersonly = $votersonly;

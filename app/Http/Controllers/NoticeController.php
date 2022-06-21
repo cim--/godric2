@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filter;
 use App\Models\Notice;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -118,7 +119,7 @@ class NoticeController extends Controller
             return back()->with('message', 'Start date must be before the end date');
         }
         $notice->title = $title;
-        $notice->content = $content;
+        $notice->content = Filter::HTML($content);
         $notice->start = $start;
         $notice->end = $end;
         $notice->highlight = $highlight;
