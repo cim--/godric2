@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "datatables.net": "^1.11.5",
-        "datatables.net-dt": "^1.11.5"
+        "datatables.net-dt": "^1.11.5",
+        "tinymce": "^6.0.3"
     }
 }

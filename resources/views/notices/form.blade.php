@@ -13,7 +13,7 @@
     </div>
     <div>
 	{!! Form::label('content', 'Content') !!}
-	{!! Form::textarea('content', $notice->content) !!}
+	{!! Form::textarea('content', $notice->content, ['class' => 'htmlbox']) !!}
 	(HTML markup allowed)
     </div>
     <div>
