@@ -176,6 +176,16 @@ class CampaignController extends Controller
 
     public function reportView(Campaign $campaign)
     {
+        return $this->doReportView($campaign, null);
+    }
+    
+    public function reportViewCompare(Campaign $campaign, Campaign $compare)
+    {
+        return $this->doReportView($campaign, $compare);
+    }
+
+    protected function doReportView(Campaign $campaign, ?Campaign $compare)
+    {
         $departments = [];
         if ($campaign->votersonly) {
             $members = Member::where('voter', true)->get();
@@ -220,6 +230,46 @@ class CampaignController extends Controller
             }
         }
         ksort($departments);
+
+
+        // get actions, order by time, cumulative count
+        // second series, two points from origin to target-end
+        // third series, comparison campaign
+
+        $datasets = [
+            'current' => $campaign->progressDataSet("#310c58"),
+            'target' => $campaign->targetDataSet("#009000")
+        ];
+        if ($compare) {
+            $datasets['compare'] = $compare->progressDataSet("#e74898");
+        }
+        sort($datasets); // compact
+        
+        $chart = app()->chartjs
+            ->name("progresschart")
+            ->type("line")
+            ->size(["height" => 300, "width" => 750])
+            ->options([
+                'scales' => [
+                    'x' => [
+                        'type' => 'linear',
+                        'position' => 'bottom',
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Day of campaign',
+                        ]
+                    ],
+                    'y' => [
+                        'position' => 'left',
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Participants so far',
+                        ]
+                    ]
+                ]
+            ])->datasets($datasets);
+               
+        $compares = Campaign::where('id', '!=', $campaign->id)->orderBy('start')->get();
         
         return view('campaigns.report.show', [
             'campaign' => $campaign,
@@ -228,7 +278,10 @@ class CampaignController extends Controller
             'pcount' => $pcount,
             'wpcount' => $wpcount,
             'whpcount' => $whpcount,
-            'ccount' => $ccount
+            'ccount' => $ccount,
+            'chart' => $chart,
+            'compare' => $compare,
+            'compares' => $compares
         ]);
     }
 

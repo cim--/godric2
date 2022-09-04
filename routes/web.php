@@ -60,7 +60,8 @@ Route::middleware('auth')->group(function() {
         // general any-role routes
         Route::middleware('authz.any')->group(function() {
             Route::get('/campaigns/report', [CampaignController::class, 'reportIndex'])->name('campaign.report');
-            Route::get('/campaigns/report/{campaign}', [CampaignController::class, 'reportView'])->name('campaign.report.view');  
+            Route::get('/campaigns/report/{campaign}', [CampaignController::class, 'reportView'])->name('campaign.report.view');
+            Route::get('/campaigns/report/{campaign}/compare/{compare}', [CampaignController::class, 'reportViewCompare'])->name('campaign.report.compare');  
         });
         
         // rep routes

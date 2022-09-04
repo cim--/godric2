@@ -118,4 +118,52 @@ class Campaign extends Model implements Participatory
     {
         return $this->name;
     }
+
+
+    // for chartjs use
+    public function progressDataSet($colour)
+    {
+        $dataset = [
+            'label' => $this->shortDesc(),
+            'backgroundColor' => 'transparent',
+            'borderColor' => $colour,
+            'fill' => false,
+            'data' => [],
+        ];
+
+        $actions = $this->actions()->where('action', 'yes')->orderBy('created_at')->get();
+        $dataset['data'][] = [
+            'x' => 0,
+            'y' => 0
+        ];
+        foreach ($actions as $idx => $action) {
+            $dataset['data'][] = [
+                'x' => $action->created_at->diffInMinutes($this->start)/1440,
+                'y' => $idx+1
+            ];
+        }
+        return $dataset;
+    }
+
+    public function targetDataSet($colour)
+    {
+        $dataset = [
+            'label' => "Target",
+            'backgroundColor' => 'transparent',
+            'borderColor' => $colour,
+            'fill' => false,
+            'data' => [],
+        ];
+
+        $dataset['data'][] = [
+            'x' => 0,
+            'y' => 0
+        ];
+        $dataset['data'][] = [
+            'x' => $this->end->diffInMinutes($this->start)/1440,
+            'y' => $this->calctarget
+        ];
+
+        return $dataset;
+    }
 }

@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>Campaign Reports</x-slot:title>
-
+ 
     <table>
 	<thead>
 	    <tr>

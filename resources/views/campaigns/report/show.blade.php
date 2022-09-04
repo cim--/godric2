@@ -1,10 +1,38 @@
 <x-layout>
     <x-slot:title>Campaign Report: {{$campaign->name}}</x-slot:title>
 
+    <h2>Campaign progress</h2>
+    {!! $chart->render() !!}
+    
     @if ($campaign->end->isPast())
 	<p><em>Totals for campaigns which have ended are based on current department sizes and will be somewhat inaccurate.</em></p>
     @endif
+
+    @if ($compares->count() > 0)
+	@if ($compare)
+	    <p>Comparing with {{ $compare->name }}</p>
+	@else
+	    <p>No comparison selected</p>
+	@endif
+	<p>
+	    Compare with:
+	    @if ($compare)
+		<a href="{{ route('campaign.report.view', [$campaign->id]) }}">none</a>
+	    @else
+		none
+	    @endif
+	    @foreach ($compares as $c)
+		|
+		@if ($compare && $c->id == $compare->id)
+		    {{ $compare->name }}
+		@else
+		    <a href="{{ route('campaign.report.compare', [$campaign->id, $c->id]) }}">{{ $c->name }}</a>
+		@endif
+	    @endforeach
+	</p>
+    @endif
     
+    <h2>Departmental breakdown</h2>
     <table class="datatable" data-paging="false" data-searching="false" data-info="false">
 	<thead>
 	    <tr>

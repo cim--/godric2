@@ -1,6 +1,7 @@
 var $       = require( 'jquery' );
 var dt      = require( 'datatables.net' );
 var tinymce      = require( 'tinymce' );
+var chartjs = require('chart.js');
 
 // initialise datatables
 $(document).ready( function () {
@@ -27,3 +28,4 @@ $(document).ready( function () {
 	link_title: false
     });
 } );
+

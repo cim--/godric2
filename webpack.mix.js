@@ -24,7 +24,7 @@ mix.autoload({
 	'node_modules/tinymce/plugins/image/plugin.js',
 	'node_modules/tinymce/plugins/lists/plugin.js',
 	'node_modules/tinymce/plugins/code/plugin.js',
-
+	'node_modules/chart.js/dist/chart.js',
     'node_modules/jquery/dist/jquery.js',
     'node_modules/datatables.net-dt/js/dataTables.dataTables.js',
     'resources/js/app.js'

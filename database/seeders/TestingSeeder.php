@@ -69,7 +69,8 @@ class TestingSeeder extends Seeder
                     Action::factory()->create([
                         'member_id' => $member->id,
                         'campaign_id' => $currentcampaign->id,
-                        'action' => 'yes'
+                        'action' => 'yes',
+                        'created_at' => $currentcampaign->start->copy()->addDays(rand(1,6))->addMinutes(rand(0,1440))
                     ]);
                     break;
                 default:
@@ -77,17 +78,20 @@ class TestingSeeder extends Seeder
                         Action::factory()->create([
                             'member_id' => $member->id,
                             'campaign_id' => $pastcampaign->id,
+                            'created_at' => $pastcampaign->start->copy()->addDays(rand(1,28))->addMinutes(rand(0,1440))
                         ]);
                         if (rand(0,10) < 3) {
                             Action::factory()->create([
                                 'member_id' => $member->id,
                                 'campaign_id' => $currentcampaign->id,
+                                'created_at' => $currentcampaign->start->copy()->addDays(rand(1,6))->addMinutes(rand(0,1440))
                             ]);
                         }
                     } elseif (rand(0,10) < 2) {
                         Action::factory()->create([
                             'member_id' => $member->id,
                             'campaign_id' => $currentcampaign->id,
+                            'created_at' => $currentcampaign->start->copy()->addDays(rand(1,6))->addMinutes(rand(0,1440))
                         ]);
                     }
                 }
