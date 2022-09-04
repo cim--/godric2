@@ -270,6 +270,144 @@ class CampaignController extends Controller
             ])->datasets($datasets);
                
         $compares = Campaign::where('id', '!=', $campaign->id)->orderBy('start')->get();
+
+
+        if ($compare) {
+            $deptsets = [];
+            $deptlist = [];
+            foreach ($departments as $department => $data) {
+                if ($data['members'] >= 10) {
+                    $deptlist[] = [
+                        'x' => 100*$compare->participationByDepartment($department)/$data['members'],
+                        'y' => 100*$data['participants']/$data['members'],
+                        'label' => $department
+                    ];
+                }
+            }
+
+            $deptsets = [
+         
+                [
+                    'label' => 'Overall Target',
+                    'data' => [
+                        [
+                            'x' => 0,
+                            'y' => $campaign->target
+                        ],
+                        [
+                            'x' => 100,
+                            'y' => $campaign->target
+                        ],
+                    ],
+                    'borderColor' => '#009000',
+                    'backgroundColor' => 'transparent',
+                    'showLine' => true,
+                ],
+                [
+                    'label' => 'Improvement',
+                    'data' => [
+                        [
+                            'x' => 0,
+                            'y' => 0
+                        ],
+                        [
+                            'x' => 100,
+                            'y' => 100
+                        ],
+                    ],
+                    'borderColor' => '#e74898',
+                    'backgroundColor' => 'transparent',
+                    'showLine' => true,
+                ],
+            ];
+
+            if ($campaign->end->isFuture() && $campaign->start->isPast()) {
+
+                $fraction = Carbon::now()->diffInMinutes($campaign->start) /
+                          $campaign->end->diffInMinutes($campaign->start);
+                
+                $deptsets[] = [
+                    'label' => 'Required Pace for Target',
+                    'data' => [
+                        [
+                            'x' => 0,
+                            'y' => $campaign->target * $fraction
+                        ],
+                        [
+                            'x' => 100,
+                            'y' => $campaign->target * $fraction
+                        ],
+                    ],
+                    'borderColor' => '#009000',
+                    'backgroundColor' => 'transparent',
+                    'showLine' => true,
+                    'borderDash' => [5,5]
+                ];
+
+                $deptsets[] = [
+                    'label' => 'Required Pace for Improvement',
+                    'data' => [
+                        [
+                            'x' => 0,
+                            'y' => 0
+                        ],
+                        [
+                            'x' => 100,
+                            'y' => 100 * $fraction
+                        ],
+                    ],
+                    'borderColor' => '#e74898',
+                    'backgroundColor' => 'transparent',
+                    'showLine' => true,
+                    'borderDash' => [5,5]
+                ];
+                
+            }
+
+            $deptsets[] = [
+                'label' => 'Departments',
+                'data' => $deptlist,
+                'borderColor' => '#310c58',
+                'backgroundColor' => '#310c58',
+                'tooltip' => [
+                    'callbacks' => [
+                        'label' => "@@@function(context) { return context.raw.label; }@@@"
+                    ]
+                ]
+            ];
+            
+            $deptchart = app()->chartjs
+                   ->name('departmentchart')
+                   ->type('scatter')
+                   ->size(["height" => 300, "width" => 750])
+                   ->options([
+                       'scales' => [
+                           'x' => [
+                               'type' => 'linear',
+                               'position' => 'bottom',
+                               'title' => [
+                                   'display' => true,
+                                   'text' => 'Participation last time (%)',
+                               ],
+                               'min' => 0,
+                               'max' => 100,
+                           ],
+                           'y' => [
+                               'position' => 'left',
+                               'title' => [
+                                   'display' => true,
+                                   'text' => 'Participation this time (%)',
+                               ],
+                               'min' => 0,
+                               'max' => 100,
+                           ]
+                       ]
+                   ])
+                   ->datasets($deptsets);
+        } else {
+            $deptchart = null;
+        }
+
         
         return view('campaigns.report.show', [
             'campaign' => $campaign,
@@ -280,6 +418,7 @@ class CampaignController extends Controller
             'whpcount' => $whpcount,
             'ccount' => $ccount,
             'chart' => $chart,
+            'deptchart' => $deptchart,
             'compare' => $compare,
             'compares' => $compares
         ]);

@@ -77,5 +77,11 @@
 	    @endforeach
 	</tbody>
     </table>
+
+    @if ($deptchart)
+	<h2>Departmental comparison</h2>
+	{!! str_replace('"@@@', '', 
+			str_replace('@@@"', '', $deptchart->render())) !!}
+    @endif
 	    
 </x-layout>

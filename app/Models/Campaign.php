@@ -166,4 +166,14 @@ class Campaign extends Model implements Participatory
 
         return $dataset;
     }
+
+    public function participationByDepartment($dept)
+    {
+        return $this->actions()
+                    ->where('action', 'yes')
+                    ->whereHas('member', function ($q) use ($dept) {
+                        $q->where('department', $dept);
+                    })
+                    ->count();
+    }
 }
