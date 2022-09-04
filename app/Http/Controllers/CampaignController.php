@@ -286,7 +286,17 @@ class CampaignController extends Controller
             }
 
             $deptsets = [
-         
+                [
+                    'label' => 'Departments',
+                    'data' => $deptlist,
+                    'borderColor' => '#310c58',
+                    'backgroundColor' => '#310c58',
+                    'tooltip' => [
+                        'callbacks' => [
+                            'label' => "@@@function(context) { return context.raw.label; }@@@"
+                        ]
+                    ]
+                ],
                 [
                     'label' => 'Overall Target',
                     'data' => [
@@ -364,17 +374,7 @@ class CampaignController extends Controller
                 
             }
 
-            $deptsets[] = [
-                'label' => 'Departments',
-                'data' => $deptlist,
-                'borderColor' => '#310c58',
-                'backgroundColor' => '#310c58',
-                'tooltip' => [
-                    'callbacks' => [
-                        'label' => "@@@function(context) { return context.raw.label; }@@@"
-                    ]
-                ]
-            ];
+            
             
             $deptchart = app()->chartjs
                    ->name('departmentchart')

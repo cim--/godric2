@@ -80,6 +80,7 @@
 
     @if ($deptchart)
 	<h2>Departmental comparison</h2>
+	<p>(departments of 10 members or larger only)</p>
 	{!! str_replace('"@@@', '', 
 			str_replace('@@@"', '', $deptchart->render())) !!}
     @endif
