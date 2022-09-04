@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Member;
 use App\Models\Action;
+use App\Models\Changelog;
 use Carbon\Carbon;
 
 class ImportController extends Controller
@@ -13,7 +14,11 @@ class ImportController extends Controller
 
     public function index()
     {
-        return view('import.index');
+        $changelogs = Changelog::orderBy('created_at')->get();
+        
+        return view('import.index', [
+            'changelogs' => $changelogs
+        ]);
     }
 
     public function process(Request $request)
@@ -77,6 +82,20 @@ class ImportController extends Controller
         
         $addlist = collect($added)->map($lister);
         $remlist = $removed->map($lister);
+
+        // clear old changelogs
+        Changelog::old()->delete();
+        // save messages to changelog
+        foreach ($addlist as $message) {
+            $c = new Changelog;
+            $c->message = "New: ".$message;
+            $c->save();
+        }
+        foreach ($remlist as $message) {
+            $c = new Changelog;
+            $c->message = "Removed: ".$message;
+            $c->save();
+        }
 
         foreach ($removed as $remove) {
             $remove->actions()->delete();
