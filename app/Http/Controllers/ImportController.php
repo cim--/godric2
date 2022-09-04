@@ -65,16 +65,19 @@ class ImportController extends Controller
             $member->updated_at = Carbon::now();
             $member->save();
         }
-        
-        $removed = Member::where('updated_at', '<', Carbon::parse("-1 hour"))->get();
+
+        $staff = collect(config('membership.staff'));
+
+        $removed = Member::where('updated_at', '<', Carbon::parse("-1 hour"))->
+                 whereNotIn('membership', $staff)->get();
 
         $lister = function($item, $key) {
-            return $item->membership.": ".$item->firstname." ".$item->lastname." (".$item->department.")";
+            return $item->membership.": ".$item->firstname." ".$item->lastname." (".$item->email.", ".$item->department.")";
         };
         
         $addlist = collect($added)->map($lister);
         $remlist = $removed->map($lister);
-        
+
         foreach ($removed as $remove) {
             $remove->actions()->delete();
             $remove->workplaces()->detach();

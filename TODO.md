@@ -3,6 +3,8 @@
 ## For balloting / campaigning
 
 * Campaigns: bulk move wait -> yes
+* Graphs of turnout, basic linear projection
+* Graphs of departmental turnout, on-track lines
 
 ## More generally
 
@@ -16,6 +18,7 @@
 
 ## Data retention improvements
 
+* Joiners-and-leavers log (retained for a couple of weeks only) for management of induction/cleanup tasks
 * Implement "dispute+3" cleanup of old campaigns. Probably needs a dispute object to link them to so that it can be configured properly. (No hurry, just sometime before 2025)
 
 ## For testing
