@@ -2,6 +2,10 @@ var $       = require( 'jquery' );
 var dt      = require( 'datatables.net' );
 var tinymce      = require( 'tinymce' );
 var chartjs = require('chart.js');
+var cdl = require('chartjs-plugin-datalabels');
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(ChartDataLabels);
+Chart.defaults.plugins.datalabels.display = false;
 
 // initialise datatables
 $(document).ready( function () {

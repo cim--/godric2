@@ -295,6 +295,10 @@ class CampaignController extends Controller
                         'callbacks' => [
                             'label' => "@@@function(context) { return context.raw.label; }@@@"
                         ]
+                    ],
+                    'datalabels' => [
+                        'display' => true,
+                        'align' => 'right'
                     ]
                 ],
                 [
@@ -401,7 +405,7 @@ class CampaignController extends Controller
                                'min' => 0,
                                'max' => 100,
                            ]
-                       ]
+                       ],
                    ])
                    ->datasets($deptsets);
         } else {
