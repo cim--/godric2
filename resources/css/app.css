@@ -79,3 +79,11 @@ div.profilebox {
     padding-bottom: 0.5em;
     border-bottom: thin dotted #310c58;
 }
+
+div.error {
+    background: #fcc;
+    color: #400;
+    border: thick solid #700;
+    font-size: 110%;
+    padding: 1em;
+}

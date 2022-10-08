@@ -104,11 +104,21 @@ class ImportController extends Controller
             $remove->roles()->delete();
             $remove->delete();
         }
+
+        $excelcheck = false;
+        /* Does it look as if the members file has been mangled
+         * through Excel before import? */
+        if (Member::where('mobile', 'LIKE', '0%')->count() == 0) {
+            $excelcheck = true;
+        } elseif (Member::where('mobile', 'LIKE', '%.%E+%')->count() > 0) {
+            $excelcheck = true;
+        }
         
         return view('import.process', [
             'total' => count($contents)-1,
             'added' => $addlist,
-            'removed' => $remlist
+            'removed' => $remlist,
+            'excelcheck' => $excelcheck
         ]);
     }
     

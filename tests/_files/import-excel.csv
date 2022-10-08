@@ -1,0 +1,4 @@
+person_id,unused,unused,firstname,lastname,unused,unused,email,unused,unused,department,unused,unused,unused,phone,unused,mobile,unused,unused,jobtype,unused,unused,unused,unused,unused,unused,unused,unused,unused,membertype,ede_primary
+1001,x,x,Member,McMemberFace,x,x,member@example.com,x,x,Chemistry,x,x,x,,,1234 567890,x,x,Academic,x,x,x,x,x,x,x,x,x,Standard,Yes
+1103,x,x,New,Member,x,x,member@example.org,x,x,Chemistry,x,x,x,,,,x,x,Academic,x,x,x,x,x,x,x,x,x,Standard,Yes
+1105,x,x,New,Member,x,x,member@example.net,x,x,Chemistry,x,x,x,,,4.4782E+11,x,x,Academic,x,x,x,x,x,x,x,x,x,Standard,Yes
