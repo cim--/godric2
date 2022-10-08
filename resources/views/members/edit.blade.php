@@ -24,7 +24,7 @@
     
     <div>
 	{!! Form::label('notes', 'Additional Notes') !!}
-	{!! Form::textarea('notes', '') !!} 
+	{!! Form::textarea('notes', $member->notes ) !!} 
     </div>
 
     <p>Record additional notes about a member. Notes will be visible and editable by all representatives. The member will be able to view the notes on their My Profile page.</p>
