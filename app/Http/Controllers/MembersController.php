@@ -206,6 +206,9 @@ class MembersController extends Controller
         case "rep":
             $data = $this->exportRep($members, $pastcampaigns, $campaigns);
             break;
+        case "participants":
+            $data = $this->exportParticipants($members, $campaigns);
+            break;
         default:
             abort(400);
         }
@@ -303,6 +306,28 @@ class MembersController extends Controller
                 } else {
                     // include all
                     $data[] = [$member->firstname, $member->lastname, $member->department, $member->mobile];
+                }
+            }
+        }
+        return $data;
+    }
+
+    private function exportParticipants($members, $campaigns)
+    {
+        $data = [];
+        $data[] = ["Member ID"];
+
+        if (count($campaigns) > 0) {
+            // doesn't make sense if no active campaigns
+            foreach ($members as $member) {
+                foreach ($campaigns as $campaign) {
+                    if ($campaign->end->isFuture()) {
+                        $part = $campaign->participation($member);
+                        if ($part == "yes") {
+                            $data[] = [$member->membership];
+                            continue 2; // next member
+                        }
+                    }
                 }
             }
         }

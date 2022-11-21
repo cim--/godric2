@@ -70,6 +70,7 @@
 	@if ($campaigns->count() > 0)
 	    <li><a href="{{ route('members.export') }}?format=phone">Export Campaign Phone List</a> (excludes those who have already participated)</li>
 	    <li><a href="{{ route('members.export') }}?format=thrutext">Export Campaign Thrutext List</a> (excludes those who have already participated, mobiles only)</li>
+	    <li><a href="{{ route('members.export') }}?format=participants">Export Campaign Participants</a> (only includes those who have participated in at least one of the active campaigns)
 	@endif
 	<li><a href="{{ route('members.export') }}?format=rep">Download Rep CSV</a> (all campaigns)</li>
     </ul>
