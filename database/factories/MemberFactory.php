@@ -56,7 +56,8 @@ class MemberFactory extends Factory
                 "Postgraduate"
             ]),
             "membertype" => $membertype,
-            "voter" => ($membertype != "Student")
+            "voter" => ($membertype != "Student"),
+            "created_at" => $this->faker->dateTimeBetween("-6 months", "-1 day")
         ];
     }
 }

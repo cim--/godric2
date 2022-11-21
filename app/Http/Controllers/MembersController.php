@@ -11,6 +11,7 @@ use App\Models\Action;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class MembersController extends Controller
 {
@@ -58,11 +59,17 @@ class MembersController extends Controller
 
         $ballots = Ballot::open()->with('members')->orderBy('end')->get();
         $pastballots = Ballot::completed()->with('members')->orderBy('end')->get();
+
+        $newpoint = Carbon::parse("-2 weeks");
+        if ($campaigns->count() > 0) {
+            $newpoint = $campaigns->min('start');
+        }
         
         return view('members.list', [
             'members' => $members,
             'pastcampaigns' => $pastcampaigns->concat($pastballots),
             'campaigns' => $campaigns->concat($ballots),
+            'newpoint' => $newpoint
         ]);
     }
 
@@ -304,9 +311,13 @@ class MembersController extends Controller
 
     private function exportRep($members, $pastcampaigns, $campaigns)
     {
-      
+        $newpoint = Carbon::parse("-2 weeks");
+        if ($campaigns->count() > 0) {
+            $newpoint = $campaigns->min('start');
+        }
+        
         $data = [];
-        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes"];
+        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes", "New?"];
         foreach ($pastcampaigns as $pc) {
             $headers[] = "(P)".$pc->shortDesc();
         }
@@ -328,6 +339,7 @@ class MembersController extends Controller
                 $member->membertype,
                 $member->voter ? "Yes":"No",
                 str_replace(["\r", "\n"], " ", $member->notes),
+                $member->created_at->gt($newpoint) ? "Y" : "N"
             ];
 
             foreach ($pastcampaigns as $pc) {

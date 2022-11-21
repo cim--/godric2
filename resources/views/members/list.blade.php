@@ -46,7 +46,12 @@
 		    @foreach ($campaigns as $campaign)
 			<td>{{ $campaign->participation($member) }}</td>
 		    @endforeach
-		    <td>{{ $member->notes }}</td>
+		    <td>
+			@if ($member->created_at->gt($newpoint))
+			    <strong>New member.</strong>
+			@endif
+			{{ $member->notes }}
+		    </td>
 		</tr>
 	    @endforeach
 	</tbody>
