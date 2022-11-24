@@ -53,6 +53,14 @@ class TestingSeeder extends Seeder
                     'voter' => true,
                 ]);
                 break;
+            case 1083:
+            case 1084:
+                $member = Member::factory()->create([
+                    'membership' => $i,
+                    'department' => 'Finance',
+                    'voter' => true,
+                ]);
+                break;
             default:
                 // randomise
                 $member = Member::factory()->create([

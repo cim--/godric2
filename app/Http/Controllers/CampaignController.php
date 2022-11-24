@@ -275,6 +275,11 @@ class CampaignController extends Controller
         if ($compare) {
             $deptsets = [];
             $deptlist = [];
+            $otherlast = 0;
+            $otherthis = 0;
+            $othertotal = 0;
+            $allthis = 0;
+            $alltotal = 0;
             foreach ($departments as $department => $data) {
                 if ($data['members'] >= 10) {
                     $deptlist[] = [
@@ -282,9 +287,23 @@ class CampaignController extends Controller
                         'y' => 100*$data['participants']/$data['members'],
                         'label' => $department
                     ];
+                } else {
+                    $otherlast += $compare->participationByDepartment($department);
+                    $otherthis += $data['participants'];
+                    $othertotal += $data['members'];
                 }
+                $allthis += $data['participants'];
+                $alltotal += $data['members'];
             }
-
+            if ($othertotal > 0) {
+                $deptlist[] = [
+                    'x' => 100*$otherlast/$othertotal,
+                    'y' => 100*$otherthis/$othertotal,
+                    'label' => "Others"
+                ];
+            }
+            $allmean = 100*$allthis/$alltotal;
+            
             $deptsets = [
                 [
                     'label' => 'Departments',
@@ -314,6 +333,22 @@ class CampaignController extends Controller
                         ],
                     ],
                     'borderColor' => '#009000',
+                    'backgroundColor' => 'transparent',
+                    'showLine' => true,
+                ],
+                [
+                    'label' => 'Average Participation',
+                    'data' => [
+                        [
+                            'x' => 0,
+                            'y' => $allmean
+                        ],
+                        [
+                            'x' => 100,
+                            'y' => $allmean
+                        ],
+                    ],
+                    'borderColor' => '#666666',
                     'backgroundColor' => 'transparent',
                     'showLine' => true,
                 ],

@@ -3,8 +3,6 @@
 ## For balloting / campaigning
 
 * Give phone banker permission visibility of notes field, ability to edit
-* Comparison graph should have "others" point for depts < 10
-* On departmental turnout chart, style differently those above and below average
 
 ## More generally
 
