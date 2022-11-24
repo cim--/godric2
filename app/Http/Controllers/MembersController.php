@@ -399,6 +399,7 @@ class MembersController extends Controller
         if (!$campaigns->count()) {
             return view('phonebank.nocampaign');
         }
+        $newpoint = $campaigns->min('start');
         
         $user = Auth::user();
         
@@ -430,7 +431,8 @@ class MembersController extends Controller
         return view('phonebank.search', [
             'search' => $search,
             'results' => $results,
-            'campaigns' => $campaigns
+            'campaigns' => $campaigns,
+            'newpoint' => $newpoint
         ]);
     }
 
@@ -464,6 +466,9 @@ class MembersController extends Controller
             $part = $request->input('action'.$campaign->id);
             $action->action = $part;
             $action->save();
+
+            $member->notes = $request->input('notes');
+            $member->save();
         }
 
         return redirect()->route('phonebank')->with('message', $member->firstname." ".$member->lastname." participation updated");

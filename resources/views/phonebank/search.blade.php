@@ -19,11 +19,16 @@
 	    @foreach ($results as $result)
 		<h3>{{$result->firstname}} {{$result->lastname}}</h3>
 		<p>Department: {{$result->department}}</p>
+		<p>Notes: {{$result->notes}}</p>
+		@if ($result->created_at->gt($newpoint))
+		    <p><strong>New member.</strong></p>
+		@endif
 
 		{!! Form::open(['method'=>'post', 'route' => ['phonebank.update', $result->id]]) !!}
 		@foreach ($campaigns as $campaign)
 		    <x-campaigns.statemenu :campaign="$campaign" :member="$result" />
 		@endforeach
+		<div>Update Notes:<br>{!! Form::textarea('notes', $result->notes) !!}</div>
 		{!! Form::submit('Update participation') !!}
 		{!! Form::close() !!}
 		
