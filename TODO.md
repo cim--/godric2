@@ -2,10 +2,12 @@
 
 ## For balloting / campaigning
 
-* Give phone banker permission visibility of notes field, ability to edit
+* Allow campaigns to be given restrictfield/restrictvalue for more localised work. (Workplace can be used to construct an arbitrary restriction this way)
+* Allow collection of preference-list ballots (counting them is probably out of scope, so some sort of export)
 
 ## More generally
 
+* Add "date joined branch" column to rep report and export.
 * Highlight permissions held on reps list
 * More structured list of branch offices and holders (can be done as a notice, of course)
 ** could link to roles/permissions in-app as well, potentially?
