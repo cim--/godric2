@@ -4,6 +4,8 @@
     <p>Click on names to update participation in current campaigns.</p>
 
     <p>Name, contact and affiliation data is derived from national data sources - please send corrections to national in the usual way.</p>
+
+    <p>Date Created is the date the member was first imported into Godric, which will either be the initial set up date for the system, or shortly after they joined the organisation.</p>
     
     <table class="datatable" data-order='[[1, "asc"]]' data-length-menu='[[25,100,-1],[25,100,"All"]]'>
 	<thead>
@@ -22,6 +24,7 @@
 		    <th>{{ $campaign->shortDesc() }}</th>
 		@endforeach
 		<th>Notes</th>
+		<th>Date Created</th>
 	    </tr>
 	</thead>
 	<tbody>
@@ -52,6 +55,7 @@
 			@endif
 			{{ $member->notes }}
 		    </td>
+		    <td data-sort="{{ $member->created_at->format('YmdHis') }}">{{ $member->created_at->format("j F Y") }}</td>
 		</tr>
 	    @endforeach
 	</tbody>

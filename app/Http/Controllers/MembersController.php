@@ -342,7 +342,7 @@ class MembersController extends Controller
         }
         
         $data = [];
-        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes", "New?"];
+        $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes", "New?", "Record Created"];
         foreach ($pastcampaigns as $pc) {
             $headers[] = "(P)".$pc->shortDesc();
         }
@@ -364,7 +364,8 @@ class MembersController extends Controller
                 $member->membertype,
                 $member->voter ? "Yes":"No",
                 str_replace(["\r", "\n"], " ", $member->notes),
-                $member->created_at->gt($newpoint) ? "Y" : "N"
+                $member->created_at->gt($newpoint) ? "Y" : "N",
+                $member->created_at->format("Y-m-d")
             ];
 
             foreach ($pastcampaigns as $pc) {
