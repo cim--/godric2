@@ -30,7 +30,7 @@ class MembersController extends Controller
                 // proceed
             } elseif ($role->role != Role::ROLE_SUPERUSER && $role->role != Role::ROLE_REP) {
                 continue; // not a role for this list
-            }  
+            }
             $hasrole = true;
             if ($role->restrictfield == "") {
                 // trivially true
@@ -64,7 +64,7 @@ class MembersController extends Controller
         if ($campaigns->count() > 0) {
             $newpoint = $campaigns->min('start');
         }
-        
+
         return view('members.list', [
             'members' => $members,
             'pastcampaigns' => $pastcampaigns->concat($pastballots),
@@ -81,7 +81,7 @@ class MembersController extends Controller
         }
 
         $workplaces = Workplace::managedBy($user);
-        
+
         $campaigns = Campaign::started()->orderBy('end')->get();
         return view('members.edit', [
             'member' => $member,
@@ -96,7 +96,7 @@ class MembersController extends Controller
         if (!$user->can('viewFull', $member)) {
             abort(403);
         }
-        
+
         $campaigns = Campaign::started()->orderBy('end')->get();
         foreach ($campaigns as $campaign) {
             if ($campaign->campaigntype == CAMPAIGN::CAMPAIGN_PETITION && $campaign->participation($member) == "yes") {
@@ -107,7 +107,7 @@ class MembersController extends Controller
                 // skip this one
                 continue;
             }
-            
+
             $part = $request->input('action'.$campaign->id, "-");
             if ($part != "-") {
                 $action = Action::firstOrNew([
@@ -157,7 +157,7 @@ class MembersController extends Controller
         $member->save();
         return redirect()->route('members.list')->with('message', 'Updated notes');
     }
-    
+
     public function setPassword(Member $member, Request $request)
     {
         $user = \Auth::user();
@@ -169,33 +169,46 @@ class MembersController extends Controller
         if (strlen($newpass) < 8) {
             return back()->with('message', 'Password must be at least 8 characters');
         }
-        
+
         $member->user->password = Hash::make($newpass);
         $member->user->save();
 
         return back()->with('message', 'Temporary Password set - please contact the member to confirm this promptly.');
     }
-    
+
     public function export(Request $request)
     {
         $members = $this->getMemberList();
         $pastcampaigns = Campaign::ended()->orderBy('end')->get()->concat(
             Ballot::completed()->with('members')->orderBy('end')->get()
         );
-        
+
+        $campaign_requested = $request->input('campaign', false);
+        $voted = $request->input('voted', false);
         $full = $request->input('full', 0);
         if ($full == 0) {
-            $campaigns = Campaign::started()->orderBy('end')->get()->concat(
-                Ballot::open()->with('members')->orderBy('end')->get()
-            );
+            if($campaign_requested === false){
+                $campaigns = Campaign::started()->orderBy('end')->get()->concat(
+                    Ballot::open()->with('members')->orderBy('end')->get()
+                );
+            }
+            else{
+                $campaigns = Campaign::find([$campaign_requested]);
+            }
         } else {
             $campaigns = [];
         }
 
+
         $format = $request->input('format');
         switch ($format) {
         case "email":
-            $data = $this->exportEmail($members, $campaigns);
+            if ($voted !== false && $campaign_requested !== false){
+                $data = $this->exportEmail($members, $campaigns, $voted);
+            }
+            else{
+                $data = $this->exportEmail($members, $campaigns);
+            }
             break;
         case "phone":
             $data = $this->exportPhone($members, $campaigns);
@@ -225,25 +238,34 @@ class MembersController extends Controller
             }
             fclose($file);
         };
-        
+
         return response()->stream($csvencoder, 200, $headers);
     }
 
-    private function exportEmail($members, $campaigns)
+    private function exportEmail($members, $campaigns, $voted = "unknown")
     {
         $data = [];
         $data[] = ["EMAIL", "FNAME", "LNAME"];
-
+        $count = 0;
         foreach ($members as $member) {
             if (count($campaigns) > 0) {
                 foreach ($campaigns as $campaign) {
                     $part = $campaign->participation($member);
                     if ($part == "yes" || $part == "no") {
-                        continue; // try next campaign
+                        if($voted === "known"){
+                            $data[] = [$member->email, $member->firstname, $member->lastname];
+                            $count += 1;
+                            continue 2;
+                        }
+                        else{
+                            continue; // try next campaign
+                        }
                     } elseif ($campaign->votersonly && !$member->voter) {
                         continue; // try next campaign
                     } else {
-                        $data[] = [$member->email, $member->firstname, $member->lastname];
+                        if($voted === "unknown"){
+                            $data[] = [$member->email, $member->firstname, $member->lastname];
+                        }
                         continue 2;
                         // next member
                     }
@@ -340,7 +362,7 @@ class MembersController extends Controller
         if ($campaigns->count() > 0) {
             $newpoint = $campaigns->min('start');
         }
-        
+
         $data = [];
         $headers = ["Member ID", "First name", "Last name", "Email", "Phone", "Department", "Workplaces", "Job Type", "Member Type", "Voter?", "Notes", "New?", "Record Created"];
         foreach ($pastcampaigns as $pc) {
@@ -386,7 +408,7 @@ class MembersController extends Controller
         if (!Campaign::started()->count()) {
             return view('phonebank.nocampaign');
         }
-        
+
         return view('phonebank.search', [
             'search' => '',
             'results' => null,
@@ -401,15 +423,15 @@ class MembersController extends Controller
             return view('phonebank.nocampaign');
         }
         $newpoint = $campaigns->min('start');
-        
+
         $user = Auth::user();
-        
+
         $search = $request->input('search');
         $words = explode(" ", trim($search));
         if (strlen(trim($search)) < 3) {
             return redirect()->route('phonebank')->with('message', 'Search term must be at least three characters');
         }
-        
+
         $members = Member::orderBy('lastname');
         foreach ($words as $word) {
             $members->where(function ($q) use ($word) {
@@ -428,7 +450,7 @@ class MembersController extends Controller
                 $results[] = $person;
             }
         }
-        
+
         return view('phonebank.search', [
             'search' => $search,
             'results' => $results,
@@ -448,7 +470,7 @@ class MembersController extends Controller
         if (!$member || !$user->can('view', $member)) {
             return redirect()->route('phonebank')->with('message', 'This member could not be found');
         }
-        
+
         $campaigns = Campaign::started()->get();
         foreach ($campaigns as $campaign) {
             if ($campaign->votersonly && !$member->voter) {
