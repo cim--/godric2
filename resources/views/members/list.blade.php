@@ -6,7 +6,7 @@
     <p>Name, contact and affiliation data is derived from national data sources - please send corrections to national in the usual way.</p>
 
     <p>Date Created is the date the member was first imported into Godric, which will either be the initial set up date for the system, or shortly after they joined the organisation.</p>
-    
+
     <table class="datatable" data-order='[[1, "asc"]]' data-length-menu='[[25,100,-1],[25,100,"All"]]'>
 	<thead>
 	    <tr>
@@ -64,7 +64,7 @@
     <h2>Download data</h2>
 
     <p>Downloaded copies of data must be used in accordance with data protection policies, and deleted once no longer required.</p>
-	
+
     <ul>
 	<li><a href="{{ route('members.export') }}?format=email&amp;full=1">Export Full Email List</a></li>
 	@if ($campaigns->count() > 0)
@@ -78,5 +78,5 @@
 	@endif
 	<li><a href="{{ route('members.export') }}?format=rep">Download Rep CSV</a> (all campaigns)</li>
     </ul>
-	
+
 </x-layout>
