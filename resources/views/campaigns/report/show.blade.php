@@ -86,6 +86,8 @@
     @endif
 
 
+    @can('seeLists', App\Models\Member::class)
+
     <h2>Download data</h2>
 
     <p>Downloaded copies of data must be used in accordance with data protection policies, and deleted once no longer required.</p>
@@ -94,6 +96,6 @@
 	   <li><a href="{{ route('members.export') }}?format=email&campaign={{$campaign->id}}&voted=known">Export "{{$campaign->name}}" Campaign Email List of members who have voted, told us they won't, or refuse to disclose</a></li>
 	   <li><a href="{{ route('members.export') }}?format=email&campaign={{$campaign->id}}&voted=unknown">Export "{{$campaign->name}}" Campaign Email List of members who have an unknown voting status</a></li>
 	</ul>
-
+	@endcan
 
 </x-layout>
