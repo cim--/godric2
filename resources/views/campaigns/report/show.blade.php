@@ -3,7 +3,7 @@
 
     <h2>Campaign progress</h2>
     {!! $chart->render() !!}
-    
+
     @if ($campaign->end->isPast())
 	<p><em>Totals for campaigns which have ended are based on current department sizes and will be somewhat inaccurate.</em></p>
     @endif
@@ -31,7 +31,7 @@
 	    @endforeach
 	</p>
     @endif
-    
+
     <h2>Departmental breakdown</h2>
     <table class="datatable" data-paging="false" data-searching="false" data-info="false">
 	<thead>
@@ -81,8 +81,21 @@
     @if ($deptchart)
 	<h2>Departmental comparison</h2>
 	<p>(departments of 10 members or larger only)</p>
-	{!! str_replace('"@@@', '', 
+	{!! str_replace('"@@@', '',
 			str_replace('@@@"', '', $deptchart->render())) !!}
     @endif
-	    
+
+
+    @can('seeLists', App\Models\Member::class)
+
+    <h2>Download data</h2>
+
+    <p>Downloaded copies of data must be used in accordance with data protection policies, and deleted once no longer required.</p>
+
+    <ul>
+	   <li><a href="{{ route('members.export') }}?format=email&campaign={{$campaign->id}}&voted=known">Export "{{$campaign->name}}" Campaign Email List of members who have voted, told us they won't, or refuse to disclose</a></li>
+	   <li><a href="{{ route('members.export') }}?format=email&campaign={{$campaign->id}}&voted=unknown">Export "{{$campaign->name}}" Campaign Email List of members who have an unknown voting status</a></li>
+	</ul>
+	@endcan
+
 </x-layout>
