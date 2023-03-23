@@ -19,5 +19,9 @@ return [
      */
     'staff' => explode(",", env('STAFF_USERS', "")),
 
-
+    /*
+     * The organisation type. Affects login advice and membership
+     * import processing. Only one supported value for now. */
+    'orgtype' => env('ORGANISATION_TYPE', 'UCUBranch'),
+    
 ];

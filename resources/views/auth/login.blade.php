@@ -1,6 +1,10 @@
 <x-layout>
     <x-slot:title>Log in</x-slot:title>
 
+    @if ($orgtype == "UCUBranch")
+	<p>If you cannot remember your membership ID, you can send a blank email to <a href="mailto:mynumber@mercury.ucu.org.uk">mynumber@mercury.ucu.org.uk</a> from the email address we have recorded for you, and your membership ID will be emailed back. You can also get it by logging into <a href="https://www.ucu.org.uk/article/8903/My-UCU">MyUCU</a>.</p>
+    @endif
+    
     <h2>Existing Accounts</h2>
     
     {!! Form::open(['method' => 'POST', 'route' => 'auth.dologin']) !!}

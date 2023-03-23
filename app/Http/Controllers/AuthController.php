@@ -18,7 +18,10 @@ class AuthController extends Controller
 
     public function login()
     {
-        return view('auth.login');
+        $orgtype = config('membership.orgtype');
+        return view('auth.login', [
+            'orgtype' => $orgtype
+        ]);
     }
 
     public function doLogin(Request $request)
@@ -136,7 +139,10 @@ class AuthController extends Controller
 
     public function reset()
     {
-        return view('auth.reset');
+        $orgtype = config('membership.orgtype');
+        return view('auth.reset', [
+            'orgtype' => $orgtype
+        ]);
     }
 
     public function doReset(Request $request)
