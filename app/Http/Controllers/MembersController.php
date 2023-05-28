@@ -48,7 +48,7 @@ class MembersController extends Controller
             // no list - though shouldn't get here anyway
             return collect([]);
         }
-        return $members->with('workplaces')->get();
+        return $members->with('workplaces')->withCount('user')->get();
     }
 
     public function list()

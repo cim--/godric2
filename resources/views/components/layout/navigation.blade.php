@@ -6,7 +6,7 @@
 	<li><a href="{{route('ballots.archive')}}">Online Vote Archive</a></li>
 
 	<li><a href="{{route('auth.password')}}">Change Password</a></li>
-	<li><a href="{{route('auth.logout')}}">Log out</a></li>
+	<li><a href="{{route('auth.logout')}}">Log out {{ Auth::user()->username ?? "" }}</a></li>
     </ul>
 
     @can('seeReports', App\Models\Member::class)

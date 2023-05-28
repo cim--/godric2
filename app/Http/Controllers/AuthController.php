@@ -79,7 +79,6 @@ class AuthController extends Controller
         $user = Auth::user();
         if (Hash::check($user->member->lastname, $user->password)) {
             $firsttime = true;
-
             if ($user->resetcode === null) {
                 $user->setEmailCode();
 
@@ -171,9 +170,14 @@ class AuthController extends Controller
                     $user->username = $username;
                     $user->password = Hash::make($member->lastname);
                     $user->save();
-                    
+
+                    $user->setEmailCode();
+                    Mail::to($user->member->email)->send(new FirstLogin($user));
+                    $user->save();
+
                     Auth::login($user);
                     $request->session()->regenerate();
+                    Auth::login($user);
                     return redirect()->route('auth.password')->with('message', 'Please set a new password');
                 }
             }
