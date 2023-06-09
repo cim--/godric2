@@ -20,6 +20,9 @@ class NoticeController extends Controller
     public function publicIndex()
     {
         $notices = Notice::current()->orderBy('highlight', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
+        $notices = $notices->mapToGroups(function($notice) {
+            return [($notice->meeting ?? "") => $notice];
+        });
         return view('notices.public', [
             'notices' => $notices
         ]);
@@ -67,7 +70,8 @@ class NoticeController extends Controller
     public function create()
     {
         return view('notices.form', [
-            'notice' => new Notice
+            'notice' => new Notice,
+            'meetings' => Notice::allMeetings()
         ]);
     }
 
@@ -92,7 +96,8 @@ class NoticeController extends Controller
     public function edit(Notice $notice)
     {
         return view('notices.form', [
-            'notice' => $notice
+            'notice' => $notice,
+            'meetings' => Notice::allMeetings()
         ]);
     }
 
@@ -106,25 +111,26 @@ class NoticeController extends Controller
     public function update(Request $request, Notice $notice)
     {
         $title = $request->input('title');
+        $meeting = $request->input('meeting');
         $content = $request->input('content');
         $start = $request->input('nostart', false) ? null : Carbon::parse($request->input('start'));
         $end = $request->input('noend', false) ? null : Carbon::parse($request->input('end'));
         $highlight = $request->input('highlight', false);
 
         if (!$title || !$content) {
-            dd($title, $content);
             return back()->with('message', 'Title and content are required');
         }
         if ($start && $end && $start->gt($end)) {
             return back()->with('message', 'Start date must be before the end date');
         }
         $notice->title = $title;
+        $notice->meeting = $meeting;
         $notice->content = Filter::HTML($content);
         $notice->start = $start;
         $notice->end = $end;
         $notice->highlight = $highlight;
         $notice->save();
-        return redirect()->route('notices.index')->with('message', 'Notice Saved');
+        return redirect()->route('notices.index')->with('message', 'Document Saved');
                            
     }
 

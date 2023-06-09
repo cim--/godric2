@@ -166,6 +166,14 @@ class TestingSeeder extends Seeder
                     'restrictvalue' => 'Library'
                 ]);
                 break;
+            case 1009:
+                Role::factory()->create([
+                    'member_id' => $member->id,
+                    'role' => Role::ROLE_SECRETARY,
+                    'restrictfield' => '',
+                    'restrictvalue' => ''
+                ]);
+                break;
             default:
                 // no roles
             }

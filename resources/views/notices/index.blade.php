@@ -2,6 +2,7 @@
     <x-slot:title>Notice Editing</x-slot:title>
 
     <p>Notices are shown in the "Notices and Information" link, and may have highlighted links on the front page.</p>
+    <p>Notices may be associated with a meeting to be grouped together on the Notices and Information page.</p>
 
     <p><a href="{{ route('notices.create') }}">New notice</a></p>
     
@@ -11,6 +12,7 @@
 		<th>Title</th>
 		<th>Start</th>
 		<th>End</th>
+		<th>Meeting</th>
 		<th>Highlighted?</th>
 	    </tr>
 	</thead>
@@ -26,6 +28,7 @@
 		    <td data-sort="{{ $notice->end ? $notice->end->format("Y-m-d") : 0 }}">
 			{{ $notice->end ? $notice->end->format("j F Y") : "" }}
 		    </td>
+		    <td>{{ $notice->meeting }}</td>
 		    <td>{{ $notice->highlight ? "Y" : "N" }}</td>
 		</tr>
 	    @endforeach

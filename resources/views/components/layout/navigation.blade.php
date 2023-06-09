@@ -29,9 +29,15 @@
 	<li><a href="{{route('roles.index')}}">Set up Roles</a></li>
 	<li><a href="{{route('campaigns.index')}}">Set up Campaigns</a></li>
 	<li><a href="{{route('ballots.index')}}">Set up Online Votes</a></li>
-	<li><a href="{{route('notices.index')}}">Set up Notices</a></li>
+	<li><a href="{{route('notices.index')}}">Set up Documents</a></li>
 	<li><a href="{{route('workplaces.index')}}">Set up Workplaces</a></li>
     </ul>
+    @else
+    @can('manage', App\Models\Notice::class)
+    <ul>
+	<li><a href="{{route('notices.index')}}">Set up Documents</a></li>
+    </ul>
+    @endcan
     @endcan
 </nav>
 

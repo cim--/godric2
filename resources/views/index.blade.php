@@ -5,7 +5,7 @@
 	<ul>
 	    @foreach ($notices as $notice)
 		<li class="highnotice">
-		    <a href="{{ route('notices.read', $notice->id) }}">{{ $notice->title }}</a>
+		    <a href="{{ route('notices.read', $notice->id) }}">{{ $notice->meeting }} {{ $notice->title }}</a>
 		</li>
 	    @endforeach
 	</ul>

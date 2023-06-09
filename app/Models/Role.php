@@ -11,6 +11,10 @@ class Role extends Model
 
     /* Superuser: set up roles, set up campaigns, do member imports, run reports */
     public const ROLE_SUPERUSER = "superuser";
+
+    /* Secretary: edit documents */
+    public const ROLE_SECRETARY = "secretary";
+    
     /* Rep: run reports and charts */
     public const ROLE_REP = "rep";
     /* Campaigner: same permissions as a rep, but only when campaigns are active */
@@ -34,6 +38,7 @@ class Role extends Model
             self::ROLE_CAMPAIGNER => "Campaigner",
             self::ROLE_PHONEBANK => "Phonebank",
             self::ROLE_REPORT => "Reporting View",
+            self::ROLE_SECRETARY => "Secretary",
             self::ROLE_SUPERUSER => "Super-user",
         ];
     }
