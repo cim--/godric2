@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'authz.super' => \App\Http\Middleware\RequireSuperuser::class,
         'authz.rep' => \App\Http\Middleware\RequireRep::class,
         'authz.phonebank' => \App\Http\Middleware\RequirePhonebank::class,
+        'authz.secretary' => \App\Http\Middleware\RequireSecretary::class,
 
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

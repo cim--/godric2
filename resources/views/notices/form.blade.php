@@ -8,6 +8,15 @@
     @endif
 
     <div>
+	{!! Form::label('meeting', 'Meeting') !!}
+	{!! Form::text('meeting', $notice->meeting, ["list" => "meetings", "size" => 30]) !!} Leave blank if not associated with a meeting
+	<datalist id="meetings">
+	    @foreach ($meetings as $meeting)
+		<option>{{ $meeting }}</option>
+	    @endforeach
+	</datalist>
+    </div>
+    <div>
 	{!! Form::label('title', 'Title') !!}
 	{!! Form::text('title', $notice->title) !!}
     </div>
@@ -21,6 +30,7 @@
 	{!! Form::date('start', $notice->start ? $notice->start->format("Y-m-d") : "") !!}
 	({!! Form::label('nostart', 'no date?') !!}
 	{!! Form::checkbox('nostart', 1, $notice->start === null) !!})
+	Setting a start date a few weeks before the meeting date is strongly recommended for documents associated with meetings.
     </div>
     <div>
 	{!! Form::label('end', 'End') !!}

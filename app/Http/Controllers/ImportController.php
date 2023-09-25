@@ -12,8 +12,15 @@ use Carbon\Carbon;
 class ImportController extends Controller
 {
 
+    private $orgtypes = ['UCUBranch'];
+    
     public function index()
     {
+        $orgtype = config('membership.orgtype');
+        if (!in_array($orgtype, $this->orgtypes)) {
+            return view('import.unsupported');
+        }
+        
         $changelogs = Changelog::orderBy('created_at')->get();
         
         return view('import.index', [
@@ -23,6 +30,11 @@ class ImportController extends Controller
 
     public function process(Request $request)
     {
+        $orgtype = config('membership.orgtype');
+        if (!in_array($orgtype, $this->orgtypes)) {
+            return view('import.unsupported');
+        }
+
         if (!$request->hasFile('list') || !$request->file('list')->isValid()) {
             return back()->with('message', 'File upload invalid');
         }

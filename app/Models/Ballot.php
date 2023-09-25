@@ -66,8 +66,8 @@ class Ballot extends Model implements Participatory
     {
         if ($this->pcache === null) {
             $this->pcache = [];
-            foreach ($this->members as $member) {
-                $this->pcache[$member->id] = "yes";
+            foreach ($this->members as $pmember) {
+                $this->pcache[$pmember->id] = "yes";
             }
         }
         

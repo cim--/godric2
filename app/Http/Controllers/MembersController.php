@@ -48,7 +48,7 @@ class MembersController extends Controller
             // no list - though shouldn't get here anyway
             return collect([]);
         }
-        return $members->with('workplaces')->get();
+        return $members->with('workplaces')->withCount('user')->get();
     }
 
     public function list()
@@ -482,13 +482,15 @@ class MembersController extends Controller
                 continue;
             }
 
-            $action = Action::firstOrNew([
-                'campaign_id' => $campaign->id,
-                'member_id' => $member->id
-            ]);
             $part = $request->input('action'.$campaign->id);
-            $action->action = $part;
-            $action->save();
+            if ($part != "-") { 
+                $action = Action::firstOrNew([
+                    'campaign_id' => $campaign->id,
+                    'member_id' => $member->id
+                ]);
+                $action->action = $part;
+                $action->save();
+            }
 
             $member->notes = $request->input('notes');
             $member->save();

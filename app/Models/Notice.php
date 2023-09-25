@@ -43,4 +43,9 @@ class Notice extends Model
         }
         return true;
     }
+
+    public static function allMeetings()
+    {
+        return Notice::select('meeting')->whereNotNull('meeting')->distinct()->get()->pluck('meeting');
+    }
 }

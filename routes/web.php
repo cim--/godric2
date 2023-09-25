@@ -75,7 +75,11 @@ Route::middleware('auth')->group(function() {
             Route::post('/members/{member}/notes', [MembersController::class, 'updateNotes'])->name('members.updatenotes');
             
         });
-        
+
+        Route::middleware('authz.secretary')->prefix('admin')->group(function() {
+            Route::resource('/notices', NoticeController::class)->except('show');
+        });
+
         // superuser routes
         Route::middleware('authz.super')->prefix('admin')->group(function() {
             
@@ -84,7 +88,6 @@ Route::middleware('auth')->group(function() {
 
             Route::resource('/roles', RolesController::class)->except('show');
             Route::resource('/campaigns', CampaignController::class)->except('show');
-            Route::resource('/notices', NoticeController::class)->except('show');
             Route::resource('/workplaces', WorkplaceController::class)->except('show');
             Route::resource('/ballots', BallotController::class)->except('show');
             
@@ -93,8 +96,6 @@ Route::middleware('auth')->group(function() {
             
             Route::get('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImport'])->name('campaigns.import');
             Route::post('/campaigns/{campaign}/import', [CampaignController::class, 'bulkImportProcess'])->name('campaigns.import.process');
-
-            
         });
         
 
