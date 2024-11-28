@@ -20,7 +20,7 @@ class OptionFactory extends Factory
             // 'ballot_id',
             'option' => ucfirst($this->faker->word()),
             'votes' => $this->faker->numberBetween(3, 30),
-            'order' => $this->faker->numberBetween(1, 10)
+            'order' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

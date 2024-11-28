@@ -14,7 +14,6 @@ class Workplace extends Model
         return $this->belongsToMany(Member::class);
     }
 
-
     public static function managedBy(User $user)
     {
         $roles = $user->member->roles;

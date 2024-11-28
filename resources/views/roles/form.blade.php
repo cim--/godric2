@@ -2,31 +2,31 @@
     <x-slot:title>Data Access Roles: Edit</x-slot:title>
 
     @if ($role->id)
-	{!! Form::open(['route' => ['roles.update', $role->id], 'method' => 'PUT']) !!}
+	{!! html()->form('PUT',route('roles.update', $role->id))->open() !!}
     @else
-	{!! Form::open(['route' => 'roles.store', 'method' => 'POST']) !!}
+	{!! html()->form('POST',route('roles.store')) !!}
     @endif
 
     <div>
-	{!! Form::label('member', 'Member ID') !!}
-	{!! Form::text('member', $role->member ? $role->member->membership : "") !!}
+	{!! html()->label('member', 'Member ID') !!}
+	{!! html()->text('member', $role->member ? $role->member->membership : "") !!}
     </div>
     <div>
-	{!! Form::label('role', 'Role') !!}
-	{!! Form::select('role', $types, $role->role) !!}
+	{!! html()->label('role', 'Role') !!}
+	{!! html()->select('role', $types, $role->role) !!}
     </div>
     <div>
-	{!! Form::label('restrictfield', 'Restrict Field') !!}
-	{!! Form::select('restrictfield', $fields, $role->restrictfield) !!}
+	{!! html()->label('restrictfield', 'Restrict Field') !!}
+	{!! html()->select('restrictfield', $fields, $role->restrictfield) !!}
     </div>
     <div>
-	{!! Form::label('restrictvalue', 'Restrict Value') !!}
-	{!! Form::text('restrictvalue', $role->restrictvalue) !!}
+	{!! html()->label('restrictvalue', 'Restrict Value') !!}
+	{!! html()->text('restrictvalue', $role->restrictvalue) !!}
     </div>
 
-    {!! Form::submit("Edit Role") !!}
+    {!! html()->submit("Edit Role") !!}
 
-    {!!  Form::close() !!}
+    {!!  html()->form()->close() !!}
 
     <h2>Role Types</h2>
     <ul>
@@ -42,11 +42,11 @@
     @if ($role->id)
 	<h2>Delete Role</h2>
 	<p>Deletion cannot be undone - though you can recreate the role.</p>
-	{!! Form::open(['route' => ['roles.destroy', $role->id], 'method' => 'DELETE']) !!}
+	{!! html()->form('DELETE', route('roles.destroy', $role->id))->open() !!}
 
-	{!! Form::submit("Delete Role") !!}
-	
-	{!! Form::close() !!}
+	{!! html()->submit("Delete Role") !!}
+
+	{!! html()->form()->close() !!}
     @endif
-	
+
 </x-layout>

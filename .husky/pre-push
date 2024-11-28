@@ -1,0 +1,2 @@
+act -j test-and-build --container-architecture linux/amd64 --verbose
+npm run prettier:write

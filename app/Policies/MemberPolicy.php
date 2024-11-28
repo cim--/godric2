@@ -22,15 +22,16 @@ class MemberPolicy
     {
         /* This is the lowest level of member data permission and
          * should usually be given to every new role */
-        return $user->member->roles()
-                            ->whereIn('role', [
-                                Role::ROLE_REP,
-                                Role::ROLE_CAMPAIGNER,
-                                Role::ROLE_PHONEBANK,
-                                Role::ROLE_SUPERUSER,
-                                Role::ROLE_REPORT
-                            ])
-                            ->count() > 0;
+        return $user->member
+            ->roles()
+            ->whereIn('role', [
+                Role::ROLE_REP,
+                Role::ROLE_CAMPAIGNER,
+                Role::ROLE_PHONEBANK,
+                Role::ROLE_SUPERUSER,
+                Role::ROLE_REPORT,
+            ])
+            ->count() > 0;
     }
 
     public function seeLists(User $user)
@@ -40,19 +41,17 @@ class MemberPolicy
             // only applies during campaigns
             $roles[] = Role::ROLE_CAMPAIGNER;
         }
-        return $user->member->roles()
-                            ->whereIn('role', $roles)
-                            ->count() > 0;
+        return $user->member->roles()->whereIn('role', $roles)->count() > 0;
     }
 
     public function seePhonebank(User $user)
     {
-        return $user->member->roles()
-                            ->whereIn('role', [Role::ROLE_PHONEBANK, Role::ROLE_SUPERUSER])
-                            ->count() > 0;
+        return $user->member
+            ->roles()
+            ->whereIn('role', [Role::ROLE_PHONEBANK, Role::ROLE_SUPERUSER])
+            ->count() > 0;
     }
 
-    
     /**
      * Determine whether the user can view the specific member.
      *
@@ -71,14 +70,22 @@ class MemberPolicy
         foreach ($roles as $role) {
             if ($role->role == Role::ROLE_SUPERUSER) {
                 return true;
-            } else if ($role->role == Role::ROLE_REP || $role->role == Role::ROLE_PHONEBANK || $role->role == Role::ROLE_CAMPAIGNER) {
+            } elseif (
+                $role->role == Role::ROLE_REP ||
+                $role->role == Role::ROLE_PHONEBANK ||
+                $role->role == Role::ROLE_CAMPAIGNER
+            ) {
                 if (!$role->restrictfield) {
                     // view all
                     return true;
-                } 
+                }
                 $field = $role->restrictfield;
-                if ($field == "workplace") {
-                    if ($member->workplaces->where('name', $role->restrictvalue)->count() > 0) {
+                if ($field == 'workplace') {
+                    if (
+                        $member->workplaces
+                            ->where('name', $role->restrictvalue)
+                            ->count() > 0
+                    ) {
                         return true;
                     }
                 } elseif ($member->$field == $role->restrictvalue) {
@@ -98,21 +105,27 @@ class MemberPolicy
         }
 
         $campaign = Campaign::started()->count();
-        
+
         $roles = $user->member->roles;
 
         foreach ($roles as $role) {
             if ($role->role == Role::ROLE_SUPERUSER) {
                 return true;
-            } else if ($role->role == Role::ROLE_REP ||
-                       ($role->role == Role::ROLE_CAMPAIGNER && $campaign > 0)) {
+            } elseif (
+                $role->role == Role::ROLE_REP ||
+                ($role->role == Role::ROLE_CAMPAIGNER && $campaign > 0)
+            ) {
                 if (!$role->restrictfield) {
                     // view all
                     return true;
-                } 
+                }
                 $field = $role->restrictfield;
-                if ($field == "workplace") {
-                    if ($member->workplaces->where('name', $role->restrictvalue)->count() > 0) {
+                if ($field == 'workplace') {
+                    if (
+                        $member->workplaces
+                            ->where('name', $role->restrictvalue)
+                            ->count() > 0
+                    ) {
                         return true;
                     }
                 } elseif ($member->$field == $role->restrictvalue) {
@@ -127,7 +140,10 @@ class MemberPolicy
     // superuser wide-scale management
     public function manage(User $user)
     {
-        return $user->member->roles()->where('role', Role::ROLE_SUPERUSER)->count() > 0;
+        return $user->member
+            ->roles()
+            ->where('role', Role::ROLE_SUPERUSER)
+            ->count() > 0;
     }
 
     // for people who have trouble logging in normally
@@ -149,6 +165,4 @@ class MemberPolicy
         // process
         return false;
     }
-
-    
 }

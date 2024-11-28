@@ -19,8 +19,7 @@ class RequireSomerole
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if (!$user->can('seeReports', \App\Models\Member::class))
-        {
+        if (!$user->can('seeReports', \App\Models\Member::class)) {
             abort(403);
         }
         return $next($request);

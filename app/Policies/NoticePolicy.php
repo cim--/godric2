@@ -20,7 +20,9 @@ class NoticePolicy
      */
     public function manage(User $user)
     {
-        return $user->member->roles()->whereIn('role', [Role::ROLE_SUPERUSER, Role::ROLE_SECRETARY])->count() > 0;
+        return $user->member
+            ->roles()
+            ->whereIn('role', [Role::ROLE_SUPERUSER, Role::ROLE_SECRETARY])
+            ->count() > 0;
     }
-
 }

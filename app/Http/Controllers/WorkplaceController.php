@@ -16,9 +16,9 @@ class WorkplaceController extends Controller
     public function index()
     {
         $workplaces = Workplace::withCount('members')->orderBy('name')->get();
-        
+
         return view('workplace.index', [
-            'workplaces' => $workplaces
+            'workplaces' => $workplaces,
         ]);
     }
 
@@ -30,7 +30,7 @@ class WorkplaceController extends Controller
     public function create()
     {
         return view('workplace.form', [
-            'workplace' => new Workplace
+            'workplace' => new Workplace(),
         ]);
     }
 
@@ -42,7 +42,7 @@ class WorkplaceController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->update($request, new Workplace);
+        return $this->update($request, new Workplace());
     }
 
     /**
@@ -54,7 +54,7 @@ class WorkplaceController extends Controller
     public function edit(Workplace $workplace)
     {
         return view('workplace.form', [
-            'workplace' => $workplace
+            'workplace' => $workplace,
         ]);
     }
 
@@ -68,38 +68,50 @@ class WorkplaceController extends Controller
     public function update(Request $request, Workplace $workplace)
     {
         $name = $request->input('name');
-        if (!$name || Workplace::where('name', $name)->where('id', '!=', $workplace->id)->count() > 0) {
+        if (
+            !$name ||
+            Workplace::where('name', $name)
+                ->where('id', '!=', $workplace->id)
+                ->count() > 0
+        ) {
             return back()->with('message', 'Workplace name must be unique');
         }
 
         $workplace->name = $name;
         $workplace->save();
 
-        $message = "Updated workplace. ";
+        $message = 'Updated workplace. ';
 
         $newmembers = $request->input('newmembers');
-        if ($newmembers != "") {
+        if ($newmembers != '') {
             $lines = explode("\n", trim($newmembers));
             foreach ($lines as $line) {
-                if (trim($line) != "") {
+                if (trim($line) != '') {
                     $member = Member::search($line);
                     if ($member) {
                         $workplace->members()->attach($member->id);
-                        $message .= "Added ".$member->firstname." ".$member->lastname.". ";
+                        $message .=
+                            'Added ' .
+                            $member->firstname .
+                            ' ' .
+                            $member->lastname .
+                            '. ';
                     } else {
-                        $message .= trim($line). " not recognised. ";
+                        $message .= trim($line) . ' not recognised. ';
                     }
                 }
             }
         }
 
-        $detach = $request->input("detach", []);
+        $detach = $request->input('detach', []);
         foreach ($detach as $detid) {
             $workplace->members()->detach($detid);
-            $message .= "Removed member. ";
+            $message .= 'Removed member. ';
         }
 
-        return redirect()->route('workplaces.edit', $workplace->id)->with('message', $message);
+        return redirect()
+            ->route('workplaces.edit', $workplace->id)
+            ->with('message', $message);
     }
 
     /**
@@ -113,7 +125,9 @@ class WorkplaceController extends Controller
         if ($request->input('confirm') == $workplace->name) {
             $workplace->members()->detach();
             $workplace->delete();
-            return redirect()->route('workplaces.index')->with('message', 'Workplace Deleted');
+            return redirect()
+                ->route('workplaces.index')
+                ->with('message', 'Workplace Deleted');
         } else {
             return back()->with('message', 'Deletion confirmation not given');
         }

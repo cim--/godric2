@@ -7,13 +7,22 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "prepare": "npx husky",
+        "prettier:check": "prettier --check \"{app,resources,public,config,database}/**/*.{php,js,json,css,scss,html,md}\"",
+        "prettier:write": "prettier --write \"{app,resources,public,config,database}/**/*.{php,js,json,css,scss,html,md}\""
     },
     "devDependencies": {
+        "@eslint/js": "^9.15.0",
+        "@prettier/plugin-php": "^0.22.2",
         "axios": "^0.25",
+        "eslint": "^9.15.0",
+        "globals": "^15.12.0",
+        "husky": "^9.1.0",
         "laravel-mix": "^6.0.49",
         "lodash": "^4.17.19",
-        "postcss": "^8.4.24"
+        "postcss": "^8.4.24",
+        "prettier": "^3.3.3"
     },
     "dependencies": {
         "chart.js": "^3.9.1",

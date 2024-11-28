@@ -15,9 +15,13 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = Role::with('member')->orderBy('role')->orderBy('restrictfield')->orderBy('restrictvalue')->get();
+        $roles = Role::with('member')
+            ->orderBy('role')
+            ->orderBy('restrictfield')
+            ->orderBy('restrictvalue')
+            ->get();
         return view('roles.index', [
-            'roles' => $roles
+            'roles' => $roles,
         ]);
     }
 
@@ -29,9 +33,9 @@ class RolesController extends Controller
     public function create()
     {
         return view('roles.form', [
-            'role' => new Role,
+            'role' => new Role(),
             'types' => Role::roleTypes(),
-            'fields' => Role::roleFields()
+            'fields' => Role::roleFields(),
         ]);
     }
 
@@ -43,9 +47,8 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->update($request, new Role);
+        return $this->update($request, new Role());
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -58,7 +61,7 @@ class RolesController extends Controller
         return view('roles.form', [
             'role' => $role,
             'types' => Role::roleTypes(),
-            'fields' => Role::roleFields()
+            'fields' => Role::roleFields(),
         ]);
     }
 
@@ -71,7 +74,10 @@ class RolesController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $member = Member::where('membership', $request->input('member'))->first();
+        $member = Member::where(
+            'membership',
+            $request->input('member')
+        )->first();
         if (!$member) {
             return back()->with('message', 'Unknown member ID')->withInput();
         }
@@ -82,14 +88,17 @@ class RolesController extends Controller
         }
         $field = $request->input('restrictfield');
         if ($field && !isset(Role::roleFields()[$field])) {
-            return back()->with('message', 'Unknown restriction field')->withInput();
+            return back()
+                ->with('message', 'Unknown restriction field')
+                ->withInput();
         }
         $value = $request->input('restrictvalue');
         if ($field && !$value) {
-            return back()->with('message', 'A value must be specified')->withInput();
+            return back()
+                ->with('message', 'A value must be specified')
+                ->withInput();
         }
-            
-        
+
         $role->member_id = $member->id;
         $role->role = $roletype;
         if ($field) {
@@ -100,7 +109,7 @@ class RolesController extends Controller
             $role->restrictvalue = null;
         }
         $role->save();
-        
+
         return redirect()->route('roles.index')->with('message', 'Role edited');
     }
 
@@ -113,6 +122,8 @@ class RolesController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
-        return redirect()->route('roles.index')->with('message', 'Role deleted');
+        return redirect()
+            ->route('roles.index')
+            ->with('message', 'Role deleted');
     }
 }

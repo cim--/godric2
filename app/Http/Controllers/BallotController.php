@@ -18,17 +18,19 @@ class BallotController extends Controller
      */
     public function index()
     {
-        $ballots = Ballot::orderBy('end', 'desc')->with('options', function($q) {
-            $q->orderBy('order');
-        })->get();
+        $ballots = Ballot::orderBy('end', 'desc')
+            ->with('options', function ($q) {
+                $q->orderBy('order');
+            })
+            ->get();
 
         $membercount = Member::count();
         $votercount = Member::where('voter', true)->count();
-        
+
         return view('ballots.index', [
             'ballots' => $ballots,
             'members' => $membercount,
-            'voters' => $votercount
+            'voters' => $votercount,
         ]);
     }
 
@@ -40,7 +42,7 @@ class BallotController extends Controller
     public function create()
     {
         return view('ballots.form', [
-            'ballot' => new Ballot
+            'ballot' => new Ballot(),
         ]);
     }
 
@@ -52,7 +54,7 @@ class BallotController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->update($request, new Ballot);
+        return $this->update($request, new Ballot());
     }
 
     /**
@@ -64,7 +66,7 @@ class BallotController extends Controller
     public function edit(Ballot $ballot)
     {
         return view('ballots.form', [
-            'ballot' => $ballot
+            'ballot' => $ballot,
         ]);
     }
 
@@ -78,27 +80,42 @@ class BallotController extends Controller
     public function update(Request $request, Ballot $ballot)
     {
         if ($ballot->ended()) {
-            return back()->with('message', 'This ballot has ended and cannot be edited');
+            return back()->with(
+                'message',
+                'This ballot has ended and cannot be edited'
+            );
         }
         if (!$ballot->started()) {
             $end = Carbon::parse($request->input('end'));
             $start = Carbon::parse($request->input('start'));
             if (!$end->isFuture() || !$end->gt($start)) {
-                return back()->with('message', 'The end time must be in the future and after the start time.');   
+                return back()->with(
+                    'message',
+                    'The end time must be in the future and after the start time.'
+                );
             }
 
             if (!$start->isFuture()) {
-                return back()->with('message', 'The start time must be in the future.');   
+                return back()->with(
+                    'message',
+                    'The start time must be in the future.'
+                );
             }
             $title = $request->input('title');
             $description = $request->input('description');
             if (!$title || !$description) {
-                return back()->with('message', 'A title and description are required.');
+                return back()->with(
+                    'message',
+                    'A title and description are required.'
+                );
             }
-            $votersonly = (bool)$request->input('votersonly', false);
+            $votersonly = (bool) $request->input('votersonly', false);
             $options = explode("\n", $request->input('options'));
             if (count($options) < 2) {
-                return back()->with('message', 'At least two options are required.');
+                return back()->with(
+                    'message',
+                    'At least two options are required.'
+                );
             }
 
             $ballot->title = $title;
@@ -110,25 +127,32 @@ class BallotController extends Controller
 
             $ballot->options()->delete();
             foreach ($options as $idx => $option) {
-                if (trim($option) != "") {
-                    $opt = new Option;
+                if (trim($option) != '') {
+                    $opt = new Option();
                     $opt->option = trim($option);
                     $opt->ballot_id = $ballot->id;
                     $opt->votes = 0;
-                    $opt->order = $idx+1;
+                    $opt->order = $idx + 1;
                     $opt->save();
                 }
             }
-            return redirect()->route('ballots.index')->with('message', 'Ballot saved');     
+            return redirect()
+                ->route('ballots.index')
+                ->with('message', 'Ballot saved');
         } else {
             $end = Carbon::parse($request->input('end'));
             $start = $ballot->start;
             if (!$end->isFuture() || !$end->gt($start)) {
-                return back()->with('message', 'The end time must be in the future and after the start time.');   
+                return back()->with(
+                    'message',
+                    'The end time must be in the future and after the start time.'
+                );
             }
             $ballot->end = $end;
             $ballot->save();
-            return redirect()->route('ballots.index')->with('message', 'Ballot saved');
+            return redirect()
+                ->route('ballots.index')
+                ->with('message', 'Ballot saved');
         }
     }
 
@@ -144,14 +168,13 @@ class BallotController extends Controller
             $ballot->options()->delete();
             $ballot->members()->detach();
             $ballot->delete();
-            return redirect()->route('ballots.index')->with('message', 'Ballot Deleted');
+            return redirect()
+                ->route('ballots.index')
+                ->with('message', 'Ballot Deleted');
         } else {
             return back()->with('message', 'Deletion confirmation not given');
         }
     }
-
-
-
 
     public function vote(Request $request, Ballot $ballot)
     {
@@ -159,39 +182,55 @@ class BallotController extends Controller
         $ballots = $self->activeBallots();
 
         if (!$ballots->pluck('id')->contains($ballot->id)) {
-            return back()->with('message', 'You cannot vote in this ballot, or it has closed.');
+            return back()->with(
+                'message',
+                'You cannot vote in this ballot, or it has closed.'
+            );
         }
 
         $choice = $request->input('option', 0);
         if ($choice == 0) {
-            return back()->with('message', 'Select an option to cast your vote.');
+            return back()->with(
+                'message',
+                'Select an option to cast your vote.'
+            );
         }
 
-        $option = Option::where('id', $choice)->where('ballot_id', $ballot->id)->first();
+        $option = Option::where('id', $choice)
+            ->where('ballot_id', $ballot->id)
+            ->first();
         if (!$option) {
-             return back()->with('message', 'This is not a valid option in this ballot.');           
+            return back()->with(
+                'message',
+                'This is not a valid option in this ballot.'
+            );
         }
 
         // all looks okay
-        \DB::transaction(function() use ($option, $ballot, $self) {
+        \DB::transaction(function () use ($option, $ballot, $self) {
             $ballot->members()->attach($self->id);
             $option->votes = $option->votes + 1;
             $option->save();
         });
 
-        return redirect()->route('main')->with('message', 'Your vote has been recorded.');
+        return redirect()
+            ->route('main')
+            ->with('message', 'Your vote has been recorded.');
     }
 
     public function archive()
     {
-        $ballots = Ballot::completed()->with('options', function($q) {
-            $q->orderBy('order');
-        })->orderBy('end', 'desc')->get();
+        $ballots = Ballot::completed()
+            ->with('options', function ($q) {
+                $q->orderBy('order');
+            })
+            ->orderBy('end', 'desc')
+            ->get();
         $running = Ballot::open()->orderBy('end')->get();
 
         return view('ballots.archive', [
             'running' => $running,
-            'ballots' => $ballots
+            'ballots' => $ballots,
         ]);
     }
 }

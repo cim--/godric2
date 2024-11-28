@@ -1,0 +1,46 @@
+name: Test and Build
+
+on:
+  push:
+    branches:
+      - '**' # Run on all branches, including main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup test .env
+      run: |
+         cp .env.example .env
+         cat .env
+         sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+
+    # Set up PHP environment
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3' # Adjust to your PHP version
+        extensions: mbstring, pdo, pdo_mysql, bcmath, ctype, fileinfo, json, openssl, tokenizer, xml
+        ini-values: post_max_size=256M, upload_max_filesize=256M
+        coverage: none
+
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        npm install
+        composer install --no-progress --no-suggest --optimize-autoloader
+        npm run dev
+
+    # Run tests
+    - name: Run Tests
+      run: |
+        php artisan key:generate
+        bash test.sh

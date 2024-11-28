@@ -17,15 +17,19 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $campaigns = Campaign::withCount(['actions' => function ($q) {
-            $q->where('action', 'yes');
-        }])->orderBy('end', 'DESC')->get();
+        $campaigns = Campaign::withCount([
+            'actions' => function ($q) {
+                $q->where('action', 'yes');
+            },
+        ])
+            ->orderBy('end', 'DESC')
+            ->get();
         $membercount = Member::count();
         $votercount = Member::where('voter', true)->count();
         return view('campaigns.index', [
             'campaigns' => $campaigns,
             'members' => $membercount,
-            'voters' => $votercount
+            'voters' => $votercount,
         ]);
     }
 
@@ -37,7 +41,7 @@ class CampaignController extends Controller
     public function create()
     {
         return view('campaigns.form', [
-            'campaign' => new Campaign
+            'campaign' => new Campaign(),
         ]);
     }
 
@@ -49,7 +53,7 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->update($request, new Campaign);
+        return $this->update($request, new Campaign());
     }
 
     /**
@@ -61,7 +65,7 @@ class CampaignController extends Controller
     public function edit(Campaign $campaign)
     {
         return view('campaigns.form', [
-            'campaign' => $campaign
+            'campaign' => $campaign,
         ]);
     }
 
@@ -87,36 +91,42 @@ class CampaignController extends Controller
             } else {
                 $count = Member::count();
             }
-            $campaign->calctarget = ceil($campaign->target * $count / 100);
+            $campaign->calctarget = ceil(($campaign->target * $count) / 100);
         } elseif (!$campaign->calctarget) {
             $campaign->calctarget = 0;
         }
         $campaign->save();
 
-        return redirect()->route('campaigns.index')->with('message', 'Campaign edited');
+        return redirect()
+            ->route('campaigns.index')
+            ->with('message', 'Campaign edited');
     }
-
-
 
     public function participate(Request $request, Campaign $campaign)
     {
-        $part = $request->input('participation'.$campaign->id, '-');
+        $part = $request->input('participation' . $campaign->id, '-');
 
         $self = \Auth::user()->member;
-        if ($campaign->start->isFuture() || $campaign->end->copy()->addDay()->isPast()) {
-            return back()->with('message', 'This campaign is not currently active');
+        if (
+            $campaign->start->isFuture() ||
+            $campaign->end->copy()->addDay()->isPast()
+        ) {
+            return back()->with(
+                'message',
+                'This campaign is not currently active'
+            );
         }
         if ($campaign->votersonly && !$self->voter) {
             return back()->with('message', 'This campaign is for voters only');
         }
 
-        if ($part == "-") {
+        if ($part == '-') {
             return back()->with('message', 'You have not selected an option');
         }
 
         $action = Action::firstOrNew([
             'campaign_id' => $campaign->id,
-            'member_id' => $self->id
+            'member_id' => $self->id,
         ]);
         $action->action = $part;
         $action->save();
@@ -124,11 +134,10 @@ class CampaignController extends Controller
         return back()->with('message', 'Your participation has been updated');
     }
 
-
     public function bulkImport(Campaign $campaign)
     {
         return view('campaigns.bulkimport', [
-            'campaign' => $campaign
+            'campaign' => $campaign,
         ]);
     }
 
@@ -140,15 +149,15 @@ class CampaignController extends Controller
         foreach ($members as $memberid) {
             $memberid = trim($memberid);
 
-            if ($memberid == "") {
+            if ($memberid == '') {
                 continue;
             }
-            
+
             $member = Member::search($memberid);
             if ($member) {
                 $action = Action::firstOrNew([
                     'campaign_id' => $campaign->id,
-                    'member_id' => $member->id
+                    'member_id' => $member->id,
                 ]);
                 $action->action = $part;
                 $action->save();
@@ -158,19 +167,31 @@ class CampaignController extends Controller
         }
 
         if (count($notfound) == 0) {
-            return redirect()->route('campaigns.index')->with('message', 'Imported actions');
+            return redirect()
+                ->route('campaigns.index')
+                ->with('message', 'Imported actions');
         } else {
-            return redirect()->route('campaigns.index')->with('message', 'Imported actions. Some IDs not found: '.join(",", $notfound));
+            return redirect()
+                ->route('campaigns.index')
+                ->with(
+                    'message',
+                    'Imported actions. Some IDs not found: ' .
+                        join(',', $notfound)
+                );
         }
     }
 
     public function reportIndex()
     {
-        $campaigns = Campaign::withCount(['actions' => function ($q) {
-            $q->where('action', 'yes');
-        }])->orderBy('end', 'DESC')->get();
+        $campaigns = Campaign::withCount([
+            'actions' => function ($q) {
+                $q->where('action', 'yes');
+            },
+        ])
+            ->orderBy('end', 'DESC')
+            ->get();
         return view('campaigns.report.index', [
-            'campaigns' => $campaigns
+            'campaigns' => $campaigns,
         ]);
     }
 
@@ -178,7 +199,7 @@ class CampaignController extends Controller
     {
         return $this->doReportView($campaign, null);
     }
-    
+
     public function reportViewCompare(Campaign $campaign, Campaign $compare)
     {
         return $this->doReportView($campaign, $compare);
@@ -206,7 +227,7 @@ class CampaignController extends Controller
                     'participants' => 0,
                     'wparticipants' => 0,
                     'whparticipants' => 0,
-                    'contacts' => 0
+                    'contacts' => 0,
                 ];
             }
             $departments[$dept]['members']++;
@@ -214,41 +235,40 @@ class CampaignController extends Controller
             $participation = $campaign->participation($member);
             switch ($participation) {
                 // fall-through is intended!
-            case "yes":
-                $departments[$dept]['participants']++;
-                $pcount++;
-            case "wait":
-                $departments[$dept]['wparticipants']++;
-                $wpcount++;
-            case "help":
-                $departments[$dept]['whparticipants']++;
-                $whpcount++;
-            case "no":
-                $departments[$dept]['contacts']++;
-                $ccount++;
-            default:
+                case 'yes':
+                    $departments[$dept]['participants']++;
+                    $pcount++;
+                case 'wait':
+                    $departments[$dept]['wparticipants']++;
+                    $wpcount++;
+                case 'help':
+                    $departments[$dept]['whparticipants']++;
+                    $whpcount++;
+                case 'no':
+                    $departments[$dept]['contacts']++;
+                    $ccount++;
+                default:
             }
         }
         ksort($departments);
-
 
         // get actions, order by time, cumulative count
         // second series, two points from origin to target-end
         // third series, comparison campaign
 
         $datasets = [
-            'current' => $campaign->progressDataSet("#310c58"),
-            'target' => $campaign->targetDataSet("#009000")
+            'current' => $campaign->progressDataSet('#310c58'),
+            'target' => $campaign->targetDataSet('#009000'),
         ];
         if ($compare) {
-            $datasets['compare'] = $compare->progressDataSet("#e74898");
+            $datasets['compare'] = $compare->progressDataSet('#e74898');
         }
         sort($datasets); // compact
-        
-        $chart = app()->chartjs
-            ->name("progresschart")
-            ->type("line")
-            ->size(["height" => 300, "width" => 750])
+
+        $chart = app()
+            ->chartjs->name('progresschart')
+            ->type('line')
+            ->size(['height' => 300, 'width' => 750])
             ->options([
                 'scales' => [
                     'x' => [
@@ -257,20 +277,22 @@ class CampaignController extends Controller
                         'title' => [
                             'display' => true,
                             'text' => 'Day of campaign',
-                        ]
+                        ],
                     ],
                     'y' => [
                         'position' => 'left',
                         'title' => [
                             'display' => true,
                             'text' => 'Participants so far',
-                        ]
-                    ]
-                ]
-            ])->datasets($datasets);
-               
-        $compares = Campaign::where('id', '!=', $campaign->id)->orderBy('start')->get();
+                        ],
+                    ],
+                ],
+            ])
+            ->datasets($datasets);
 
+        $compares = Campaign::where('id', '!=', $campaign->id)
+            ->orderBy('start')
+            ->get();
 
         if ($compare) {
             $deptsets = [];
@@ -283,12 +305,19 @@ class CampaignController extends Controller
             foreach ($departments as $department => $data) {
                 if ($data['members'] >= 10) {
                     $deptlist[] = [
-                        'x' => 100*$compare->participationByDepartment($department)/$data['members'],
-                        'y' => 100*$data['participants']/$data['members'],
-                        'label' => $department
+                        'x' =>
+                            (100 *
+                                $compare->participationByDepartment(
+                                    $department
+                                )) /
+                            $data['members'],
+                        'y' => (100 * $data['participants']) / $data['members'],
+                        'label' => $department,
                     ];
                 } else {
-                    $otherlast += $compare->participationByDepartment($department);
+                    $otherlast += $compare->participationByDepartment(
+                        $department
+                    );
                     $otherthis += $data['participants'];
                     $othertotal += $data['members'];
                 }
@@ -297,13 +326,13 @@ class CampaignController extends Controller
             }
             if ($othertotal > 0) {
                 $deptlist[] = [
-                    'x' => 100*$otherlast/$othertotal,
-                    'y' => 100*$otherthis/$othertotal,
-                    'label' => "Others"
+                    'x' => (100 * $otherlast) / $othertotal,
+                    'y' => (100 * $otherthis) / $othertotal,
+                    'label' => 'Others',
                 ];
             }
-            $allmean = 100*$allthis/$alltotal;
-            
+            $allmean = (100 * $allthis) / $alltotal;
+
             $deptsets = [
                 [
                     'label' => 'Departments',
@@ -312,24 +341,25 @@ class CampaignController extends Controller
                     'backgroundColor' => '#310c58',
                     'tooltip' => [
                         'callbacks' => [
-                            'label' => "@@@function(context) { return context.raw.label; }@@@"
-                        ]
+                            'label' =>
+                                '@@@function(context) { return context.raw.label; }@@@',
+                        ],
                     ],
                     'datalabels' => [
                         'display' => true,
-                        'align' => 'right'
-                    ]
+                        'align' => 'right',
+                    ],
                 ],
                 [
                     'label' => 'Overall Target',
                     'data' => [
                         [
                             'x' => 0,
-                            'y' => $campaign->target
+                            'y' => $campaign->target,
                         ],
                         [
                             'x' => 100,
-                            'y' => $campaign->target
+                            'y' => $campaign->target,
                         ],
                     ],
                     'borderColor' => '#009000',
@@ -341,11 +371,11 @@ class CampaignController extends Controller
                     'data' => [
                         [
                             'x' => 0,
-                            'y' => $allmean
+                            'y' => $allmean,
                         ],
                         [
                             'x' => 100,
-                            'y' => $allmean
+                            'y' => $allmean,
                         ],
                     ],
                     'borderColor' => '#666666',
@@ -357,11 +387,11 @@ class CampaignController extends Controller
                     'data' => [
                         [
                             'x' => 0,
-                            'y' => 0
+                            'y' => 0,
                         ],
                         [
                             'x' => 100,
-                            'y' => 100
+                            'y' => 100,
                         ],
                     ],
                     'borderColor' => '#e74898',
@@ -371,26 +401,26 @@ class CampaignController extends Controller
             ];
 
             if ($campaign->end->isFuture() && $campaign->start->isPast()) {
+                $fraction =
+                    Carbon::now()->diffInMinutes($campaign->start) /
+                    $campaign->end->diffInMinutes($campaign->start);
 
-                $fraction = Carbon::now()->diffInMinutes($campaign->start) /
-                          $campaign->end->diffInMinutes($campaign->start);
-                
                 $deptsets[] = [
                     'label' => 'Required Pace for Target',
                     'data' => [
                         [
                             'x' => 0,
-                            'y' => $campaign->target * $fraction
+                            'y' => $campaign->target * $fraction,
                         ],
                         [
                             'x' => 100,
-                            'y' => $campaign->target * $fraction
+                            'y' => $campaign->target * $fraction,
                         ],
                     ],
                     'borderColor' => '#009000',
                     'backgroundColor' => 'transparent',
                     'showLine' => true,
-                    'borderDash' => [5,5]
+                    'borderDash' => [5, 5],
                 ];
 
                 $deptsets[] = [
@@ -398,56 +428,52 @@ class CampaignController extends Controller
                     'data' => [
                         [
                             'x' => 0,
-                            'y' => 0
+                            'y' => 0,
                         ],
                         [
                             'x' => 100,
-                            'y' => 100 * $fraction
+                            'y' => 100 * $fraction,
                         ],
                     ],
                     'borderColor' => '#e74898',
                     'backgroundColor' => 'transparent',
                     'showLine' => true,
-                    'borderDash' => [5,5]
+                    'borderDash' => [5, 5],
                 ];
-                
             }
 
-            
-            
-            $deptchart = app()->chartjs
-                   ->name('departmentchart')
-                   ->type('scatter')
-                   ->size(["height" => 300, "width" => 750])
-                   ->options([
-                       'scales' => [
-                           'x' => [
-                               'type' => 'linear',
-                               'position' => 'bottom',
-                               'title' => [
-                                   'display' => true,
-                                   'text' => 'Participation last time (%)',
-                               ],
-                               'min' => 0,
-                               'max' => 100,
-                           ],
-                           'y' => [
-                               'position' => 'left',
-                               'title' => [
-                                   'display' => true,
-                                   'text' => 'Participation this time (%)',
-                               ],
-                               'min' => 0,
-                               'max' => 100,
-                           ]
-                       ],
-                   ])
-                   ->datasets($deptsets);
+            $deptchart = app()
+                ->chartjs->name('departmentchart')
+                ->type('scatter')
+                ->size(['height' => 300, 'width' => 750])
+                ->options([
+                    'scales' => [
+                        'x' => [
+                            'type' => 'linear',
+                            'position' => 'bottom',
+                            'title' => [
+                                'display' => true,
+                                'text' => 'Participation last time (%)',
+                            ],
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                        'y' => [
+                            'position' => 'left',
+                            'title' => [
+                                'display' => true,
+                                'text' => 'Participation this time (%)',
+                            ],
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                    ],
+                ])
+                ->datasets($deptsets);
         } else {
             $deptchart = null;
         }
 
-        
         return view('campaigns.report.show', [
             'campaign' => $campaign,
             'departments' => $departments,
@@ -459,7 +485,7 @@ class CampaignController extends Controller
             'chart' => $chart,
             'deptchart' => $deptchart,
             'compare' => $compare,
-            'compares' => $compares
+            'compares' => $compares,
         ]);
     }
 
@@ -468,10 +494,11 @@ class CampaignController extends Controller
         if ($request->input('confirm') == $campaign->name) {
             $campaign->actions()->delete();
             $campaign->delete();
-            return redirect()->route('campaigns.index')->with('message', 'Campaign Deleted');
+            return redirect()
+                ->route('campaigns.index')
+                ->with('message', 'Campaign Deleted');
         } else {
             return back()->with('message', 'Deletion confirmation not given');
         }
     }
-
 }
