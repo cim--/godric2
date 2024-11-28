@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
      * An array of membership IDs which will not be automatically
      * removed if absent from a membership import, to allow staff
@@ -17,11 +16,10 @@ return [
      * than adding an extra line onto the membership file before it is
      * imported.
      */
-    'staff' => explode(",", env('STAFF_USERS', "")),
+    'staff' => explode(',', env('STAFF_USERS', '')),
 
     /*
      * The organisation type. Affects login advice and membership
      * import processing. Only one supported value for now. */
     'orgtype' => env('ORGANISATION_TYPE', 'UCUBranch'),
-    
 ];

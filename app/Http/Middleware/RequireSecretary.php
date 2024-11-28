@@ -19,11 +19,10 @@ class RequireSecretary
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if (!$user->can('manage', App\Models\Notice::class))
-        {
+        if (!$user->can('manage', App\Models\Notice::class)) {
             abort(403);
         }
-        
+
         return $next($request);
     }
 }

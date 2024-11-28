@@ -2,47 +2,47 @@
     <x-slot:title>Workplaces: Edit</x-slot:title>
 
     @if ($workplace->id)
-	{!! Form::open(['route' => ['workplaces.update', $workplace->id], 'method' => 'PUT']) !!}
+	{!! html()->form('PUT',route('workplaces.update', $workplace->id))->open() !!}
     @else
-	{!! Form::open(['route' => 'workplaces.store', 'method' => 'POST']) !!}
+	{!! html()->form('POST',route('workplaces.store'))->open() !!}
     @endif
 
     <div>
-	{!! Form::label('name', 'Name') !!}
-	{!! Form::text('name', $workplace->name) !!} (must be unique)
+	{!! html()->label('name', 'Name') !!}
+	{!! html()->text('name', $workplace->name) !!} (must be unique)
     </div>
     <div>
-	{!! Form::label('newmembers', 'Import Members') !!}
-	{!! Form::textarea('newmembers', '') !!} (member id, email or phone; one per line)
+	{!! html()->label('newmembers', 'Import Members') !!}
+	{!! html()->textarea('newmembers', '') !!} (member id, email or phone; one per line)
     </div>
 
     @if ($workplace->id)
 	<fieldset><legend>Current Members</legend>
 	    @foreach ($workplace->members()->orderBy('lastname')->get() as $member)
 		<div>
-		    {!! Form::checkbox('detach[]', $member->id, false, ['id' => 'detach_'.$member->id]) !!}
-		    {!! Form::label('detach_'.$member->id, $member->membership.": ".$member->firstname." ".$member->lastname." (".$member->department.")") !!}
+		    {!! html()->checkbox('detach[]', $member->id, false, ['id' => 'detach_'.$member->id]) !!}
+		    {!! html()->label('detach_'.$member->id, $member->membership.": ".$member->firstname." ".$member->lastname." (".$member->department.")") !!}
 		</div>
 	    @endforeach
 	</fieldset>
     @endif
-    
-    {!! Form::submit("Edit Workplace") !!}
 
-    {!!  Form::close() !!}
+    {!! html()->submit("Edit Workplace") !!}
 
-    
+    {!!  html()->form()->close() !!}
+
+
     @if ($workplace->id)
-	{!! Form::open(['route' => ['workplaces.destroy', $workplace->id], 'method' => 'DELETE']) !!}
+	{!! html()->form('DELETE',route('workplaces.destroy', $workplace->id))->open() !!}
 	<p><strong>Warning:</strong> Workplace deletion cannot be undone.</p>
 	<div>
-	    {!! Form::label('confirm', 'Confirm by typing workplace name') !!}
-	    {!! Form::text('confirm') !!}
+	    {!! html()->label('confirm', 'Confirm by typing workplace name') !!}
+	    {!! html()->text('confirm') !!}
 	</div>
-	
-	{!! Form::submit("Delete Workplace") !!}
 
-	{!!  Form::close() !!}
+	{!! html()->submit("Delete Workplace") !!}
+
+	{!!  html()->form()->close() !!}
     @endif
-    
+
 </x-layout>

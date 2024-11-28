@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,15 +14,15 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string("membership");
-            $table->string("firstname");
-            $table->string("lastname");
-            $table->string("email");
-            $table->string("mobile");
-            $table->string("department");
-            $table->string("jobtype");
-            $table->string("membertype");
-            $table->boolean("voter")->default(true);
+            $table->string('membership');
+            $table->string('firstname');
+            $table->string('lastname');
+            $table->string('email');
+            $table->string('mobile');
+            $table->string('department');
+            $table->string('jobtype');
+            $table->string('membertype');
+            $table->boolean('voter')->default(true);
             $table->timestamps();
         });
     }

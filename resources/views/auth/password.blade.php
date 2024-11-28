@@ -1,46 +1,46 @@
 <x-layout>
     <x-slot:title>Change Password</x-slot:title>
 
-    {!! Form::open(['method' => 'POST', 'route' => 'auth.password.update']) !!}
+    {!! html()-form('POST',route('auth.password.update'))->open() !!}
 
     @if ($firsttime)
 	<p><strong>As this is the first time you have used this system, you must set a new password, and enter a verification code.</strong> The verification code has been sent to your preferred email address.</p>
 
 	<div>
-	    {!! Form::label('cpwd', 'Last Name') !!}
-	    {!! Form::password('cpwd') !!} (again, exactly as recorded in membership data)
+	    {!! html()->label('cpwd', 'Last Name') !!}
+	    {!! html()->password('cpwd') !!} (again, exactly as recorded in membership data)
 	</div>
     @else
 	<div>
-	    {!! Form::label('cpwd', 'Current Password') !!}
-	    {!! Form::password('cpwd') !!}
+	    {!! html()->label('cpwd', 'Current Password') !!}
+	    {!! html()->password('cpwd') !!}
 	</div>
 
     @endif
-    
+
 
     <div>
-	{!! Form::label('npwd', 'New Password') !!}
-	{!! Form::password('npwd') !!}
+	{!! html()->label('npwd', 'New Password') !!}
+	{!! html()->password('npwd') !!}
     </div>
 
     <div>
-	{!! Form::label('npwd2', 'Confirm New Password') !!}
-	{!! Form::password('npwd2') !!}
+	{!! html()->label('npwd2', 'Confirm New Password') !!}
+	{!! html()->password('npwd2') !!}
     </div>
 
     @if ($firsttime)
 	<div>
-	    {!! Form::label('code', 'Verification Code') !!}
-	    {!! Form::text('code') !!}
+	    {!! html()->label('code', 'Verification Code') !!}
+	    {!! html()->text('code') !!}
 	    Check your email for this code - it will be eight letters and numbers
 	</div>
     @endif
-    
-    {!! Form::submit("Change Password") !!}
-    
-    {!! Form::close() !!}
+
+    {!! html()->submit("Change Password") !!}
+
+    {!! html()->form()->close() !!}
 
     <p>Passwords must be at least 8 characters long.</p>
-    
+
 </x-layout>

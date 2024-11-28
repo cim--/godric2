@@ -25,189 +25,204 @@ class TestingSeeder extends Seeder
      */
     public function run()
     {
-
         $pastcampaign = Campaign::factory()->create();
         $currentcampaign = Campaign::factory()->current()->create();
 
         $memberhash = [];
-        
-        for ($i=1000;$i<=1100;$i++) {
+
+        for ($i = 1000; $i <= 1100; $i++) {
             if ($i < 1050) {
                 $user = User::factory()->create([
-                    'username' => $i
+                    'username' => $i,
                 ]);
             }
             switch ($i) {
-            case 1020:
-            case 1030:
-                // set specific members
-                $member = Member::factory()->create([
-                    'membership' => $i,
-                    'department' => 'Philosophy',
-                    'voter' => true,
-                ]);
-                break;
-            case 1040:
-                $member = Member::factory()->create([
-                    'membership' => $i,
-                    'voter' => true,
-                ]);
-                break;
-            case 1083:
-            case 1084:
-                $member = Member::factory()->create([
-                    'membership' => $i,
-                    'department' => 'Finance',
-                    'voter' => true,
-                ]);
-                break;
-            default:
-                // randomise
-                $member = Member::factory()->create([
-                    'membership' => $i
-                ]);
-            }
-            if ($member->voter) {
-                switch ($member->id) {
                 case 1020:
-                    // force no actions
-                    break;
                 case 1030:
-                    // force yes action this time
-                    Action::factory()->create([
-                        'member_id' => $member->id,
-                        'campaign_id' => $currentcampaign->id,
-                        'action' => 'yes',
-                        'created_at' => $currentcampaign->start->copy()->addDays(rand(1,6))->addMinutes(rand(0,1440))
+                    // set specific members
+                    $member = Member::factory()->create([
+                        'membership' => $i,
+                        'department' => 'Philosophy',
+                        'voter' => true,
+                    ]);
+                    break;
+                case 1040:
+                    $member = Member::factory()->create([
+                        'membership' => $i,
+                        'voter' => true,
+                    ]);
+                    break;
+                case 1083:
+                case 1084:
+                    $member = Member::factory()->create([
+                        'membership' => $i,
+                        'department' => 'Finance',
+                        'voter' => true,
                     ]);
                     break;
                 default:
-                    if (rand(0,10) < 5) {
-                        Action::factory()->create([
-                            'member_id' => $member->id,
-                            'campaign_id' => $pastcampaign->id,
-                            'created_at' => $pastcampaign->start->copy()->addDays(rand(1,28))->addMinutes(rand(0,1440))
-                        ]);
-                        if (rand(0,10) < 3) {
-                            Action::factory()->create([
-                                'member_id' => $member->id,
-                                'campaign_id' => $currentcampaign->id,
-                                'created_at' => $currentcampaign->start->copy()->addDays(rand(1,6))->addMinutes(rand(0,1440))
-                            ]);
-                        }
-                    } elseif (rand(0,10) < 2) {
+                    // randomise
+                    $member = Member::factory()->create([
+                        'membership' => $i,
+                    ]);
+            }
+            if ($member->voter) {
+                switch ($member->id) {
+                    case 1020:
+                        // force no actions
+                        break;
+                    case 1030:
+                        // force yes action this time
                         Action::factory()->create([
                             'member_id' => $member->id,
                             'campaign_id' => $currentcampaign->id,
-                            'created_at' => $currentcampaign->start->copy()->addDays(rand(1,6))->addMinutes(rand(0,1440))
+                            'action' => 'yes',
+                            'created_at' => $currentcampaign->start
+                                ->copy()
+                                ->addDays(rand(1, 6))
+                                ->addMinutes(rand(0, 1440)),
                         ]);
-                    }
+                        break;
+                    default:
+                        if (rand(0, 10) < 5) {
+                            Action::factory()->create([
+                                'member_id' => $member->id,
+                                'campaign_id' => $pastcampaign->id,
+                                'created_at' => $pastcampaign->start
+                                    ->copy()
+                                    ->addDays(rand(1, 28))
+                                    ->addMinutes(rand(0, 1440)),
+                            ]);
+                            if (rand(0, 10) < 3) {
+                                Action::factory()->create([
+                                    'member_id' => $member->id,
+                                    'campaign_id' => $currentcampaign->id,
+                                    'created_at' => $currentcampaign->start
+                                        ->copy()
+                                        ->addDays(rand(1, 6))
+                                        ->addMinutes(rand(0, 1440)),
+                                ]);
+                            }
+                        } elseif (rand(0, 10) < 2) {
+                            Action::factory()->create([
+                                'member_id' => $member->id,
+                                'campaign_id' => $currentcampaign->id,
+                                'created_at' => $currentcampaign->start
+                                    ->copy()
+                                    ->addDays(rand(1, 6))
+                                    ->addMinutes(rand(0, 1440)),
+                            ]);
+                        }
                 }
             }
             /* Set up roles */
             switch ($i) {
-            case 1000:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_SUPERUSER
-                ]);
-                break;
-            case 1001:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_REP,
-                    'restrictfield' => 'department',
-                    'restrictvalue' => 'Philosophy'
-                ]);
-                break;
-            case 1002:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_REP,
-                    'restrictfield' => 'department',
-                    'restrictvalue' => 'Library'
-                ]);
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_PHONEBANK,
-                    'restrictfield' => '',
-                    'restrictvalue' => ''
-                ]);
-                break;
-            case 1003:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_PHONEBANK,
-                    'restrictfield' => '',
-                    'restrictvalue' => ''
-                ]);
-                break;
-            case 1004:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_REP,
-                    'restrictfield' => 'jobtype',
-                    'restrictvalue' => 'Postgraduate'
-                ]);
-                break;
-            case 1005:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_CAMPAIGNER,
-                    'restrictfield' => 'department',
-                    'restrictvalue' => 'Chemistry'
-                ]);
-                break;
-            case 1006:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_PHONEBANK,
-                    'restrictfield' => 'department',
-                    'restrictvalue' => 'Library'
-                ]);
-                break;
-            case 1009:
-                Role::factory()->create([
-                    'member_id' => $member->id,
-                    'role' => Role::ROLE_SECRETARY,
-                    'restrictfield' => '',
-                    'restrictvalue' => ''
-                ]);
-                break;
-            default:
+                case 1000:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_SUPERUSER,
+                    ]);
+                    break;
+                case 1001:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_REP,
+                        'restrictfield' => 'department',
+                        'restrictvalue' => 'Philosophy',
+                    ]);
+                    break;
+                case 1002:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_REP,
+                        'restrictfield' => 'department',
+                        'restrictvalue' => 'Library',
+                    ]);
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_PHONEBANK,
+                        'restrictfield' => '',
+                        'restrictvalue' => '',
+                    ]);
+                    break;
+                case 1003:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_PHONEBANK,
+                        'restrictfield' => '',
+                        'restrictvalue' => '',
+                    ]);
+                    break;
+                case 1004:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_REP,
+                        'restrictfield' => 'jobtype',
+                        'restrictvalue' => 'Postgraduate',
+                    ]);
+                    break;
+                case 1005:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_CAMPAIGNER,
+                        'restrictfield' => 'department',
+                        'restrictvalue' => 'Chemistry',
+                    ]);
+                    break;
+                case 1006:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_PHONEBANK,
+                        'restrictfield' => 'department',
+                        'restrictvalue' => 'Library',
+                    ]);
+                    break;
+                case 1009:
+                    Role::factory()->create([
+                        'member_id' => $member->id,
+                        'role' => Role::ROLE_SECRETARY,
+                        'restrictfield' => '',
+                        'restrictvalue' => '',
+                    ]);
+                    break;
+                default:
                 // no roles
             }
             $memberhash[$i] = $member->id;
         }
 
-        $pastcampaign->calctarget = ceil(Member::voter()->count()/2);
+        $pastcampaign->calctarget = ceil(Member::voter()->count() / 2);
         $pastcampaign->save();
-        $currentcampaign->calctarget = ceil(Member::voter()->count()/2);
+        $currentcampaign->calctarget = ceil(Member::voter()->count() / 2);
         $currentcampaign->save();
 
         /* Ballots */
 
         $ballot1 = Ballot::factory()->create([
-            'start' => Carbon::parse("-3 months"),
-            'end' => Carbon::parse("-10 weeks")
+            'start' => Carbon::parse('-3 months'),
+            'end' => Carbon::parse('-10 weeks'),
         ]);
-        $options = Option::factory()->count(3)->create([
-            'ballot_id' => $ballot1->id
-        ]);
+        $options = Option::factory()
+            ->count(3)
+            ->create([
+                'ballot_id' => $ballot1->id,
+            ]);
         $total = min($options->sum('votes'), 45);
-        for ($i=1099; $i>1099-$total; $i-=2) {
+        for ($i = 1099; $i > 1099 - $total; $i -= 2) {
             $ballot1->members()->attach($memberhash[$i]);
         }
 
         $ballot2 = Ballot::factory()->create([
-            'start' => Carbon::parse("-4 weeks"),
-            'end' => Carbon::parse("-3 weeks")
+            'start' => Carbon::parse('-4 weeks'),
+            'end' => Carbon::parse('-3 weeks'),
         ]);
-        $options = Option::factory()->count(6)->create([
-            'ballot_id' => $ballot2->id
-        ]);
+        $options = Option::factory()
+            ->count(6)
+            ->create([
+                'ballot_id' => $ballot2->id,
+            ]);
         $total = min($options->sum('votes'), 90);
-        for ($i=1000; $i<1000+$total; $i++) {
+        for ($i = 1000; $i < 1000 + $total; $i++) {
             $ballot2->members()->attach($memberhash[$i]);
         }
 
@@ -232,9 +247,14 @@ class TestingSeeder extends Seeder
                 'option' => 'Abstain'
             ]),
         ]);
+        $options = Option::factory()
+            ->count(3)
+            ->create([
+                'ballot_id' => $ballot3->id,
+            ]);
 
         $total = min($options->sum('votes'), 90);
-        for ($i=1099; $i>1099-$total; $i--) {
+        for ($i = 1099; $i > 1099 - $total; $i--) {
             $ballot3->members()->attach($memberhash[$i]);
         }
     }

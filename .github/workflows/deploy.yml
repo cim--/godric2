@@ -1,0 +1,63 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: godric-prod
+    steps:
+    # Check out the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create environment from base64
+      env:
+        ENV_FILE: ${{ secrets.ENV_FILE }}
+      run: |
+        echo "$ENV_FILE" | base64 -d > .env
+
+    - name: Install rsync
+      run: |
+        sudo apt-get update && sudo apt-get install -y rsync
+
+    - name: Add Host Key
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -t ed25519 cardiffucu.org.uk > ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
+
+    - name: Write SSH key from base64
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" | base64 -d > ssh_key
+        chmod 600 ssh_key
+
+    # Set up PHP environment
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, pdo, pdo_mysql, bcmath, ctype, fileinfo, json, openssl, tokenizer, xml
+        ini-values: post_max_size=256M, upload_max_filesize=256M
+        coverage: none
+
+    # Install dependencies and build
+    - name: Install dependencies
+      run: |
+        npm install
+        composer install --no-progress --no-suggest --optimize-autoloader
+        npm run production
+
+    # Deploy to server
+    - name: Deploy to Production
+      env:
+        SERVER_HOST: ${{ secrets.SERVER_HOST}}
+        DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      run: |
+        rsync -avz --rsync-path="sudo rsync" --chown=www-data:www-data --exclude=node_modules --exclude=.git -e "ssh -i ssh_key" ./ $SERVER_HOST:$DEPLOY_PATH
+        ssh -i ssh_key $SERVER_HOST "cd $DEPLOY_PATH && php artisan migrate --force"

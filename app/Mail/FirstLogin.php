@@ -6,15 +6,15 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-
 use App\Models\User;
 
 class FirstLogin extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user = null;
-    
+
     /**
      * Create a new message instance.
      *
@@ -33,7 +33,7 @@ class FirstLogin extends Mailable
     public function build()
     {
         return $this->markdown('emails.firstlogin', [
-            'user' => $this->user
+            'user' => $this->user,
         ]);
     }
 }

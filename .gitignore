@@ -25,3 +25,5 @@ yarn-error.log
 *#
 /database/database.sqlite
 /storage/debugbar
+.phpunit.cache/
+.secrets

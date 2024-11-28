@@ -1,17 +1,21 @@
-@import "../../node_modules/datatables.net-dt/css/jquery.dataTables.css";
+@import '../../node_modules/datatables.net-dt/css/jquery.dataTables.css';
 
 body {
     background: #fff4f4;
     font-family: sans-serif;
 }
 
-header, footer {
+header,
+footer {
     border-top: #e74898 solid 3px;
     border-bottom: #e74898 solid 3px;
     padding: 0.5em;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     color: #310c58;
 }
 
@@ -20,7 +24,7 @@ nav ul {
     padding: 0;
 }
 
-nav ul+ul {
+nav ul + ul {
     margin-top: 0.25em;
     padding-top: 0.25em;
     border-top: #e74898 solid 2px;
@@ -45,7 +49,8 @@ form {
     margin-bottom: 1em;
 }
 
-td, th {
+td,
+th {
     border: thin #310c58 solid;
     padding: 2px;
 }
@@ -55,7 +60,7 @@ table {
     border-collapse: collapse;
 }
 
-th[scope=row] {
+th[scope='row'] {
     text-align: right;
 }
 
@@ -67,7 +72,6 @@ table.dataTable tbody th,
 table.dataTable tbody td {
     padding: 2px;
 }
-
 
 .highnotice {
     font-weight: bold;

@@ -18,26 +18,28 @@ class CampaignFactory extends Factory
      */
     public function definition()
     {
-        $start = Carbon::parse($this->faker->dateTimeBetween("-12 months", "-2 months"));
+        $start = Carbon::parse(
+            $this->faker->dateTimeBetween('-12 months', '-2 months')
+        );
         return [
-            "name" => "Ballot ".$start->format("F Y"),
-            "description" => $this->faker->paragraph(),
-            "start" => $start,
-            "end" => $start->copy()->addMonths(1),
-            "target" => 50,
-            "calctarget" => ceil(Member::voter()->count()/2),
-            "votersonly" => true
+            'name' => 'Ballot ' . $start->format('F Y'),
+            'description' => $this->faker->paragraph(),
+            'start' => $start,
+            'end' => $start->copy()->addMonths(1),
+            'target' => 50,
+            'calctarget' => ceil(Member::voter()->count() / 2),
+            'votersonly' => true,
         ];
     }
 
     public function current()
     {
-        return $this->state(function(array $attributes) {
-            $start = Carbon::parse("-1 week");
+        return $this->state(function (array $attributes) {
+            $start = Carbon::parse('-1 week');
             return [
-                'name' => "Ballot ".$start->format("F Y"),
+                'name' => 'Ballot ' . $start->format('F Y'),
                 'start' => $start,
-                'end' => $start->copy()->addMonths(1)
+                'end' => $start->copy()->addMonths(1),
             ];
         });
     }

@@ -2,14 +2,14 @@
     <x-slot:title>Notices: Edit</x-slot:title>
 
     @if ($notice->id)
-	{!! Form::open(['route' => ['notices.update', $notice->id], 'method' => 'PUT']) !!}
+	{!! html()->form('PUT',route('notices.update', $notice->id))->open() !!}
     @else
-	{!! Form::open(['route' => 'notices.store', 'method' => 'POST']) !!}
+	{!! html()-form('POST',route('notices.store', 'method'))->open() !!}
     @endif
 
     <div>
-	{!! Form::label('meeting', 'Meeting') !!}
-	{!! Form::text('meeting', $notice->meeting, ["list" => "meetings", "size" => 30]) !!} Leave blank if not associated with a meeting
+	{!! html()->label('meeting', 'Meeting') !!}
+	{!! html()->text('meeting', $notice->meeting, ["list" => "meetings", "size" => 30]) !!} Leave blank if not associated with a meeting
 	<datalist id="meetings">
 	    @foreach ($meetings as $meeting)
 		<option>{{ $meeting }}</option>
@@ -17,49 +17,49 @@
 	</datalist>
     </div>
     <div>
-	{!! Form::label('title', 'Title') !!}
-	{!! Form::text('title', $notice->title) !!}
+	{!! html()->label('title', 'Title') !!}
+	{!! html()->text('title', $notice->title) !!}
     </div>
     <div>
-	{!! Form::label('content', 'Content') !!}
-	{!! Form::textarea('content', $notice->content, ['class' => 'htmlbox']) !!}
+	{!! html()->label('content', 'Content') !!}
+	{!! html()->textarea('content', $notice->content, ['class' => 'htmlbox']) !!}
 	(HTML markup allowed)
     </div>
     <div>
-	{!! Form::label('start', 'Start') !!}
-	{!! Form::date('start', $notice->start ? $notice->start->format("Y-m-d") : "") !!}
-	({!! Form::label('nostart', 'no date?') !!}
-	{!! Form::checkbox('nostart', 1, $notice->start === null) !!})
+	{!! html()->label('start', 'Start') !!}
+	{!! html()->date('start', $notice->start ? $notice->start->format("Y-m-d") : "") !!}
+	({!! html()->label('nostart', 'no date?') !!}
+	{!! html()->checkbox('nostart', 1, $notice->start === null) !!})
 	Setting a start date a few weeks before the meeting date is strongly recommended for documents associated with meetings.
     </div>
     <div>
-	{!! Form::label('end', 'End') !!}
-	{!! Form::date('end', $notice->end ? $notice->end->format("Y-m-d") : "") !!}
-	({!! Form::label('noend', 'no date?') !!}
-	{!! Form::checkbox('noend', 1, $notice->end === null) !!})
+	{!! html()->label('end', 'End') !!}
+	{!! html()->date('end', $notice->end ? $notice->end->format("Y-m-d") : "") !!}
+	({!! html()->label('noend', 'no date?') !!}
+	{!! html()->checkbox('noend', 1, $notice->end === null) !!})
     </div>
     <div>
-	{!! Form::label('highlight', 'Highlight on front page?') !!}
-	{!! Form::checkbox('highlight', 1, $notice->highlight) !!}
+	{!! html()->label('highlight', 'Highlight on front page?') !!}
+	{!! html()->checkbox('highlight', 1, $notice->highlight) !!}
     </div>
 
-    
-    {!! Form::submit("Edit Notice") !!}
 
-    {!!  Form::close() !!}
+    {!! html()->submit("Edit Notice") !!}
+
+    {!!  html()->form()->close() !!}
 
 
     @if ($notice->id)
 	<h2>Delete notice</h2>
-	{!! Form::open(['route' => ['notices.destroy', $notice->id], 'method' => 'DELETE']) !!}
+	{!! html()->form('DELETE', route('notices.destroy', $notice->id))->open() !!}
 	<p><strong>Warning:</strong> Notice deletion cannot be undone - consider hiding it by setting the display dates if it might be needed again later.</p>
-	
-	{!! Form::submit("Delete Notice") !!}
 
-	{!!  Form::close() !!}
+	{!! html()->submit("Delete Notice") !!}
+
+	{!!  html()->form()->close() !!}
 
     @endif
 
 
-    
+
 </x-layout>

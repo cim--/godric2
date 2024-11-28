@@ -21,7 +21,7 @@ class RoleFactory extends Factory
             'role' => Role::ROLE_REP,
             // 'member_id'
             'restrictfield' => '',
-            'restrictvalue' => ''
+            'restrictvalue' => '',
         ];
     }
 }

@@ -9,9 +9,8 @@ use Carbon\Carbon;
 
 class NoticeController extends Controller
 {
-
     // public routes
-    
+
     /**
      * Display a listing of the resource for user view
      *
@@ -19,12 +18,16 @@ class NoticeController extends Controller
      */
     public function publicIndex()
     {
-        $notices = Notice::current()->orderBy('highlight', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
-        $notices = $notices->mapToGroups(function($notice) {
-            return [($notice->meeting ?? "") => $notice];
+        $notices = Notice::current()
+            ->orderBy('highlight', 'desc')
+            ->orderBy('start', 'desc')
+            ->orderBy('title')
+            ->get();
+        $notices = $notices->mapToGroups(function ($notice) {
+            return [$notice->meeting ?? '' => $notice];
         });
         return view('notices.public', [
-            'notices' => $notices
+            'notices' => $notices,
         ]);
     }
 
@@ -40,15 +43,14 @@ class NoticeController extends Controller
         if (!$notice->isCurrent()) {
             abort(404);
         }
-        
+
         return view('notices.read', [
-            'notice' => $notice
+            'notice' => $notice,
         ]);
     }
 
-
     // editing routes
-    
+
     /**
      * Display a listing of the resource for editors
      *
@@ -56,9 +58,12 @@ class NoticeController extends Controller
      */
     public function index()
     {
-        $notices = Notice::orderBy('highlight', 'desc')->orderBy('start', 'desc')->orderBy('title')->get();
+        $notices = Notice::orderBy('highlight', 'desc')
+            ->orderBy('start', 'desc')
+            ->orderBy('title')
+            ->get();
         return view('notices.index', [
-            'notices' => $notices
+            'notices' => $notices,
         ]);
     }
 
@@ -70,8 +75,8 @@ class NoticeController extends Controller
     public function create()
     {
         return view('notices.form', [
-            'notice' => new Notice,
-            'meetings' => Notice::allMeetings()
+            'notice' => new Notice(),
+            'meetings' => Notice::allMeetings(),
         ]);
     }
 
@@ -83,10 +88,9 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->update($request, new Notice);
+        return $this->update($request, new Notice());
     }
 
-    
     /**
      * Show the form for editing the specified resource.
      *
@@ -97,7 +101,7 @@ class NoticeController extends Controller
     {
         return view('notices.form', [
             'notice' => $notice,
-            'meetings' => Notice::allMeetings()
+            'meetings' => Notice::allMeetings(),
         ]);
     }
 
@@ -113,15 +117,22 @@ class NoticeController extends Controller
         $title = $request->input('title');
         $meeting = $request->input('meeting');
         $content = $request->input('content');
-        $start = $request->input('nostart', false) ? null : Carbon::parse($request->input('start'));
-        $end = $request->input('noend', false) ? null : Carbon::parse($request->input('end'));
+        $start = $request->input('nostart', false)
+            ? null
+            : Carbon::parse($request->input('start'));
+        $end = $request->input('noend', false)
+            ? null
+            : Carbon::parse($request->input('end'));
         $highlight = $request->input('highlight', false);
 
         if (!$title || !$content) {
             return back()->with('message', 'Title and content are required');
         }
         if ($start && $end && $start->gt($end)) {
-            return back()->with('message', 'Start date must be before the end date');
+            return back()->with(
+                'message',
+                'Start date must be before the end date'
+            );
         }
         $notice->title = $title;
         $notice->meeting = $meeting;
@@ -130,8 +141,9 @@ class NoticeController extends Controller
         $notice->end = $end;
         $notice->highlight = $highlight;
         $notice->save();
-        return redirect()->route('notices.index')->with('message', 'Document Saved');
-                           
+        return redirect()
+            ->route('notices.index')
+            ->with('message', 'Document Saved');
     }
 
     /**
@@ -143,6 +155,8 @@ class NoticeController extends Controller
     public function destroy(Notice $notice)
     {
         $notice->delete();
-        return redirect()->route('notices.index')->with('message', 'Notice Removed');
+        return redirect()
+            ->route('notices.index')
+            ->with('message', 'Notice Removed');
     }
 }

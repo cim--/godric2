@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>Reset Password</x-slot:title>
 
-    {!! Form::open(['method' => 'POST', 'route' => 'auth.doreset']) !!}
+    {!! html->form('POST','auth.doreset')->open() !!}
 
     <p>To reset your password, enter your membership ID, last name and preferred contact email <em>exactly</em> as in the membership records. If this is successful, you will then be able to log in again using your last name as the password and entering a code sent to your email address.</p>
 
@@ -10,22 +10,22 @@
     @endif
 
     <div>
-	{!! Form::label('username', 'Membership ID') !!}
-	{!! Form::text('username') !!}
+	{!! html()->label('username', 'Membership ID') !!}
+	{!! html()->text('username') !!}
     </div>
     <div>
-	{!! Form::label('lastname', 'Last Name') !!}
-	{!! Form::password('lastname') !!}
+	{!! html()->label('lastname', 'Last Name') !!}
+	{!! html()->password('lastname') !!}
     </div>
     <div>
-	{!! Form::label('email', 'Email') !!}
-	{!! Form::password('email') !!}
+	{!! html()->label('email', 'Email') !!}
+	{!! html()->password('email') !!}
     </div>
 
-    {!! Form::submit("Reset password") !!}
-    
-    {!! Form::close() !!}
+    {!! html()->submit("Reset password") !!}
+
+    {!! html()->form()->close() !!}
 
     <p>If you are unable to use this form, please contact your organisation and ask them to reset your password.</p>
-    
+
 </x-layout>

@@ -18,7 +18,7 @@ class Ballot extends Model implements Participatory
     ];
 
     private $pcache = null;
-    
+
     public function options()
     {
         return $this->hasMany(Option::class);
@@ -41,11 +41,11 @@ class Ballot extends Model implements Participatory
 
     public function scopeOpen($q)
     {
-        return $q->where('end', '>', Carbon::now())
-                 ->where('start', '<=', Carbon::now());
+        return $q
+            ->where('end', '>', Carbon::now())
+            ->where('start', '<=', Carbon::now());
     }
 
-    
     public function started()
     {
         if (!$this->id) {
@@ -67,11 +67,11 @@ class Ballot extends Model implements Participatory
         if ($this->pcache === null) {
             $this->pcache = [];
             foreach ($this->members as $pmember) {
-                $this->pcache[$pmember->id] = "yes";
+                $this->pcache[$pmember->id] = 'yes';
             }
         }
-        
-        return $this->pcache[$member->id] ?? "-";
+
+        return $this->pcache[$member->id] ?? '-';
     }
 
     public function shortDesc()

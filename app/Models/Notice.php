@@ -24,13 +24,15 @@ class Notice extends Model
 
     public function scopeCurrent($q)
     {
-        return $q->where(function ($sq) {
-            $sq->whereDate('start', '<=', Carbon::now())
-               ->orWhereNull('start');
-        })->where(function ($eq) {
-            $eq->whereDate('end', '>=', Carbon::now())
-               ->orWhereNull('end');
-        });
+        return $q
+            ->where(function ($sq) {
+                $sq->whereDate('start', '<=', Carbon::now())->orWhereNull(
+                    'start'
+                );
+            })
+            ->where(function ($eq) {
+                $eq->whereDate('end', '>=', Carbon::now())->orWhereNull('end');
+            });
     }
 
     public function isCurrent()
@@ -38,7 +40,10 @@ class Notice extends Model
         if ($this->start !== null && $this->start->isFuture()) {
             return false;
         }
-        if ($this->end !== null && $this->end->copy()->setTime(23,59,59)->isPast()) {
+        if (
+            $this->end !== null &&
+            $this->end->copy()->setTime(23, 59, 59)->isPast()
+        ) {
             return false;
         }
         return true;
@@ -46,6 +51,10 @@ class Notice extends Model
 
     public static function allMeetings()
     {
-        return Notice::select('meeting')->whereNotNull('meeting')->distinct()->get()->pluck('meeting');
+        return Notice::select('meeting')
+            ->whereNotNull('meeting')
+            ->distinct()
+            ->get()
+            ->pluck('meeting');
     }
 }

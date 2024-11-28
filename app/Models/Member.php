@@ -23,7 +23,7 @@ class Member extends Model
     {
         return $this->belongsToMany(Ballot::class);
     }
-    
+
     public function roles()
     {
         return $this->hasMany(Role::class);
@@ -34,12 +34,11 @@ class Member extends Model
         return $this->belongsToMany(Workplace::class);
     }
 
-    
     public function participation(Campaign $campaign)
     {
         $action = $this->actions->where('campaign_id', $campaign->id)->first();
         if (!$action) {
-            return "-";
+            return '-';
         } else {
             return $action->action;
         }
@@ -49,18 +48,19 @@ class Member extends Model
     {
         return $q->where('voter', true);
     }
-    
+
     public function hasMobileNumber()
     {
         $number = $this->mobile;
-        $number = preg_replace("/[^0-9]+/", "", $number);
-        if (substr($number, 0, 2) == "07" || substr($number, 0, 3) == "447") {
+        $number = preg_replace('/[^0-9]+/', '', $number);
+        if (substr($number, 0, 2) == '07' || substr($number, 0, 3) == '447') {
             return true;
         }
         return false;
     }
 
-    public static function search($memberid) {
+    public static function search($memberid)
+    {
         $memberid = trim($memberid);
         return Member::where('membership', $memberid)
             ->orWhere('email', $memberid)
@@ -69,49 +69,57 @@ class Member extends Model
     }
 
     /* Gets the representatives of particular roles for a member */
-    public function representatives($roles=null)
+    public function representatives($roles = null)
     {
         if ($roles === null) {
             $roles = [Role::ROLE_REP, Role::ROLE_SUPERUSER];
         }
         $bydept = Member::whereHas('roles', function ($q) use ($roles) {
             $q->where('restrictfield', 'department')
-              ->where('restrictvalue', $this->department)
-              ->whereIn('role', $roles);
-        })->orderBy('lastname')->get();
+                ->where('restrictvalue', $this->department)
+                ->whereIn('role', $roles);
+        })
+            ->orderBy('lastname')
+            ->get();
 
         $byjtype = Member::whereHas('roles', function ($q) use ($roles) {
             $q->where('restrictfield', 'jobtype')
-              ->where('restrictvalue', $this->jobtype)
-              ->whereIn('role', $roles);
-        })->orderBy('lastname')->get();
+                ->where('restrictvalue', $this->jobtype)
+                ->whereIn('role', $roles);
+        })
+            ->orderBy('lastname')
+            ->get();
 
         $bymtype = Member::whereHas('roles', function ($q) use ($roles) {
             $q->where('restrictfield', 'membertype')
-              ->where('restrictvalue', $this->membertype)
-              ->whereIn('role', $roles);
-        })->orderBy('lastname')->get();
+                ->where('restrictvalue', $this->membertype)
+                ->whereIn('role', $roles);
+        })
+            ->orderBy('lastname')
+            ->get();
 
         $byworkplace = Member::whereHas('roles', function ($q) use ($roles) {
             $q->where('restrictfield', 'membertype')
-              ->whereIn('restrictvalue', $this->workplaces->pluck('name'))
-              ->whereIn('role', $roles);
-        })->orderBy('lastname')->get();
+                ->whereIn('restrictvalue', $this->workplaces->pluck('name'))
+                ->whereIn('role', $roles);
+        })
+            ->orderBy('lastname')
+            ->get();
 
         $byorganisation = Member::whereHas('roles', function ($q) use ($roles) {
             $q->where(function ($nq) {
-                $nq->whereNull('restrictfield')
-                   ->orWhere('restrictfield', '');
-            })
-              ->whereIn('role', $roles);
-        })->orderBy('lastname')->get();
+                $nq->whereNull('restrictfield')->orWhere('restrictfield', '');
+            })->whereIn('role', $roles);
+        })
+            ->orderBy('lastname')
+            ->get();
 
         return [
             'department' => $bydept,
             'jobtype' => $byjtype,
             'membertype' => $bymtype,
             'workplace' => $byworkplace,
-            'organisation' => $byorganisation
+            'organisation' => $byorganisation,
         ];
     }
 
@@ -121,8 +129,8 @@ class Member extends Model
         if (!$this->voter) {
             $q->where('votersonly', false);
         }
-        $q->whereDoesntHave('members', function($mq) {
-            $mq->where('members.id', $this->id); 
+        $q->whereDoesntHave('members', function ($mq) {
+            $mq->where('members.id', $this->id);
         });
         return $q->orderBy('end')->with('options')->get();
     }

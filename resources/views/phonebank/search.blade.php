@@ -3,19 +3,19 @@
 
     <h2>Search</h2>
 
-    {!! Form::open(['method'=>'POST', 'route'=>'phonebank.search']) !!}
+    {!! html()->form('POST',route('phonebank.search'))->open() !!}
     <div>
-	{!! Form::label('search', 'Search members') !!}
-	{!! Form::text('search', $search) !!}
-	{!! Form::submit('Search') !!}
+	{!! html()->label('search', 'Search members') !!}
+	{!! html()->text('search', $search) !!}
+	{!! html()->submit('Search') !!}
     </div>
-    {!! Form::close() !!}
+    {!! html()->form()->close() !!}
 
     @if ($results !== null)
 	@if (count($results) == 0)
 	    <p>No members found - check your search and try again.</p>
 	@else
-	    
+
 	    @foreach ($results as $result)
 		<h3>{{$result->firstname}} {{$result->lastname}}</h3>
 		<p>Department: {{$result->department}}</p>
@@ -24,17 +24,17 @@
 		    <p><strong>New member.</strong></p>
 		@endif
 
-		{!! Form::open(['method'=>'post', 'route' => ['phonebank.update', $result->id]]) !!}
+		{!! html()->form('POST', route('phonebank.update', $result->id))->open() !!}
 		@foreach ($campaigns as $campaign)
 		    <x-campaigns.statemenu :campaign="$campaign" :member="$result" />
 		@endforeach
-		<div>Update Notes:<br>{!! Form::textarea('notes', $result->notes) !!}</div>
-		{!! Form::submit('Update participation') !!}
-		{!! Form::close() !!}
-		
+		<div>Update Notes:<br>{!! html()->textarea('notes', $result->notes) !!}</div>
+		{!! html()->submit('Update participation') !!}
+		{!! html()->form()->close() !!}
+
 	    @endforeach
-		
+
 	@endif
     @endif
-    
+
 </x-layout>

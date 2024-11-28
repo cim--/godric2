@@ -3,24 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\User;
 use App\Models\Member;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
 use App\Mail\FirstLogin;
 use App\Mail\PasswordReset;
 
 class AuthController extends Controller
 {
-
     public function login()
     {
         $orgtype = config('membership.orgtype');
         return view('auth.login', [
-            'orgtype' => $orgtype
+            'orgtype' => $orgtype,
         ]);
     }
 
@@ -37,14 +34,16 @@ class AuthController extends Controller
             }
             // member exists, user doesn't, create user record if 'password' okay
             if ($member->lastname == $password) {
-                $user = new User;
+                $user = new User();
                 $user->username = $username;
                 $user->password = Hash::make($member->lastname);
                 $user->save();
-                
+
                 Auth::login($user);
                 $request->session()->regenerate();
-                return redirect()->route('auth.password')->with('message', 'Please set your password');
+                return redirect()
+                    ->route('auth.password')
+                    ->with('message', 'Please set your password');
             } else {
                 // wrong initial password
                 return back()->with('message', 'Invalid username or password');
@@ -54,10 +53,14 @@ class AuthController extends Controller
                 // only users with a current member record are allowed
                 return back()->with('message', 'Invalid username or password');
             } else {
-                
-                if (Auth::attempt(['username' => $username, 'password' => $password])) {
+                if (
+                    Auth::attempt([
+                        'username' => $username,
+                        'password' => $password,
+                    ])
+                ) {
                     $request->session()->regenerate();
- 
+
                     return redirect()->intended(route('main'));
                 }
 
@@ -70,9 +73,10 @@ class AuthController extends Controller
     {
         Auth::logout();
         $request->session()->regenerate();
-        return redirect()->route('auth.login')->with('message', 'You have logged out');
+        return redirect()
+            ->route('auth.login')
+            ->with('message', 'You have logged out');
     }
-
 
     public function changePassword()
     {
@@ -84,12 +88,11 @@ class AuthController extends Controller
 
                 Mail::to($user->member->email)->send(new FirstLogin($user));
             }
-            
         } else {
             $firsttime = false;
         }
         return view('auth.password', [
-            'firsttime' => $firsttime
+            'firsttime' => $firsttime,
         ]);
     }
 
@@ -101,15 +104,21 @@ class AuthController extends Controller
         } else {
             $firsttime = false;
         }
-        
+
         $cpwd = $request->input('cpwd');
         $npwd = $request->input('npwd');
         $npwd2 = $request->input('npwd2');
         if ($npwd != $npwd2) {
-            return back()->with('message', 'New password and confirmation do not match');
+            return back()->with(
+                'message',
+                'New password and confirmation do not match'
+            );
         }
         if (strlen($npwd) < 8) {
-            return back()->with('message', 'Passwords must be at least 8 characters');
+            return back()->with(
+                'message',
+                'Passwords must be at least 8 characters'
+            );
         }
 
         if (!Hash::check($cpwd, $request->user()->password)) {
@@ -117,13 +126,19 @@ class AuthController extends Controller
         }
         if ($firsttime) {
             if ($user->resetcode == null) {
-                return back()->with('message', 'Emailed verification code has expired, please start again');
+                return back()->with(
+                    'message',
+                    'Emailed verification code has expired, please start again'
+                );
             }
             $code = $request->input('code');
             if ($code != $user->resetcode) {
                 $user->resetcode = null;
                 $user->save();
-                return back()->with('message', 'The verification code was incorrect. Please wait for a new email and try again.');
+                return back()->with(
+                    'message',
+                    'The verification code was incorrect. Please wait for a new email and try again.'
+                );
             }
         }
 
@@ -133,14 +148,13 @@ class AuthController extends Controller
         $user->save();
 
         return redirect()->route('main')->with('message', 'Password updated');
-        
     }
 
     public function reset()
     {
         $orgtype = config('membership.orgtype');
         return view('auth.reset', [
-            'orgtype' => $orgtype
+            'orgtype' => $orgtype,
         ]);
     }
 
@@ -154,7 +168,10 @@ class AuthController extends Controller
             if ($member) {
                 $lastname = $request->input('lastname');
                 $email = $request->input('email');
-                if ($lastname == $member->lastname && $email == $member->email) {
+                if (
+                    $lastname == $member->lastname &&
+                    $email == $member->email
+                ) {
                     $allow = true;
                 }
             }
@@ -166,7 +183,7 @@ class AuthController extends Controller
                 if ($lastname == $member->lastname) {
                     // yes - create the account and go to the email
                     // validation step
-                    $user = new User;
+                    $user = new User();
                     $user->username = $username;
                     $user->password = Hash::make($member->lastname);
                     $user->save();
@@ -178,17 +195,24 @@ class AuthController extends Controller
                     Auth::login($user);
                     $request->session()->regenerate();
                     Auth::login($user);
-                    return redirect()->route('auth.password')->with('message', 'Please set a new password');
+                    return redirect()
+                        ->route('auth.password')
+                        ->with('message', 'Please set a new password');
                 }
             }
         }
         if (!$allow) {
-            return back()->with('message', 'The password reset information was incorrect. Please check the details and try again.');
+            return back()->with(
+                'message',
+                'The password reset information was incorrect. Please check the details and try again.'
+            );
         }
 
         Mail::to($user->member->email)->send(new PasswordReset($user));
 
         $user->delete();
-        return redirect()->route('auth.login')->with('message', 'Your password has now been reset.');
+        return redirect()
+            ->route('auth.login')
+            ->with('message', 'Your password has now been reset.');
     }
 }

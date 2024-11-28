@@ -20,14 +20,14 @@ class ActionFactory extends Factory
             // 'member_id'
             // 'campaign_id'
             'action' => $this->faker->randomElement([
-                "yes",
-                "yes",
-                "yes",
-                "yes",
-                "wait",
-                "help",
-                "no"
-            ])
+                'yes',
+                'yes',
+                'yes',
+                'yes',
+                'wait',
+                'help',
+                'no',
+            ]),
         ];
     }
 }

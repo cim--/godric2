@@ -32,7 +32,7 @@ class HasChangedPassword
         if ($user->hasTemporaryPassword()) {
             return redirect()->route('auth.password');
         }
-        
+
         return $next($request);
     }
 }
