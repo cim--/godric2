@@ -227,8 +227,25 @@ class TestingSeeder extends Seeder
         }
 
         $ballot3 = Ballot::factory()->create([
-            'start' => Carbon::parse('-1 day'),
-            'end' => Carbon::parse('+3 days'),
+            'title' => "Should we accept the employer's offer on workload?",
+            'description' => "The employer has put forward an <a href='https://www.example.com/'>offer on workload</a>.".
+            " Should we accept the offer and end the local dispute?",
+            'start' => Carbon::parse("-1 day"),
+            'end' => Carbon::parse("+3 days")
+        ]);
+        $options = collect([
+            Option::factory()->create([
+                'ballot_id' => $ballot3->id,
+                'option' => 'Yes'
+            ]),
+            Option::factory()->create([
+                'ballot_id' => $ballot3->id,
+                'option' => 'No'
+            ]),
+            Option::factory()->create([
+                'ballot_id' => $ballot3->id,
+                'option' => 'Abstain'
+            ]),
         ]);
         $options = Option::factory()
             ->count(3)
