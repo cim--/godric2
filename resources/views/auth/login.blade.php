@@ -10,11 +10,11 @@
     {!! html()->form('POST',route('auth.dologin'))->open() !!}
 
     <div>
-	{!! html()->label('username', 'Membership ID') !!}
+	{!! html()->label('Membership ID','username') !!}
 	{!! html()->text('username') !!}
     </div>
     <div>
-	{!! html()->label('password', 'Password') !!}
+	{!! html()->label('Password','password') !!}
 	{!! html()->password('password') !!}
     </div>
 
@@ -29,11 +29,11 @@
     {!! html()->form('POST', route('auth.dologin'))->open() !!}
 
     <div>
-	{!! html()->label('username', 'Membership ID') !!}
+	{!! html()->label('Membership ID','username') !!}
 	{!! html()->text('username') !!}
     </div>
     <div>
-	{!! html()->label('password', 'Last Name') !!}
+	{!! html()->label('Last Name','password') !!}
 	{!! html()->password('password') !!}
 	(exactly as in membership records, including punctuation and capitalisation)
     </div>

@@ -1,10 +1,10 @@
 <x-layout>
     <x-slot:title>Import Membership List</x-slot:title>
 
-    {!! html()->form('POST', route('import.process', 'files' => true))->open() !!}
+    {!! html()->form('POST', route('import.process'))->attribute('enctype', 'multipart/form-data')->open() !!}
 
     <div>
-	{!! html()->label('list', 'Upload CSV membership list') !!}
+	{!! html()->label('Upload CSV membership list','list') !!}
 	{!! html()->file('list') !!}
     </div>
 

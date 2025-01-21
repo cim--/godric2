@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>Reset Password</x-slot:title>
 
-    {!! html->form('POST','auth.doreset')->open() !!}
+    {!! html()->form()->method('POST')->action(route('auth.doreset'))->open() !!}
 
     <p>To reset your password, enter your membership ID, last name and preferred contact email <em>exactly</em> as in the membership records. If this is successful, you will then be able to log in again using your last name as the password and entering a code sent to your email address.</p>
 
@@ -10,15 +10,15 @@
     @endif
 
     <div>
-	{!! html()->label('username', 'Membership ID') !!}
+	{!! html()->label('Membership ID','username') !!}
 	{!! html()->text('username') !!}
     </div>
     <div>
-	{!! html()->label('lastname', 'Last Name') !!}
+	{!! html()->label('Last Name','lastname') !!}
 	{!! html()->password('lastname') !!}
     </div>
     <div>
-	{!! html()->label('email', 'Email') !!}
+	{!! html()->label('Email','email') !!}
 	{!! html()->password('email') !!}
     </div>
 
