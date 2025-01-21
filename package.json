@@ -8,7 +8,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "prepare": "npx husky",
+        "example-prepare": "npx husky",
         "prettier:check": "prettier --check \"{app,resources,public,config,database}/**/*.{php,js,json,css,scss,html,md}\"",
         "prettier:write": "prettier --write \"{app,resources,public,config,database}/**/*.{php,js,json,css,scss,html,md}\""
     },
