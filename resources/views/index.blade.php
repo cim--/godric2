@@ -26,12 +26,12 @@
 	    <fieldset><legend>Select option</legend>
 	    <div>
 		{!! html()->radio('option', 0, true, ['id' => 'option_0']) !!}
-		{!! html()->label('option_0', '(select option)') !!}
+		{!! html()->label('(select option)','option_0') !!}
 	    </div>
 	    @foreach ($ballot->options()->orderBy('order')->get() as $option)
 		<div>
 		    {!! html()->radio('option', $option->id, false, ['id' => 'option_'.$option->id]) !!}
-		    {!! html()->label('option_'.$option->id, $option->option) !!}
+		    {!! html()->label($option->option,'option_'.$option->id) !!}
 		</div>
 	    @endforeach
 	    </fieldset><br>
@@ -57,7 +57,7 @@
 	    {!! html()->form('POST',route('participate', $campaign->id))->open() !!}
 
 	    <div>
-		{!! html()->label('participation'.$campaign->id, 'Have you participated?') !!}
+		{!! html()->label('Have you participated?','participation'.$campaign->id) !!}
 		{!! html()->select('participation'.$campaign->id, $campaign->stateDescriptions("I"), $self->participation($campaign)) !!}
 		{!! html()->submit("Update participation") !!}
 	    </div>

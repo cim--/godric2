@@ -8,32 +8,32 @@
     @endif
 
     <div>
-	{!! html()->label('name', 'Name') !!}
+	{!! html()->label('Name','name') !!}
 	{!! html()->text('name', $campaign->name) !!}
     </div>
     <div>
-	{!! html()->label('description', 'Description') !!}
+	{!! html()->label('Description','description') !!}
 	{!! html()->textarea('description', $campaign->description) !!}
     </div>
     <div>
-	{!! html()->label('type', 'Campaign Type') !!}
+	{!! html()->label('Campaign Type','type') !!}
 	{!! html()->select('type', App\Models\Campaign::campaignTypes(), $campaign->campaigntype) !!}
     </div>
 
     <div>
-	{!! html()->label('start', 'Start') !!}
+	{!! html()->label('Start','start') !!}
 	{!! html()->date('start', $campaign->start ? $campaign->start->format("Y-m-d") : "") !!}
     </div>
     <div>
-	{!! html()->label('end', 'End') !!}
+	{!! html()->label('End','end') !!}
 	{!! html()->date('end', $campaign->end ? $campaign->end->format("Y-m-d") : "") !!}
     </div>
     <div>
-	{!! html()->label('target', 'Target') !!}
-	{!! html()->number('target', $campaign->target, ['min'=>0, 'max'=>100]) !!}% ({{ $campaign->calctarget ?? "-" }})
+	{!! html()->label('Target','target') !!}
+    {!! html()->input('number', 'target')->value($campaign->target)->attributes(['min' => 0, 'max' => 100]) !!}% ({{ $campaign->calctarget ?? "-" }})
     </div>
     <div>
-	{!! html()->label('votersonly', 'Voters Only?') !!}
+	{!! html()->label('Voters Only?','votersonly') !!}
 	{!! html()->checkbox('votersonly', 1, $campaign->votersonly) !!}
     </div>
 
@@ -55,7 +55,7 @@
 	{!! html()->form('DELETE', route('campaigns.destroy', $campaign->id))->open() !!}
 	<p><strong>Warning:</strong> Campaign deletion cannot be undone.</p>
 	<div>
-	    {!! html()->label('confirm', 'Confirm by typing campaign name') !!}
+	    {!! html()->label('Confirm by typing campaign name','confirm') !!}
 	    {!! html()->text('confirm') !!}
 	</div>
 

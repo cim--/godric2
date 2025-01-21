@@ -2,7 +2,7 @@
 
     @if ($campaign->campaigntype != App\Models\Campaign::CAMPAIGN_PETITION || $member->participation($campaign) != "yes")
 	<div>
-	    {!! html()->label('action'.$campaign->id, $campaign->name) !!}
+	    {!! html()->label($campaign->name,'action'.$campaign->id) !!}
 	    {!! html()->select('action'.$campaign->id, $campaign->stateDescriptions("They") ,$member->participation($campaign)) !!}
 	    @if ($campaign->campaigntype == App\Models\Campaign::CAMPAIGN_PETITION)
 		(you cannot record signatures on their behalf)

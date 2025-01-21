@@ -23,7 +23,7 @@
     {!! html()->form('POST', route('members.updatenotes', $member->id))->open() !!}
 
     <div>
-	{!! html()->label('notes', 'Additional Notes') !!}
+	{!! html()->label('Additional Notes','notes') !!}
 	{!! html()->textarea('notes', $member->notes ) !!}
     </div>
 
@@ -41,7 +41,7 @@
 	@foreach ($workplaces as $workplace)
 	    <div>
 		{!! html()->checkbox('workplace'.$workplace->id, 1, $member->workplaces->where('id', $workplace->id)->count() > 0) !!}
-		{!! html()->label('workplace'.$workplace->id, $workplace->name) !!}
+		{!! html()->label($workplace->name,'workplace'.$workplace->id) !!}
 	    </div>
 	@endforeach
 	{!! html()->submit("Update workplaces") !!}
@@ -63,7 +63,7 @@
     <p>Remember to ask them to change their password to something only they know after they log in.</p>
 
     <div>
-	{!! html()->label('newpass', 'New temporary password') !!}
+	{!! html()->label('New temporary password','newpass') !!}
 	{!! html()->text('newpass') !!} (minimum 8 characters)
     </div>
 
