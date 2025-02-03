@@ -8,19 +8,19 @@
     @endif
 
     <div>
-	{!! html()->label('member', 'Member ID') !!}
+	{!! html()->label('Member ID','member') !!}
 	{!! html()->text('member', $role->member ? $role->member->membership : "") !!}
     </div>
     <div>
-	{!! html()->label('role', 'Role') !!}
+	{!! html()->label('Role','role') !!}
 	{!! html()->select('role', $types, $role->role) !!}
     </div>
     <div>
-	{!! html()->label('restrictfield', 'Restrict Field') !!}
+	{!! html()->label('Restrict Field','restrictfield') !!}
 	{!! html()->select('restrictfield', $fields, $role->restrictfield) !!}
     </div>
     <div>
-	{!! html()->label('restrictvalue', 'Restrict Value') !!}
+	{!! html()->label('Restrict Value','restrictvalue') !!}
 	{!! html()->text('restrictvalue', $role->restrictvalue) !!}
     </div>
 

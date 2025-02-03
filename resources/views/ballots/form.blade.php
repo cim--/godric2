@@ -17,24 +17,24 @@
 	<div><strong>Start: </strong> {{ $ballot->start->format("j F Y H:i") }}</div>
     @else
     <div>
-	{!! html()->label('title', 'Title') !!}
+	{!! html()->label('Title','title') !!}
 	{!! html()->text('title', $ballot->title) !!}
     </div>
     <div>
-	{!! html()->label('description', 'Description') !!}
+	{!! html()->label('Description','description') !!}
 	{!! html()->textarea('description', $ballot->description, ['class' => 'htmlbox']) !!} (HTML allowed)
     </div>
     <div>
-	{!! html()->label('votersonly', 'Voters Only?') !!}
+	{!! html()->label('Voters Only?','votersonly') !!}
 	{!! html()->checkbox('votersonly', 1, $ballot->votersonly) !!}
     </div>
     <div>
-	{!! html()->label('options', 'Options') !!}
+	{!! html()->label('Options','options') !!}
 	{!! html()->textarea('options', $ballot->options->pluck('option')->join("\n")) !!}
 	<br>(one per line, recommend two options + abstain)
     </div>
     <div>
-	{!! html()->label('start', 'Start') !!}
+	{!! html()->label('Start','start') !!}
 	{!! html()->datetime('start', ($ballot->start ? $ballot->start : \Carbon\Carbon::parse("+1 week"))->format("Y-m-d H:i:s")) !!}
     </div>
     @endif
@@ -42,7 +42,7 @@
 	<div><strong>End: </strong> {{ $ballot->end->format("j F Y H:i") }}</div>
     @else
 	<div>
-	    {!! html()->label('end', 'End') !!}
+	    {!! html()->label('End','end') !!}
 	    {!! html()->datetime('end', ($ballot->end ? $ballot->end : \Carbon\Carbon::parse("+2 weeks"))->format("Y-m-d H:i:s")) !!}
 	</div>
     @endif
@@ -65,7 +65,7 @@
 	{!! html()->form('DELETE', route('ballots.destroy', $ballot->id)) !!}
 	<p><strong>Warning:</strong> Ballot deletion cannot be undone.</p>
 	<div>
-	    {!! html()->label('confirm', 'Confirm by typing ballot title') !!}
+	    {!! html()->label('Confirm by typing ballot title','confirm') !!}
 	    {!! html()->text('confirm') !!}
 	</div>
 

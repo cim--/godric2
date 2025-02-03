@@ -6,7 +6,7 @@
     <p>Import actions for {{ $campaign->name }}</p>
 
     <div>
-	{!! html()->label('action', 'Import as action') !!}
+	{!! html()->label('Import as action','action') !!}
 	{!! html()->select('action', [
 	    'yes' => 'Participated',
 	    'wait' => 'Intends to',
@@ -15,7 +15,7 @@
 	    ] ,'yes') !!}
     </div>
     <div>
-	{!! html()->label('members', 'Members') !!}
+	{!! html()->label('Members','members') !!}
 	{!! html()->textarea('members', '', ['rows'=>20]) !!}
 	<br>
 	One per line, using membership ID, email or phone
