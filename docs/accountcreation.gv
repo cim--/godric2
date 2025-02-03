@@ -1,0 +1,52 @@
+digraph accountcreation {
+	pad=0.4
+	label="Godric Account Creation and Password Resets"
+	fontsize=18
+	node [
+	      shape=rectangle;
+	      style=filled;
+	      fillcolor="white";
+	      fontname="sans-serif"
+	      fontsize=12
+	      ]
+	edge [
+	      fontname="sans-serif"
+	      fontsize=12
+	      ]
+	subgraph UserPerspective {
+		cluster=true;
+		label="User Actions";
+  		Start [label="No or Reset Account"];
+		Await [label="Awaiting code\nby email"];
+		Full [label="Account Active"];
+		NoEmail [label="Can't receive emailed code"]
+        }
+	
+	Start -> Await [label="Create account using\nID and last name"];
+	Await -> Full [label="Enter code and new real password"];
+	Full -> Start [label="Use password reset form while not logged in\nResets to default last-name password"];
+
+	Await -> NoEmail [label="Can't find email"];
+	NoEmail -> Full [label="Admin uses Emergency Password Reset"];
+
+	subgraph AdminPerspective {
+		cluster=true;
+		label="Admin Diagnoses";
+		Q1 [label="Is their ID bold\nin the member list?"];
+		Q2 [label="Is the Emergency Password\nReset available?"];
+
+		edge [style=dotted];
+		Q1 -> Q2 [label="Yes"];
+		Q1 -> Start [label="No"];
+		Q2 -> Await [label="Yes"];
+		Q2 -> Full [label="No"];
+        }
+
+
+
+
+
+
+
+
+}
