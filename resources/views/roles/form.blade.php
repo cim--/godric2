@@ -4,7 +4,7 @@
     @if ($role->id)
 	{!! html()->form('PUT',route('roles.update', $role->id))->open() !!}
     @else
-	{!! html()->form('POST',route('roles.store')) !!}
+	{!! html()->form('POST',route('roles.store'))->open() !!}
     @endif
 
     <div>
