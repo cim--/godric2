@@ -84,7 +84,7 @@ class CampaignController extends Controller
         $campaign->start = Carbon::parse($request->input('start'));
         $campaign->end = Carbon::parse($request->input('end'));
         $campaign->target = $request->input('target');
-        $campaign->votersonly = $request->input('votersonly', false);
+        $campaign->votersonly = $request->boolean('votersonly');
         if ($campaign->end->isFuture()) {
             if ($campaign->votersonly) {
                 $count = Member::where('voter', true)->count();

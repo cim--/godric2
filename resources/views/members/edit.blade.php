@@ -40,8 +40,8 @@
 	{!! html()->form('POST',route('members.updateworkplace', $member->id))->open() !!}
 	@foreach ($workplaces as $workplace)
 	    <div>
-		{!! html()->checkbox('workplace'.$workplace->id, 1, $member->workplaces->where('id', $workplace->id)->count() > 0) !!}
-		{!! html()->label($workplace->name,'workplace'.$workplace->id) !!}
+        {!! html()->checkbox('workplace'.$workplace->id, 1)->checked(in_array($workplace->id, $member->workplaces->pluck('id')->toArray())) !!}
+        {!! html()->label($workplace->name,'workplace'.$workplace->id) !!}
 	    </div>
 	@endforeach
 	{!! html()->submit("Update workplaces") !!}
