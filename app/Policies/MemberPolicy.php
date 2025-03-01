@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Member;
 use App\Models\User;
 use App\Models\Campaign;
+use App\Models\Ballot;
 use App\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -37,8 +38,8 @@ class MemberPolicy
     public function seeLists(User $user)
     {
         $roles = [Role::ROLE_REP, Role::ROLE_SUPERUSER];
-        if (Campaign::started()->count() > 0) {
-            // only applies during campaigns
+        if (Campaign::started()->count() > 0 || Ballot::open()->count() > 0) {
+            // only applies during campaigns and votes
             $roles[] = Role::ROLE_CAMPAIGNER;
         }
         return $user->member->roles()->whereIn('role', $roles)->count() > 0;
@@ -104,7 +105,7 @@ class MemberPolicy
             return true;
         }
 
-        $campaign = Campaign::started()->count();
+        $campaign = Campaign::started()->count() + Ballot::open()->count();
 
         $roles = $user->member->roles;
 

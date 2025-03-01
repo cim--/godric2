@@ -20,7 +20,7 @@ class MembersController extends Controller
     {
         $roles = \Auth::user()->member->roles;
 
-        $campaign = Campaign::started()->count();
+        $campaign = Campaign::started()->count() + Ballot::open()->count();
 
         $members = Member::orderBy('lastname')->orderBy('firstname');
         $hasrole = false;
