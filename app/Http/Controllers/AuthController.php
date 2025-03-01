@@ -207,12 +207,20 @@ class AuthController extends Controller
                 'The password reset information was incorrect. Please check the details and try again.'
             );
         }
+        $member = $user->member;
+        Mail::to($member->email)->send(new PasswordReset($user));
 
-        Mail::to($user->member->email)->send(new PasswordReset($user));
-
+        /* Reset account */
         $user->delete();
+        $user = new User();
+        $user->username = $username;
+        $user->password = Hash::make($member->lastname);
+        $user->save();
+        
+        Auth::login($user);
+        $request->session()->regenerate();
         return redirect()
-            ->route('auth.login')
-            ->with('message', 'Your password has now been reset.');
+                    ->route('auth.password')
+                    ->with('message', 'Your password has now been reset to your last name. Please set a new one now');
     }
 }
