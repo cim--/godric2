@@ -41,24 +41,38 @@ class ImportController extends Controller
 
         $test = str_getcsv(trim($contents[0]));
         // check expected format
+        if ($test[0] != "BMC Branch Report Primary Employment") {
+            return back()->with(
+                'message',
+                'File is not in the expected format: requires BMC Branch Report Primary Employment, is '.$test[0]
+            );
+        }
+        $test = str_getcsv(trim($contents[1]));
         if (
-            count($test) < 31 ||
-            $test[0] != 'person_id' ||
-            $test[30] != 'ede_primary'
+            count($test) < 32 ||
+            $test[0] != 'Membership Number' ||
+            $test[31] != 'Enrolled Postgraduate Student'
         ) {
             return back()->with(
                 'message',
-                'File is not in the expected format'
+                'File is not in the expected format: unexpected column headers'
             );
         }
 
         $added = [];
         $removed = [];
 
-        for ($i = 1; $i < count($contents); $i++) {
+        for ($i = 2; $i < count($contents); $i++) {
             $line = str_getcsv(
-                iconv('ISO-8859-1', 'UTF-8', trim($contents[$i]))
+                //iconv('ISO-8859-1', 'UTF-8', trim($contents[$i]))
+                trim($contents[$i])
             );
+            if ($line[0] == "BMC Branch Report Additional Employment" ||
+                $line[0] == "Membership Number") {
+                // skip secondary header rows
+                continue;
+            }
+            
             $member = Member::where('membership', $line[0])->first();
 
             if (!$member) {
@@ -67,16 +81,18 @@ class ImportController extends Controller
                 $added[] = $member;
             }
 
-            $member->firstname = $line[3];
-            $member->lastname = $line[4];
-            $member->email = $line[7];
-            $member->department = $line[10];
-            $member->mobile = $line[16] ? $line[16] : $line[14];
-            $member->jobtype = $line[19];
-            $member->membertype = $line[29];
+            $member->firstname = $line[4];
+            $member->lastname = $line[5];
+            $member->email = $line[12];
+            $member->department = $line[20];
+            // priority mobile > home > office
+            $member->mobile = $line[8] ? $line[8] :
+                            ($line[6] ? $line[6] : $line[7]);
+            $member->jobtype = $line[23];
+            $member->membertype = $line[26];
             if (
-                ($line[29] != 'Standard' && $line[29] != 'Standard Free') ||
-                $line[27] != 'N'
+                ($line[26] != 'Standard' && $line[26] != 'Standard Free') ||
+                $line[15] != '' || $line[16] != ''
             ) {
                 $member->voter = false;
             } else {
