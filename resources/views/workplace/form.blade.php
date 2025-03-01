@@ -20,7 +20,7 @@
 	<fieldset><legend>Current Members</legend>
 	    @foreach ($workplace->members()->orderBy('lastname')->get() as $member)
 		<div>
-		    {!! html()->checkbox('detach[]', $member->id, false, ['id' => 'detach_'.$member->id]) !!}
+		    {!! html()->checkbox('detach[]', false, $member->id, ['id' => 'detach_'.$member->id]) !!}
 		    {!! html()->label($member->membership.": ".$member->firstname." ".$member->lastname." (".$member->department.")",'detach_'.$member->id) !!}
 		</div>
 	    @endforeach

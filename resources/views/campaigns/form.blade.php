@@ -34,7 +34,7 @@
     </div>
     <div>
 	{!! html()->label('Voters Only?','votersonly') !!}
-	{!! html()->checkbox('votersonly', 1, $campaign->votersonly) !!}
+	{!! html()->checkbox('votersonly', $campaign->votersonly, 1) !!}
     </div>
 
 

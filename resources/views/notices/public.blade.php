@@ -4,6 +4,7 @@
     @if ($notices->count() == 0)
 	<p>No notices today.</p>
     @else
+	@if (isset($notices[""]))
 	<h2>General Notices</h2>
 	<ul>
 	    @foreach ($notices[""] as $notice)
@@ -15,6 +16,7 @@
 		</li>
 	    @endforeach
 	</ul>
+	@endif
 
 	@foreach ($notices as $meeting => $documents)
 	    @if ($meeting != "")

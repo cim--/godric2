@@ -29,18 +29,18 @@
 	{!! html()->label('Start', 'start') !!}
 	{!! html()->date('start', $notice->start ? $notice->start->format("Y-m-d") : "") !!}
 	({!! html()->label('nostart', 'no date?') !!}
-	{!! html()->checkbox('nostart', 1, $notice->start === null) !!})
+	{!! html()->checkbox('nostart', $notice->start === null, 1) !!})
 	Setting a start date a few weeks before the meeting date is strongly recommended for documents associated with meetings.
     </div>
     <div>
 	{!! html()->label('End', 'end') !!}
 	{!! html()->date('end', $notice->end ? $notice->end->format("Y-m-d") : "") !!}
 	({!! html()->label('noend', 'no date?') !!}
-	{!! html()->checkbox('noend', 1, $notice->end === null) !!})
+	{!! html()->checkbox('noend', $notice->end === null, 1) !!})
     </div>
     <div>
 	{!! html()->label('Highlight on front page?','highlight') !!}
-	{!! html()->checkbox('highlight', 1, $notice->highlight) !!}
+	{!! html()->checkbox('highlight', $notice->highlight, 1) !!}
     </div>
 
 

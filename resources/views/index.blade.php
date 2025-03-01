@@ -25,12 +25,12 @@
 	    {!! html()->form('POST', route('ballots.vote', $ballot->id))->open() !!}
 	    <fieldset><legend>Select option</legend>
 	    <div>
-		{!! html()->radio('option', 0, true, ['id' => 'option_0']) !!}
+		{!! html()->radio('option', true, 0)->attributes(['id' => 'option_0']) !!}
 		{!! html()->label('(select option)','option_0') !!}
 	    </div>
 	    @foreach ($ballot->options()->orderBy('order')->get() as $option)
 		<div>
-		    {!! html()->radio('option', $option->id, false, ['id' => 'option_'.$option->id]) !!}
+		    {!! html()->radio('option', false, $option->id)->attributes(['id' => 'option_'.$option->id]) !!}
 		    {!! html()->label($option->option,'option_'.$option->id) !!}
 		</div>
 	    @endforeach

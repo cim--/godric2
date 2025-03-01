@@ -3,10 +3,10 @@
 
     @if ($ballot->id)
 	@if (!$ballot->ended())
-	    {!! html()->form('PUT', route('ballots.update', $ballot->id))->open() !!}
+	    {!! html()->form('PUT')->route('ballots.update', $ballot->id)->open() !!}
 	@endif
     @else
-	{!! html()->form('POST','ballots.store')->open() !!}
+	{!! html()->form('POST')->route('ballots.store')->open() !!}
     @endif
 
     @if ($ballot->started())
@@ -62,7 +62,7 @@
 
 
     @if ($ballot->id)
-	{!! html()->form('DELETE', route('ballots.destroy', $ballot->id)) !!}
+	{!! html()->form('DELETE')->route('ballots.destroy', $ballot->id)->open() !!}
 	<p><strong>Warning:</strong> Ballot deletion cannot be undone.</p>
 	<div>
 	    {!! html()->label('Confirm by typing ballot title','confirm') !!}
