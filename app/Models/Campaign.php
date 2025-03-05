@@ -153,7 +153,7 @@ class Campaign extends Model implements Participatory
         ];
         foreach ($actions as $idx => $action) {
             $dataset['data'][] = [
-                'x' => $action->created_at->diffInMinutes($this->start) / 1440,
+                'x' => $action->created_at->diffInMinutes($this->start, true) / 1440,
                 'y' => $idx + 1,
             ];
         }
@@ -175,7 +175,7 @@ class Campaign extends Model implements Participatory
             'y' => 0,
         ];
         $dataset['data'][] = [
-            'x' => $this->end->diffInMinutes($this->start) / 1440,
+            'x' => $this->end->diffInMinutes($this->start, true) / 1440,
             'y' => $this->calctarget,
         ];
 

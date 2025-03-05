@@ -402,8 +402,8 @@ class CampaignController extends Controller
 
             if ($campaign->end->isFuture() && $campaign->start->isPast()) {
                 $fraction =
-                    Carbon::now()->diffInMinutes($campaign->start) /
-                    $campaign->end->diffInMinutes($campaign->start);
+                          Carbon::now()->diffInMinutes($campaign->start, true) /
+                          $campaign->end->diffInMinutes($campaign->start, true);
 
                 $deptsets[] = [
                     'label' => 'Required Pace for Target',
