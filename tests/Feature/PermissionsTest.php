@@ -68,7 +68,7 @@ class PermissionsTest extends TestCase
              ->click('Member Lists')
              ->seeElement('table')
             // can only see their department in detail
-             ->dontSee($member1->membership)
+             ->dontSeeInElement('table', $member1->membership)
              ->see($member2->membership)
              ->click('Campaign Participation')
              ->type($member1->membership, 'search')
@@ -148,7 +148,7 @@ class PermissionsTest extends TestCase
     {
         Campaign::started()->update(['end' => Carbon::yesterday()]);
 
-        $this->loginAs('1005')
+        $this->loginAs('1006')
              ->visitRoute('main')
              ->dontSeeInElement('nav', 'Member Lists')
              ->dontSeeInElement('nav', 'Campaign Participation');

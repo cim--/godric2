@@ -42,7 +42,11 @@ class MemberPolicy
             // only applies during campaigns and votes
             $roles[] = Role::ROLE_CAMPAIGNER;
         }
-        return $user->member->roles()->whereIn('role', $roles)->count() > 0;
+        return $user->member
+            ->roles()
+            ->whereIn('role', $roles)
+            ->exists()
+            && Campaign::started()->exists();
     }
 
     public function seePhonebank(User $user)
@@ -50,7 +54,8 @@ class MemberPolicy
         return $user->member
             ->roles()
             ->whereIn('role', [Role::ROLE_PHONEBANK, Role::ROLE_SUPERUSER])
-            ->count() > 0;
+            ->exists()
+            && Campaign::started()->exists();
     }
 
     /**
