@@ -6,6 +6,7 @@ use Tests\BrowserKitTestCase as TestCase;
 use App\Models\User;
 use App\Models\Member;
 use App\Models\Campaign;
+use App\Models\Ballot;
 
 use Carbon\Carbon;
 
@@ -67,13 +68,13 @@ class PermissionsTest extends TestCase
              ->seeInElement('nav', 'Campaign Participation')
              ->click('Member Lists')
              ->seeElement('table')
-            // can only see their department in detail
+        // can only see their department in detail
              ->dontSee($member1->membership)
              ->see($member2->membership)
              ->click('Campaign Participation')
              ->type($member1->membership, 'search')
              ->press('Search')
-            // but can search more broadly here
+        // but can search more broadly here
              ->see($member1->lastname)
              ->type($member2->membership, 'search')
              ->press('Search')
@@ -132,11 +133,10 @@ class PermissionsTest extends TestCase
              ->seeInElement('table td:nth-child(1)', $member2->membership);
     }
 
-    public function testCampaignerRoleDoesntWorkIfNoCampaigns()
+    public function testCampaignerRoleDoesntWorkIfNoCampaignsOrBallots()
     {
         Campaign::started()->update(['end' => Carbon::yesterday()]);
-        $member1 = Member::where('department', 'Philosophy')->first();
-        $member2 = Member::where('department', 'Chemistry')->first();
+	Ballot::open()->update(['end' => Carbon::yesterday()]);
 
         $this->loginAs('1005')
              ->visitRoute('main')
@@ -144,10 +144,11 @@ class PermissionsTest extends TestCase
              ->dontSeeInElement('nav', 'Campaign Participation');
     }
 
-    public function testPhonebankerRoleDoesntWorkIfNoCampaigns()
+    public function testPhonebankerRoleDoesntWorkIfNoCampaignsOrBallots()
     {
         Campaign::started()->update(['end' => Carbon::yesterday()]);
-
+	Ballot::open()->update(['end' => Carbon::yesterday()]);
+	
         $this->loginAs('1005')
              ->visitRoute('main')
              ->dontSeeInElement('nav', 'Member Lists')
