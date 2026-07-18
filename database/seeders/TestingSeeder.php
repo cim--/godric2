@@ -30,6 +30,13 @@ class TestingSeeder extends Seeder
 
         $memberhash = [];
 
+        // Members that will have a Role attached below. Their own `department`
+        // must not collide with the departments tests filter members by
+        // ('Philosophy', 'Chemistry', 'Library') — otherwise
+        // Member::where('department', ...)->first() can return the logged-in
+        // actor itself instead of the regular member a test intends to check.
+        $roleHolderIds = [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1009];
+
         for ($i = 1000; $i <= 1100; $i++) {
             if ($i < 1050) {
                 $user = User::factory()->create([
@@ -61,10 +68,12 @@ class TestingSeeder extends Seeder
                     ]);
                     break;
                 default:
-                    // randomise
-                    $member = Member::factory()->create([
-                        'membership' => $i,
-                    ]);
+                    // randomise, except role holders — see $roleHolderIds above
+                    $member = Member::factory()->create(
+                        in_array($i, $roleHolderIds)
+                            ? ['membership' => $i, 'department' => 'Finance']
+                            : ['membership' => $i]
+                    );
             }
             if ($member->voter) {
                 switch ($member->id) {
@@ -191,6 +200,31 @@ class TestingSeeder extends Seeder
             $memberhash[$i] = $member->id;
         }
 
+        // Member search matches membership/email/mobile via LIKE '%term%', so
+        // tests searching by membership number can get an extra, unrelated
+        // match if some other member's randomly-generated mobile or email
+        // happens to contain those digits as a substring. Regenerate any
+        // field that collides with a real membership number to keep search
+        // results deterministic.
+        foreach (Member::all() as $member) {
+            $changed = false;
+
+            while ($member->mobile !== '' && self::collidesWithMembership($member->mobile)) {
+                $prefix = substr($member->mobile, 0, 2);
+                $member->mobile = $prefix . fake()->randomNumber(9, true);
+                $changed = true;
+            }
+
+            while (self::collidesWithMembership($member->email)) {
+                $member->email = fake()->unique()->safeEmail();
+                $changed = true;
+            }
+
+            if ($changed) {
+                $member->save();
+            }
+        }
+
         $pastcampaign->calctarget = ceil(Member::voter()->count() / 2);
         $pastcampaign->save();
         $currentcampaign->calctarget = ceil(Member::voter()->count() / 2);
@@ -257,5 +291,16 @@ class TestingSeeder extends Seeder
         for ($i = 1099; $i > 1099 - $total; $i--) {
             $ballot3->members()->attach($memberhash[$i]);
         }
+    }
+
+    private static function collidesWithMembership(string $value): bool
+    {
+        for ($m = 1000; $m <= 1100; $m++) {
+            if (str_contains($value, (string) $m)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
