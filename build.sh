@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 npm install
 composer install
-npm run dev
+npm run build
 
 rm -f godric.dist.tgz
 tar --anchored \

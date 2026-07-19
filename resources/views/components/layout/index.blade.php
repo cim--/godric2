@@ -2,8 +2,7 @@
 <html>
     <head>
 	<title>{{ $title }}</title>
-	<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
-	<script src="{{ URL::asset('js/app.js') }}"></script>
+	@vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
 

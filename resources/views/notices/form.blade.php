@@ -22,7 +22,7 @@
     </div>
     <div>
 	{!! html()->label('Content', 'content') !!}
-	{!! html()->textarea('content', $notice->content, ['class' => 'htmlbox']) !!}
+	{!! html()->textarea('content', $notice->content)->class('htmlbox') !!}
 	(HTML markup allowed)
     </div>
     <div>

@@ -22,7 +22,7 @@
     </div>
     <div>
 	{!! html()->label('Description','description') !!}
-	{!! html()->textarea('description', $ballot->description, ['class' => 'htmlbox']) !!} (HTML allowed)
+	{!! html()->textarea('description', $ballot->description)->class('htmlbox') !!} (HTML allowed)
     </div>
     <div>
 	{!! html()->label('Voters Only?','votersonly') !!}
