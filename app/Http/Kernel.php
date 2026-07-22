@@ -58,6 +58,9 @@ class Kernel extends HttpKernel
         'auth.cpwd' => \App\Http\Middleware\HasChangedPassword::class,
         'auth.basic' =>
             \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'api.token' => \App\Http\Middleware\CheckApiToken::class,
+        'api.ip' => \App\Http\Middleware\CheckApiIpWhitelist::class,
+
         'authz.any' => \App\Http\Middleware\RequireSomerole::class,
         'authz.super' => \App\Http\Middleware\RequireSuperuser::class,
         'authz.rep' => \App\Http\Middleware\RequireRep::class,
