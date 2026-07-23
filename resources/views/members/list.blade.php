@@ -7,10 +7,12 @@
 
     <p>Date Created is the date the member was first imported into Godric, which will either be the initial set up date for the system, or shortly after they joined the organisation.</p>
 
-    @can('manage', App\Models\Member::class)
+    @php $canManage = auth()->user()->can('manage', App\Models\Member::class); @endphp
+
+    @if ($canManage)
     <p>Members who have created accounts have membership IDs shown in bold.</p>
-    @endcan
-    
+    @endif
+
     <table class="datatable" data-order='[[1, "asc"]]' data-length-menu='[[25,100,-1],[25,100,"All"]]'>
 	<thead>
 	    <tr>
@@ -34,7 +36,7 @@
 	<tbody>
 	    @foreach ($members as $member)
 		<tr>
-		    @can('manage', App\Models\Member::class)
+		    @if ($canManage)
 		    <td>
 			@if ($member->user_count > 0)
 			    <strong>{{ $member->membership }}</strong>
@@ -44,7 +46,7 @@
 		    </td>
 		    @else
 		    <td>{{ $member->membership }}</td>
-		    @endcan
+		    @endif
 		    <td data-sort="{{$member->lastname}} {{$member->firstname}}"><a href="{{ route('members.edit', $member->id) }}">{{ $member->firstname }} {{ $member->lastname }}</a></td>
 		    <td>{{ $member->email }}</td>
 		    <td>{{ $member->mobile }}</td>
