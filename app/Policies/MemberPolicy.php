@@ -141,10 +141,7 @@ class MemberPolicy
     // superuser wide-scale management
     public function manage(User $user)
     {
-        return $user->member
-            ->roles()
-            ->where('role', Role::ROLE_SUPERUSER)
-            ->count() > 0;
+        return $user->member->roles->contains('role', Role::ROLE_SUPERUSER);
     }
 
     // for people who have trouble logging in normally
