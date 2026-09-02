@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CampaignParticipationController;
-use App\Http\Controllers\MemberCheckController;
+use App\Http\Controllers\Api\CampaignParticipationController;
+use App\Http\Controllers\Api\MemberCheckController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.ip', 'api.token', 'throttle:30,1'])->group(function () {
