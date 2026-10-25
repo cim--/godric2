@@ -1,3 +1,14 @@
+# Development Has Been Moved
+
+The public source code repository of Godric has now been moved to https://codeberg.org/c-i-m/godric2 for better compatibility between the hosting platform and the aims of the application.
+
+Please file new issues or pull requests there, and use that to get the latest version of the code.
+
+(Issues already raised here don't need re-filing there unless you want to)
+
+
+
+
 # Godric
 
 Godric is a membership management and GOTV tool.
